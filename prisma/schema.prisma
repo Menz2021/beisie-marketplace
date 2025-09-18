@@ -1,0 +1,304 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  phone       String?  @unique
+  name        String?
+  password    String
+  role        String   @default("CUSTOMER") // CUSTOMER, SELLER, ADMIN
+  avatar      String?
+  isVerified  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  language    String   @default("en") // en, lg (Luganda)
+  resetToken  String?
+  resetTokenExpiry DateTime?
+  // Seller-specific fields
+  businessName String?
+  businessType String?
+  district     String?
+  address      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  products    Product[]
+  orders      Order[]
+  reviews     Review[]
+  cartItems   CartItem[]
+  wishlist    WishlistItem[]
+  addresses   Address[]
+  notifications Notification[]
+  refundsRequested Refund[] @relation("RefundCustomer")
+  refundsProcessed Refund[] @relation("RefundAdmin")
+
+  @@map("users")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  image       String?
+  slug        String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  price         Float
+  originalPrice Float?
+  images        String   // JSON string of image URLs
+  stock         Int      @default(0)
+  sku           String?  @unique
+  brand         String?
+  weight        Float?
+  dimensions    String?  // JSON string: {length, width, height}
+  specifications String? // JSON string of key-value pairs for product specifications
+  isActive      Boolean  @default(true)
+  isFeatured    Boolean  @default(false)
+  approvalStatus String  @default("PENDING") // PENDING, APPROVED, REJECTED
+  rejectionReason String?
+  slug          String   @unique
+  // Delivery time fields
+  deliveryTimeDays Int    @default(0) // 0 = same day, 1 = next day, etc.
+  deliveryTimeText String? // Custom delivery text like "Same day delivery"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Foreign keys
+  categoryId String
+  vendorId   String
+
+  // Relations
+  category     Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  vendor       User           @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  orderItems   OrderItem[]
+  reviews      Review[]
+  cartItems    CartItem[]
+  wishlistItems WishlistItem[]
+
+  @@map("products")
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  orderNumber     String   @unique
+  total           Float
+  subtotal        Float
+  shippingCost    Float    @default(0)
+  tax             Float    @default(0)
+  discount        Float    @default(0)
+  status          String   @default("PENDING") // PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED
+  paymentMethod   String?  // MTN_MOBILE_MONEY, AIRTEL_MONEY, VISA, MASTERCARD
+  paymentId       String?
+  paymentStatus   String   @default("PENDING") // PENDING, COMPLETED, FAILED, REFUNDED
+  shippingAddress String
+  trackingNumber  String?
+  estimatedDelivery DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Foreign keys
+  customerId String
+  couponId   String?
+
+  // Relations
+  customer  User       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  coupon    Coupon?    @relation(fields: [couponId], references: [id])
+  orderItems OrderItem[]
+  refunds   Refund[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+
+  // Foreign keys
+  orderId   String
+  productId String
+
+  // Relations
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      // 1-5 stars
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Foreign keys
+  userId    String
+  productId String
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("reviews")
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Foreign keys
+  userId    String
+  productId String
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("cart_items")
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Foreign keys
+  userId    String
+  productId String
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("wishlist_items")
+}
+
+model Address {
+  id          String   @id @default(cuid())
+  type        String   @default("HOME") // HOME, WORK, OTHER
+  fullName    String
+  phone       String
+  address     String
+  city        String
+  district    String
+  postalCode  String?
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Foreign keys
+  userId String
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("addresses")
+}
+
+model Coupon {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  description String?
+  type        String    // PERCENTAGE, FIXED_AMOUNT
+  value       Float
+  minOrderAmount Float?
+  maxDiscount Float?
+  usageLimit  Int?
+  usedCount   Int       @default(0)
+  isActive    Boolean   @default(true)
+  validFrom   DateTime
+  validUntil  DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  orders Order[]
+
+  @@map("coupons")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  type      String   // ORDER_UPDATE, PROMOTION, SYSTEM
+  isRead    Boolean  @default(false)
+  data      String?  // JSON string for additional data
+  createdAt DateTime @default(now())
+
+  // Foreign keys
+  userId String
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model DeliveryZone {
+  id          String  @id @default(cuid())
+  name        String
+  districts   String  // JSON array of districts
+  shippingCost Float
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("delivery_zones")
+}
+
+model Refund {
+  id          String   @id @default(cuid())
+  orderId     String
+  amount      Float
+  reason      String
+  type        String   // FULL, PARTIAL
+  description String?
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED, PROCESSED
+  adminNotes  String?
+  requestedBy String   // Customer ID
+  processedBy String?  // Admin ID
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  customer    User     @relation("RefundCustomer", fields: [requestedBy], references: [id])
+  admin       User?    @relation("RefundAdmin", fields: [processedBy], references: [id])
+
+  @@map("refunds")
+}
+
+// Note: SQLite doesn't support enums, using strings instead
+// Role: "CUSTOMER", "SELLER", "ADMIN"
+// OrderStatus: "PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"
+// PaymentMethod: "MTN_MOBILE_MONEY", "AIRTEL_MONEY", "VISA", "MASTERCARD"
+// PaymentStatus: "PENDING", "COMPLETED", "FAILED", "REFUNDED"

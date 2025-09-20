@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
-<<<<<<< HEAD
     console.log('🔍 Test DB API called')
     console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL)
     console.log('NODE_ENV:', process.env.NODE_ENV)
@@ -45,36 +44,3 @@ export async function GET(request: NextRequest) {
     }, { status: 500 })
   }
 }
-=======
-    // Test database connection
-    const categoryCount = await prisma.category.count()
-    const productCount = await prisma.product.count()
-    
-    return NextResponse.json({
-      success: true,
-      message: 'Database connection successful',
-      data: {
-        categoryCount,
-        productCount,
-        databaseUrl: process.env.DATABASE_URL ? 'Set' : 'Not set',
-        nodeEnv: process.env.NODE_ENV
-      }
-    }, { status: 200 })
-    
-  } catch (error) {
-    console.error('Database connection error:', error)
-    return NextResponse.json(
-      { 
-        error: 'Database connection failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
-        databaseUrl: process.env.DATABASE_URL ? 'Set' : 'Not set'
-      },
-      { status: 500 }
-    )
-  }
-}
-
-
-
-
->>>>>>> 02ab8adf954a04aa079bc69208b552d48ea68815

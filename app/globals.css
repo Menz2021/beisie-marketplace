@@ -12,6 +12,25 @@
   body {
     @apply bg-gray-50 text-gray-900;
   }
+  
+  /* Mobile-specific optimizations */
+  @media (max-width: 640px) {
+    body {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    /* Prevent horizontal scroll on mobile */
+    * {
+      max-width: 100%;
+    }
+    
+    /* Touch-friendly buttons */
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
 }
 
 @layer components {

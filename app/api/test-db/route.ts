@@ -35,8 +35,8 @@ export async function GET(request: NextRequest) {
     console.error('❌ Test DB Error:', error)
     return NextResponse.json({ 
       success: false, 
-      error: error.message,
-      code: error.code,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      code: error instanceof Error && 'code' in error ? error.code : 'UNKNOWN',
       environment: {
         DATABASE_URL_SET: !!process.env.DATABASE_URL,
         NODE_ENV: process.env.NODE_ENV

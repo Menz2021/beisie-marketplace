@@ -113,7 +113,7 @@ export function HeroCarousel() {
   const banners = heroProducts.length > 0 ? heroProducts : fallbackBanners
 
   return (
-    <div className="relative w-full h-96 overflow-hidden">
+    <div className="relative w-full h-64 sm:h-80 lg:h-96 overflow-hidden">
       {/* Carousel Container */}
       <div 
         className="flex transition-transform duration-500 ease-in-out h-full"
@@ -138,11 +138,11 @@ export function HeroCarousel() {
               
               {/* Content */}
               <div className="relative z-10 h-full flex items-center justify-center">
-                <div className="text-center max-w-2xl px-8">
-                  <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${banner.textColor}`}>
+                <div className="text-center max-w-2xl px-4 sm:px-8">
+                  <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 ${banner.textColor}`}>
                     {banner.title}
                   </h1>
-                  <p className={`text-lg md:text-xl mb-6 ${banner.textColor} opacity-90`}>
+                  <p className={`text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 ${banner.textColor} opacity-90`}>
                     {banner.description}
                   </p>
                   
@@ -188,7 +188,7 @@ export function HeroCarousel() {
                   
                   <Link
                     href={banner.buttonLink}
-                    className="inline-block bg-white text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                    className="inline-block bg-white text-gray-900 px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base"
                   >
                     {banner.buttonText}
                   </Link>

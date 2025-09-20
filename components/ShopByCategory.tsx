@@ -45,13 +45,13 @@ export function ShopByCategory() {
             <h2 className="text-3xl font-bold text-gray-900">Shop by Category</h2>
             <p className="mt-2 text-gray-600">Discover products by category</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            {[...Array(12)].map((_, index) => (
-              <div key={index} className="text-center animate-pulse">
-                <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-20 mx-auto"></div>
-              </div>
-            ))}
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-4">
+          {[...Array(12)].map((_, index) => (
+            <div key={index} className="text-center animate-pulse">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded-full mx-auto mb-2"></div>
+              <div className="h-3 sm:h-4 bg-gray-200 rounded w-16 sm:w-20 mx-auto"></div>
+            </div>
+          ))}
           </div>
         </div>
       </section>
@@ -97,23 +97,23 @@ export function ShopByCategory() {
           <p className="mt-2 text-gray-600">Discover products by category</p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-4">
           {categories.map((category, index) => (
             <Link
               key={category.id}
               href={`/categories/${category.slug}`}
               className="group text-center hover:scale-105 transition-transform duration-200"
             >
-              <div className={`w-16 h-16 rounded-full mx-auto mb-2 flex items-center justify-center ${categoryColors[index % categoryColors.length]} group-hover:shadow-lg transition-shadow`}>
+              <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-2 flex items-center justify-center ${categoryColors[index % categoryColors.length]} group-hover:shadow-lg transition-shadow`}>
                 <Image
                   src={categoryImages[index % categoryImages.length]}
                   alt={category.name}
-                  width={48}
-                  height={48}
-                  className="w-12 h-12 rounded-full object-cover"
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover"
                 />
               </div>
-              <p className="text-sm font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
+              <p className="text-xs sm:text-sm font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
                 {category.name}
               </p>
             </Link>

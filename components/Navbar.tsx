@@ -105,7 +105,7 @@ export function Navbar() {
             </div>
 
             {/* Search Bar - Desktop */}
-            <div className="hidden md:flex flex-1 max-w-2xl mx-8">
+            <div className="hidden lg:flex flex-1 max-w-2xl mx-8">
               <form onSubmit={handleSearch} className="relative w-full">
                 <input
                   type="text"
@@ -125,7 +125,7 @@ export function Navbar() {
             </div>
 
             {/* Mobile Search Bar */}
-            <div className="md:hidden flex-1 mx-4">
+            <div className="lg:hidden flex-1 mx-2">
               <form onSubmit={handleSearch} className="relative w-full">
                 <input
                   type="text"
@@ -145,9 +145,9 @@ export function Navbar() {
             </div>
 
             {/* Right side icons */}
-            <div className="flex items-center space-x-6">
-              {/* Language/Country Selector */}
-              <div className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 cursor-pointer">
+            <div className="flex items-center space-x-2 sm:space-x-4 lg:space-x-6">
+              {/* Language/Country Selector - Hidden on mobile */}
+              <div className="hidden sm:flex items-center space-x-1 text-gray-600 hover:text-gray-900 cursor-pointer">
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
                 </svg>
@@ -164,12 +164,12 @@ export function Navbar() {
                     onClick={() => setShowUserMenu(!showUserMenu)}
                     className="flex flex-col items-center text-gray-600 hover:text-gray-900"
                   >
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                      <span className="text-sm font-medium text-purple-600">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs sm:text-sm font-medium text-purple-600">
                         {user.name.charAt(0).toUpperCase()}
                       </span>
                     </div>
-                    <span className="text-xs font-medium mt-1">Account</span>
+                    <span className="text-xs font-medium mt-1 hidden sm:block">Account</span>
                   </button>
                   
                   {/* User Dropdown Menu */}
@@ -205,34 +205,34 @@ export function Navbar() {
                 </div>
               ) : (
                 <Link href="/auth/login" className="flex flex-col items-center text-gray-600 hover:text-gray-900">
-                  <UserIcon className="h-6 w-6" />
-                  <span className="text-xs font-medium mt-1">Account</span>
+                  <UserIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <span className="text-xs font-medium mt-1 hidden sm:block">Account</span>
                 </Link>
               )}
 
               {/* Wishlist */}
               <Link href="/wishlist" className="flex flex-col items-center text-gray-600 hover:text-gray-900">
-                <HeartIcon className="h-6 w-6" />
-                <span className="text-xs font-medium mt-1">Wishlist</span>
+                <HeartIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                <span className="text-xs font-medium mt-1 hidden sm:block">Wishlist</span>
               </Link>
 
               {/* Cart */}
               {user ? (
                 <Link href="/cart" className="flex flex-col items-center text-gray-600 hover:text-gray-900 relative">
-                  <ShoppingCartIcon className="h-6 w-6" />
-                  <span className="text-xs font-medium mt-1">Cart</span>
+                  <ShoppingCartIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <span className="text-xs font-medium mt-1 hidden sm:block">Cart</span>
                   {cartItemsCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center">
                       {cartItemsCount}
                     </span>
                   )}
                 </Link>
               ) : (
                 <Link href="/auth/login?redirect=/cart" className="flex flex-col items-center text-gray-600 hover:text-gray-900 relative">
-                  <ShoppingCartIcon className="h-6 w-6" />
-                  <span className="text-xs font-medium mt-1">Cart</span>
+                  <ShoppingCartIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <span className="text-xs font-medium mt-1 hidden sm:block">Cart</span>
                   {cartItemsCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center">
                       {cartItemsCount}
                     </span>
                   )}
@@ -247,7 +247,7 @@ export function Navbar() {
       {isHomepage && (
         <div className="bg-white border-b border-gray-200">
           <div className="w-full px-4 sm:px-6 lg:px-8">
-            <nav className="flex space-x-8 py-3">
+            <nav className="flex flex-wrap gap-2 sm:gap-4 lg:gap-8 py-3 overflow-x-auto">
               <Link href="/categories" className="text-gray-700 hover:text-gray-900 font-medium">
                 All Categories
               </Link>

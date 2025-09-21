@@ -5,7 +5,7 @@
   "installCommand": "npm install",
   "devCommand": "npm run dev",
   "env": {
-    "DATABASE_URL": "postgresql://postgres:x855bMcb160J86kv@db.jflezxcpylccucevhbkv.supabase.co:5432/postgres",
+    "DATABASE_URL": "postgresql://postgres:Mugoyaronald2020@db.blqarrlpyteuelqwslen.supabase.co:5432/postgres",
     "NODE_ENV": "production"
   }
 }

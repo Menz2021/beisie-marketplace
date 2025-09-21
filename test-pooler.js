@@ -1,21 +1,20 @@
-require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
 
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: 'postgresql://postgres:Mugoyaronald2020@db.blqarrlpyteuelqwslen.supabase.co:5432/postgres'
+async function testPooler() {
+  const prisma = new PrismaClient({
+    datasources: {
+      db: {
+        url: 'postgresql://postgres.blqarrlpyteuelqwslen:Mugoyaronald2020@aws-1-us-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true'
+      }
     }
-  }
-});
+  });
 
-async function testConnection() {
   try {
-    console.log('🔍 Testing database connection...');
+    console.log('🔍 Testing Supabase Connection Pooler...');
     
     // Test basic connection
-    await prisma.$queryRaw`SELECT 1 as test`;
-    console.log('✅ Basic connection successful');
+    const result = await prisma.$queryRaw`SELECT 1 as test`;
+    console.log('✅ Pooler connection successful:', result);
     
     // Test categories
     const categories = await prisma.category.findMany({
@@ -23,6 +22,7 @@ async function testConnection() {
       select: { id: true, name: true, slug: true }
     });
     console.log('✅ Categories query successful:', categories.length);
+    console.log('📋 Sample categories:', categories);
     
     // Test products
     const products = await prisma.product.findMany({
@@ -31,16 +31,15 @@ async function testConnection() {
     });
     console.log('✅ Products query successful:', products.length);
     
-    console.log('🎉 All database tests passed!');
+    console.log('🎉 Connection pooler works perfectly!');
     
   } catch (error) {
-    console.error('❌ Database connection failed:');
+    console.error('❌ Pooler connection failed:');
     console.error('Error message:', error.message);
     console.error('Error code:', error.code);
-    console.error('Full error:', error);
   } finally {
     await prisma.$disconnect();
   }
 }
 
-testConnection();
+testPooler();

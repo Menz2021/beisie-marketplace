@@ -58,28 +58,47 @@ export default function AdminLoginPage() {
     setIsLoading(true)
     
     try {
+      // Add timeout for mobile networks
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+        signal: controller.signal
       })
 
+      clearTimeout(timeoutId)
       const data = await response.json()
 
       if (response.ok) {
         toast.success('Admin login successful!')
-        // Store admin data in localStorage using session management
-        localStorage.setItem('admin_session', JSON.stringify(data.admin))
-        // Redirect to admin dashboard
-        window.location.href = '/admin/dashboard'
+        
+        // Store admin data in localStorage with error handling for mobile
+        try {
+          localStorage.setItem('admin_session', JSON.stringify(data.admin))
+        } catch (storageError) {
+          console.error('localStorage error:', storageError)
+          toast.error('Unable to save login session. Please try again.')
+          setIsLoading(false)
+          return
+        }
+        
+        // Use router.push for better mobile compatibility
+        router.push('/admin/dashboard')
       } else {
         toast.error(data.error || 'Admin login failed. Please try again.')
       }
     } catch (error) {
       console.error('Admin login error:', error)
-      toast.error('Admin login failed. Please check your internet connection and try again.')
+      if (error.name === 'AbortError') {
+        toast.error('Login request timed out. Please check your internet connection.')
+      } else {
+        toast.error('Admin login failed. Please check your internet connection and try again.')
+      }
     } finally {
       setIsLoading(false)
     }

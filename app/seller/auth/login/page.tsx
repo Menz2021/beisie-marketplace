@@ -56,14 +56,20 @@ export default function SellerLoginPage() {
     setIsLoading(true)
 
     try {
+      // Add timeout for mobile networks
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+        signal: controller.signal
       })
 
+      clearTimeout(timeoutId)
       const data = await response.json()
 
       if (response.ok) {
@@ -74,16 +80,29 @@ export default function SellerLoginPage() {
         }
         
         toast.success('Seller login successful!')
-        // Store user data in localStorage
-        localStorage.setItem('user_session', JSON.stringify(data.user))
-        // Redirect to seller dashboard
-        window.location.href = '/seller/dashboard'
+        
+        // Store user data in localStorage with error handling for mobile
+        try {
+          localStorage.setItem('user_session', JSON.stringify(data.user))
+        } catch (storageError) {
+          console.error('localStorage error:', storageError)
+          toast.error('Unable to save login session. Please try again.')
+          setIsLoading(false)
+          return
+        }
+        
+        // Use router.push for better mobile compatibility
+        router.push('/seller/dashboard')
       } else {
         toast.error(data.error || 'Login failed. Please try again.')
       }
     } catch (error) {
       console.error('Login error:', error)
-      toast.error('Login failed. Please check your internet connection and try again.')
+      if (error.name === 'AbortError') {
+        toast.error('Login request timed out. Please check your internet connection.')
+      } else {
+        toast.error('Login failed. Please check your internet connection and try again.')
+      }
     } finally {
       setIsLoading(false)
     }

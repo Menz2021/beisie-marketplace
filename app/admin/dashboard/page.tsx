@@ -23,7 +23,8 @@ import {
   FunnelIcon,
   TableCellsIcon,
   CalendarIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 
 // Real data interface
@@ -828,8 +829,163 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col`}>
+      {/* Floating Top Header Bar */}
+      <div className="fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-200/50">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-14">
+            <div className="flex items-center">
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 lg:hidden"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <h1 className="text-lg font-semibold text-gray-900 ml-3">Admin Panel</h1>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="w-7 h-7 bg-gradient-to-r from-red-600 to-red-700 rounded-full flex items-center justify-center shadow-md">
+                <span className="text-white text-xs font-medium">{admin?.name?.charAt(0).toUpperCase() || 'A'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Backdrop Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Mobile Floating Sidebar */}
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:hidden`}>
+        <div className="flex items-center justify-between h-16 bg-red-600 px-4">
+          <h1 className="text-xl font-bold text-white">Admin Panel</h1>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="p-1 rounded-lg text-white hover:bg-white/20 transition-all duration-200 lg:hidden"
+          >
+            <XMarkIcon className="h-5 w-5" />
+          </button>
+        </div>
+        
+        <nav className="mt-8 flex-1">
+          <div className="px-4 space-y-2">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                activeTab === 'overview' 
+                  ? 'bg-red-100 text-red-700' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <ChartBarIcon className="mr-3 h-5 w-5" />
+              Overview
+            </button>
+            
+            <Link
+              href="/admin/users"
+              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                activeTab === 'users' 
+                  ? 'bg-red-100 text-red-700' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <UsersIcon className="mr-3 h-5 w-5" />
+              Users
+            </Link>
+            
+            <Link
+              href="/admin/sellers"
+              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                activeTab === 'sellers' 
+                  ? 'bg-red-100 text-red-700' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <UsersIcon className="mr-3 h-5 w-5" />
+              Sellers
+            </Link>
+            
+            <Link
+              href="/admin/products"
+              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                activeTab === 'products' 
+                  ? 'bg-red-100 text-red-700' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <ShoppingBagIcon className="mr-3 h-5 w-5" />
+              Products
+            </Link>
+            
+            <Link
+              href="/admin/orders"
+              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                activeTab === 'orders' 
+                  ? 'bg-red-100 text-red-700' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <DocumentTextIcon className="mr-3 h-5 w-5" />
+              Orders
+            </Link>
+            
+            <Link
+              href="/admin/refunds"
+              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                activeTab === 'refunds' 
+                  ? 'bg-red-100 text-red-700' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <ExclamationTriangleIcon className="mr-3 h-5 w-5" />
+              Refunds
+            </Link>
+            
+            <button
+              onClick={() => setActiveTab('financials')}
+              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                activeTab === 'financials' 
+                  ? 'bg-red-100 text-red-700' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <BanknotesIcon className="mr-3 h-5 w-5" />
+              Financials
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                activeTab === 'settings' 
+                  ? 'bg-red-100 text-red-700' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <CogIcon className="mr-3 h-5 w-5" />
+              Settings
+            </button>
+          </div>
+        </nav>
+        
+        <div className="p-4 border-t border-gray-200">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md"
+          >
+            <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5" />
+            Logout
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:w-64 lg:bg-white lg:shadow-lg lg:flex-col">
         <div className="flex items-center justify-center h-16 bg-red-600">
           <h1 className="text-xl font-bold text-white">Admin Panel</h1>
         </div>
@@ -892,47 +1048,12 @@ export default function AdminDashboard() {
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
               }`}
             >
-              <ShoppingBagIcon className="mr-3 h-5 w-5" />
+              <DocumentTextIcon className="mr-3 h-5 w-5" />
               Orders
             </Link>
             
-            <button
-              onClick={() => setActiveTab('analytics')}
-              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
-                activeTab === 'analytics' 
-                  ? 'bg-red-100 text-red-700' 
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-              }`}
-            >
-              <ChartBarIcon className="mr-3 h-5 w-5" />
-              Analytics
-            </button>
-            
-            <button
-              onClick={() => {
-                setActiveTab('statements')
-                fetchFinancialData(selectedPeriod)
-              }}
-              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
-                activeTab === 'statements' 
-                  ? 'bg-red-100 text-red-700' 
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-              }`}
-            >
-              <DocumentTextIcon className="mr-3 h-5 w-5" />
-              Account Statements
-            </button>
-            
             <Link
-              href="/admin/database"
-              className="w-full flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-            >
-              <TableCellsIcon className="mr-3 h-5 w-5" />
-              Database Viewer
-            </Link>
-            
-            <button
-              onClick={() => setActiveTab('refunds')}
+              href="/admin/refunds"
               className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
                 activeTab === 'refunds' 
                   ? 'bg-red-100 text-red-700' 
@@ -940,7 +1061,19 @@ export default function AdminDashboard() {
               }`}
             >
               <ExclamationTriangleIcon className="mr-3 h-5 w-5" />
-              Refunds & Disputes
+              Refunds
+            </Link>
+            
+            <button
+              onClick={() => setActiveTab('financials')}
+              className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                activeTab === 'financials' 
+                  ? 'bg-red-100 text-red-700' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <BanknotesIcon className="mr-3 h-5 w-5" />
+              Financials
             </button>
             
             <button
@@ -969,7 +1102,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="lg:pl-64">
+      <div className="pt-14 lg:ml-64 transition-all duration-300 ease-in-out">
         {/* Dashboard Content */}
         <div className="p-4 sm:p-6 lg:p-8">
           {activeTab === 'overview' && (

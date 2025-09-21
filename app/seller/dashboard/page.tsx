@@ -988,47 +988,61 @@ export default function SellerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Header Bar */}
-      <div className="bg-white shadow-sm border-b border-gray-200 lg:hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+      {/* Floating Top Header Bar */}
+      <div className="fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-200/50">
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-14">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+                className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 lg:hidden"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <h1 className="text-xl font-semibold text-gray-900 ml-4">Seller Center</h1>
+              <h1 className="text-lg font-semibold text-gray-900 ml-3">Seller Center</h1>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">{seller.name?.charAt(0).toUpperCase() || 'S'}</span>
+            <div className="flex items-center space-x-3">
+              <div className="w-7 h-7 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center shadow-md">
+                <span className="text-white text-xs font-medium">{seller.name?.charAt(0).toUpperCase() || 'S'}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
-        <div className="flex items-center justify-center h-16 bg-purple-600">
-          <h1 className="text-xl font-bold text-white">Seller Center</h1>
+      {/* Backdrop Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Mobile Floating Sidebar */}
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:hidden`}>
+        <div className="flex items-center justify-between h-14 bg-gradient-to-r from-purple-600 to-blue-600 px-4">
+          <h1 className="text-lg font-bold text-white">Seller Center</h1>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="p-1 rounded-lg text-white hover:bg-white/20 transition-all duration-200 lg:hidden"
+          >
+            <XMarkIcon className="h-5 w-5" />
+          </button>
         </div>
         
         
         <div className="flex flex-col h-full">
-          <nav className="flex-1 mt-8">
-            <div className="px-4 space-y-2">
+          <nav className="flex-1 mt-6">
+            <div className="px-4 space-y-1">
               <button
                 onClick={() => setActiveTab('overview')}
-                className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
                   activeTab === 'overview' 
-                    ? 'bg-purple-100 text-purple-700' 
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
                 }`}
               >
                 <ChartBarIcon className="mr-3 h-5 w-5" />
@@ -1037,10 +1051,10 @@ export default function SellerDashboard() {
               
               <button
                 onClick={() => setActiveTab('products')}
-                className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
                   activeTab === 'products' 
-                    ? 'bg-purple-100 text-purple-700' 
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
                 }`}
               >
                 <ShoppingBagIcon className="mr-3 h-5 w-5" />
@@ -1049,22 +1063,22 @@ export default function SellerDashboard() {
               
               <button
                 onClick={() => setActiveTab('orders')}
-                className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
                   activeTab === 'orders' 
-                    ? 'bg-purple-100 text-purple-700' 
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
                 }`}
               >
-                <ShoppingBagIcon className="mr-3 h-5 w-5" />
+                <DocumentTextIcon className="mr-3 h-5 w-5" />
                 Orders
               </button>
               
               <button
                 onClick={() => setActiveTab('refunds')}
-                className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
                   activeTab === 'refunds' 
-                    ? 'bg-purple-100 text-purple-700' 
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
                 }`}
               >
                 <ExclamationTriangleIcon className="mr-3 h-5 w-5" />
@@ -1073,10 +1087,10 @@ export default function SellerDashboard() {
               
               <button
                 onClick={() => setActiveTab('analytics')}
-                className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
                   activeTab === 'analytics' 
-                    ? 'bg-purple-100 text-purple-700' 
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
                 }`}
               >
                 <ChartBarIcon className="mr-3 h-5 w-5" />
@@ -1138,90 +1152,210 @@ export default function SellerDashboard() {
         </div>
       </div>
 
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:w-64 lg:bg-white lg:shadow-lg lg:flex-col">
+        <div className="flex items-center justify-center h-14 bg-gradient-to-r from-purple-600 to-blue-600">
+          <h1 className="text-lg font-bold text-white">Seller Center</h1>
+        </div>
+        
+        <div className="flex flex-col h-full">
+          <nav className="flex-1 mt-6">
+            <div className="px-4 space-y-1">
+              <button
+                onClick={() => setActiveTab('overview')}
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                  activeTab === 'overview' 
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
+                }`}
+              >
+                <ChartBarIcon className="mr-3 h-5 w-5" />
+                Overview
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('products')}
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                  activeTab === 'products' 
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
+                }`}
+              >
+                <ShoppingBagIcon className="mr-3 h-5 w-5" />
+                Products
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('orders')}
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                  activeTab === 'orders' 
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
+                }`}
+              >
+                <DocumentTextIcon className="mr-3 h-5 w-5" />
+                Orders
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('financials')}
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                  activeTab === 'financials' 
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
+                }`}
+              >
+                <BanknotesIcon className="mr-3 h-5 w-5" />
+                Financials
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('statements')}
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                  activeTab === 'statements' 
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
+                }`}
+              >
+                <ChartBarIcon className="mr-3 h-5 w-5" />
+                Account Statements
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('advertise')}
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                  activeTab === 'advertise' 
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
+                }`}
+              >
+                <MegaphoneIcon className="mr-3 h-5 w-5" />
+                Advertise Products
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('settings')}
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                  activeTab === 'settings' 
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
+                }`}
+              >
+                <CogIcon className="mr-3 h-5 w-5" />
+                Settings
+              </button>
+            </div>
+          </nav>
+          
+          <div className="p-4 border-t border-gray-200">
+            <button 
+              onClick={handleLogout}
+              className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md"
+            >
+              <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5" />
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
-      <div className="lg:pl-64">
-        {/* Dashboard Content */}
-        <div className="p-4 sm:p-6 lg:p-8">
+      <div className="pt-14 lg:ml-64 transition-all duration-300 ease-in-out">
+        <div className="px-2 sm:px-4 lg:px-6 pb-4 sm:pb-6 lg:pb-8">
           {activeTab === 'overview' && (
-            <div className="space-y-8">
-        {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="space-y-4">
+              {/* Stats Cards at Top */}
+              <div className="bg-gradient-to-r from-purple-50/95 to-blue-50/95 backdrop-blur-sm border border-gray-200/50 rounded-lg px-4 py-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
             <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <ShoppingBagIcon className="h-8 w-8 text-blue-600" />
+                      <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors duration-300">
+                        <ShoppingBagIcon className="h-5 w-5 text-blue-600" />
+                      </div>
               </div>
               <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Total Products</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                      <p className="text-sm font-medium text-gray-600">Total Products</p>
+                      <p className="text-2xl font-bold text-gray-900">
                         {statsLoading ? '...' : (stats?.totalProducts || 0)}
                       </p>
               </div>
             </div>
           </div>
 
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
             <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <ShoppingBagIcon className="h-8 w-8 text-green-600" />
+                      <div className="p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors duration-300">
+                        <ShoppingBagIcon className="h-5 w-5 text-green-600" />
+                      </div>
               </div>
               <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Orders This Week</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                      <p className="text-sm font-medium text-gray-600">Orders This Week</p>
+                      <p className="text-2xl font-bold text-gray-900">
                         {statsLoading ? '...' : (stats?.weeklyOrders || 0)}
                       </p>
-                      <p className="text-xs text-gray-400 mt-1">📅 Weekly Performance</p>
+                      <p className="text-xs text-gray-500 mt-1">📅 Weekly Performance</p>
               </div>
             </div>
           </div>
 
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
             <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <CurrencyDollarIcon className="h-8 w-8 text-purple-600" />
+                      <div className="p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors duration-300">
+                        <CurrencyDollarIcon className="h-5 w-5 text-purple-600" />
+                      </div>
               </div>
               <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Revenue This Week</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                      <p className="text-sm font-medium text-gray-600">Revenue This Week</p>
+                      <p className="text-2xl font-bold text-gray-900">
                         {statsLoading ? '...' : formatCurrency(stats?.weeklyRevenue || 0)}
                       </p>
-                      <p className="text-xs text-gray-400 mt-1">📅 Weekly Performance</p>
+                      <p className="text-xs text-gray-500 mt-1">📅 Weekly Performance</p>
               </div>
             </div>
           </div>
 
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
             <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <CurrencyDollarIcon className="h-8 w-8 text-green-600" />
+                      <div className="p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors duration-300">
+                        <CurrencyDollarIcon className="h-5 w-5 text-green-600" />
+                      </div>
               </div>
               <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Amount to be Paid</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                      <p className="text-sm font-medium text-gray-600">Amount to be Paid</p>
+                      <p className="text-2xl font-bold text-gray-900">
                         {statsLoading ? '...' : formatCurrency(stats?.amountToBePaid || 0)}
                       </p>
               </div>
+              </div>
             </div>
-          </div>
-        </div>
+                </div>
+              </div>
 
-              {/* Recent Orders */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <div className="flex justify-between items-center mb-4">
+              {/* Dashboard Content */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[calc(100vh-16rem)] overflow-hidden">
+              {/* Left Column */}
+              <div className="space-y-4">
+                {/* Recent Orders */}
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-4 hover:shadow-xl transition-all duration-300 h-96 overflow-hidden">
+                  <div className="flex justify-between items-center mb-3">
                   <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
               <button
                     onClick={() => setActiveTab('orders')}
                     className="text-sm text-purple-600 hover:text-purple-700 font-medium"
                   >
-                    View All Orders
+                      View All
               </button>
         </div>
-                <div className="space-y-4">
-                  {orders.slice(0, 3).map((order) => (
-                    <div key={order.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                  <div className="space-y-2 overflow-y-auto h-80">
+                    {orders.slice(0, 5).map((order) => (
+                      <div key={order.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mr-4">
-                          <span className="text-sm font-medium text-gray-600">#{order.orderNumber}</span>
+                          <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-3">
+                            <span className="text-xs font-medium text-gray-600">#{order.orderNumber}</span>
               </div>
                       <div>
                           <p className="text-sm font-medium text-gray-900">{order.customer}</p>
@@ -1229,8 +1363,7 @@ export default function SellerDashboard() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">{formatCurrency(order.total)}</p>
-                        <p className="text-xs text-green-600">Your Share: {formatCurrency(order.total * 0.90)}</p>
+                          <p className="text-sm font-semibold text-gray-900">{formatCurrency(order.total)}</p>
                         <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
                           {order.status}
                         </span>
@@ -1240,30 +1373,79 @@ export default function SellerDashboard() {
               </div>
             </div>
 
-              {/* Sales Chart */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Sales Overview (Last 6 Months)</h3>
+                {/* My Products */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 h-96 overflow-hidden">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900">My Products</h3>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => setActiveTab('products')}
+                        className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+                      >
+                        Manage
+                      </button>
+                      <button
+                        onClick={() => setActiveTab('add-product')}
+                        className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700"
+                      >
+                        <PlusIcon className="h-3 w-3 mr-1" />
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-2 overflow-y-auto h-80">
+                    {products.slice(0, 6).map((product) => (
+                      <div key={product.id} className="border border-gray-200 rounded-lg p-3">
+                        <div className="flex items-center space-x-3">
+                          <img
+                            src={(product as any).images ? (Array.isArray((product as any).images) ? (product as any).images[0] : JSON.parse((product as any).images)[0]) : (product as any).image || '/api/placeholder/100/100'}
+                            alt={product.name}
+                            className="w-10 h-10 rounded-lg object-cover"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
+                            <div className="flex items-center space-x-2 text-xs text-gray-500">
+                              <span>Stock: {product.stock}</span>
+                              <span>•</span>
+                              <span>{formatCurrency(product.price)}</span>
+                            </div>
+                          </div>
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor((product as any).approvalStatus || (product as any).status || 'pending')}`}>
+                            {((product as any).approvalStatus || (product as any).status || 'pending').replace('_', ' ')}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column */}
                 <div className="space-y-4">
+                {/* Sales Chart */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 h-96 overflow-hidden">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Sales Overview</h3>
+                  <div className="space-y-3 overflow-y-auto h-80">
                   {statsLoading ? (
-                    <div className="text-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
-                      <p className="text-sm text-gray-500 mt-2">Loading sales data...</p>
+                      <div className="text-center py-4">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600 mx-auto"></div>
+                        <p className="text-sm text-gray-500 mt-2">Loading...</p>
                     </div>
                   ) : (
                     stats?.salesData?.map((data: any, index: number) => {
                       const maxRevenue = Math.max(...(stats.salesData?.map((d: any) => d.revenue) || [1]))
                       return (
                         <div key={index} className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-600 w-16">{data.month}</span>
-                          <div className="flex-1 mx-4">
-                            <div className="w-full bg-gray-200 rounded-full h-3">
-                              <div 
-                                className="bg-purple-600 h-3 rounded-full" 
+                            <span className="text-sm font-medium text-gray-600 w-12">{data.month}</span>
+                            <div className="flex-1 mx-3">
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="bg-purple-600 h-2 rounded-full" 
                                 style={{ width: `${(data.revenue / maxRevenue) * 100}%` }}
                               ></div>
                             </div>
                           </div>
-                          <div className="text-right w-32">
+                            <div className="text-right w-24">
                             <p className="text-sm font-medium text-gray-900">{formatCurrency(data.revenue)}</p>
                             <p className="text-xs text-gray-500">{data.orders} orders</p>
                           </div>
@@ -1271,62 +1453,60 @@ export default function SellerDashboard() {
                       )
                     }) || []
                   )}
+                  </div>
+                </div>
               </div>
-            </div>
 
-              {/* My Products */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">My Products</h3>
-                  <div className="flex space-x-2">
+                {/* Quick Actions */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 h-96 overflow-hidden">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Quick Actions</h3>
+                  <div className="grid grid-cols-2 gap-3">
                     <button
-                      onClick={() => setActiveTab('products')}
-                      className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+                      onClick={() => setActiveTab('orders')}
+                      className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left"
                     >
-                      Manage Products
+                      <ShoppingBagIcon className="h-6 w-6 text-blue-600 mb-2" />
+                      <p className="text-sm font-medium text-gray-900">View Orders</p>
+                      <p className="text-xs text-gray-500">Manage your orders</p>
                     </button>
                     <button
                       onClick={() => setActiveTab('add-product')}
-                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                      className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left"
                     >
-                      <PlusIcon className="h-4 w-4 mr-1" />
-                      Add Product
+                      <PlusIcon className="h-6 w-6 text-green-600 mb-2" />
+                      <p className="text-sm font-medium text-gray-900">Add Product</p>
+                      <p className="text-xs text-gray-500">Create new listing</p>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('analytics')}
+                      className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left"
+                    >
+                      <ChartBarIcon className="h-6 w-6 text-purple-600 mb-2" />
+                      <p className="text-sm font-medium text-gray-900">Analytics</p>
+                      <p className="text-xs text-gray-500">View insights</p>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('settings')}
+                      className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left"
+                    >
+                      <CogIcon className="h-6 w-6 text-gray-600 mb-2" />
+                      <p className="text-sm font-medium text-gray-900">Settings</p>
+                      <p className="text-xs text-gray-500">Account settings</p>
                       </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {products.slice(0, 3).map((product) => (
-                    <div key={product.id} className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex items-center space-x-3">
-                        <img
-                          src={(product as any).images ? (Array.isArray((product as any).images) ? (product as any).images[0] : JSON.parse((product as any).images)[0]) : (product as any).image || '/api/placeholder/100/100'}
-                          alt={product.name}
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
-                          <p className="text-sm text-gray-500">Stock: {product.stock}</p>
-                          <p className="text-sm text-gray-500">Price: {formatCurrency(product.price)}</p>
-                        </div>
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor((product as any).approvalStatus || (product as any).status || 'pending')}`}>
-                          {((product as any).approvalStatus || (product as any).status || 'pending').replace('_', ' ')}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
               </div>
             </div>
-          </div>
-        )}
+          )}
 
           {/* Products Management Tab */}
-        {activeTab === 'products' && (
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Product Management</h2>
+          {activeTab === 'products' && (
+            <div className="h-[calc(100vh-6rem)] overflow-hidden">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-gray-900">Product Management</h2>
                 <button
                   onClick={() => setActiveTab('add-product')}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700"
                 >
                 <PlusIcon className="h-4 w-4 mr-2" />
                   Add New Product
@@ -1334,66 +1514,66 @@ export default function SellerDashboard() {
             </div>
 
               {/* Products Table */}
-              <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
-              <div className="overflow-x-auto">
+              <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-[calc(100vh-10rem)]">
+              <div className="overflow-auto h-full">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-gray-50 sticky top-0">
                     <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                       {products.map((product) => (
                       <tr key={product.id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-4 py-3 whitespace-nowrap">
                           <div className="flex items-center">
                               <img
                                 src={(product as any).images ? (Array.isArray((product as any).images) ? (product as any).images[0] : JSON.parse((product as any).images)[0]) : (product as any).image || '/api/placeholder/100/100'}
                                 alt={product.name}
-                                className="h-10 w-10 rounded-lg object-cover"
+                                className="h-8 w-8 rounded-lg object-cover"
                               />
-                              <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                              <div className="ml-3">
+                              <div className="text-sm font-medium text-gray-900 truncate max-w-32">{product.name}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                           {formatCurrency(product.price)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                           {product.stock}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-4 py-3 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor((product as any).approvalStatus || (product as any).status || 'pending')}`}>
                             {((product as any).approvalStatus || (product as any).status || 'pending').replace('_', ' ')}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
+                          <div className="flex space-x-1">
                             <button
                               onClick={() => setPreviewProduct(product)}
-                              className="text-blue-600 hover:text-blue-900"
-                              title="View Product Details"
+                              className="text-blue-600 hover:text-blue-900 p-1"
+                              title="View"
                             >
-                              <EyeIcon className="h-4 w-4" />
+                              <EyeIcon className="h-3 w-3" />
                             </button>
                             <button 
                               onClick={() => handleEditProduct(product)}
-                              className="text-purple-600 hover:text-purple-900"
-                              title="Edit Product"
+                              className="text-purple-600 hover:text-purple-900 p-1"
+                              title="Edit"
                             >
-                              <PencilIcon className="h-4 w-4" />
+                              <PencilIcon className="h-3 w-3" />
                             </button>
                             <button 
                               onClick={() => handleDeleteProduct(product.id)}
-                              className="text-red-600 hover:text-red-900"
-                              title="Delete Product"
+                              className="text-red-600 hover:text-red-900 p-1"
+                              title="Delete"
                             >
-                              <TrashIcon className="h-4 w-4" />
+                              <TrashIcon className="h-3 w-3" />
                             </button>
                           </div>
                         </td>
@@ -1891,87 +2071,88 @@ export default function SellerDashboard() {
 
           {/* Orders Management Tab */}
         {activeTab === 'orders' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">Order Management</h2>
+            <div className="h-[calc(100vh-6rem)] overflow-hidden">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Order Management</h2>
               
-              <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
-              <div className="overflow-x-auto">
+              <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-[calc(100vh-10rem)]">
+              <div className="overflow-auto h-full">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-gray-50 sticky top-0">
                     <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Share</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Share</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                       {ordersLoading ? (
                         <tr>
-                          <td colSpan={7} className="px-6 py-4 text-center">
+                          <td colSpan={7} className="px-4 py-3 text-center">
                             <div className="flex items-center justify-center">
-                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
-                              <span className="ml-2 text-gray-600">Loading orders...</span>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
+                              <span className="ml-2 text-sm text-gray-600">Loading...</span>
                             </div>
                           </td>
                         </tr>
                       ) : orders.length === 0 ? (
                         <tr>
-                          <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                          <td colSpan={7} className="px-4 py-3 text-center text-sm text-gray-500">
                             No orders found
                           </td>
                         </tr>
                       ) : (
                         orders.map((order) => (
                       <tr key={order.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                             #{order.orderNumber}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                           {order.customer}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                           {formatCurrency(order.total)}
                         </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-green-600 font-medium">
                             {formatCurrency(order.total * 0.90)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-4 py-3 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
                             {order.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                           {order.date}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
+                          <div className="flex space-x-1">
                             <button 
-                              className="text-purple-600 hover:text-purple-900"
+                              className="text-purple-600 hover:text-purple-900 p-1"
                               onClick={() => handleViewOrder(order)}
+                              title="View Order"
                             >
-                              <EyeIcon className="h-4 w-4" />
+                              <EyeIcon className="h-3 w-3" />
                             </button>
                             {order.status === 'pending' || order.status === 'processing' ? (
                               <>
                                 <button
                                   onClick={() => handleUpdateOrderStatus(order.id, 'READY_TO_SHIP')}
                                   disabled={updatingStatus === order.id}
-                                  className="text-green-600 hover:text-green-900 text-xs px-2 py-1 border border-green-300 rounded hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                  title="Mark as Ready to Ship"
+                                  className="text-green-600 hover:text-green-900 text-xs px-1 py-1 border border-green-300 rounded hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  title="Ready to Ship"
                                 >
-                                  {updatingStatus === order.id ? 'Updating...' : 'Ready to Ship'}
+                                  {updatingStatus === order.id ? '...' : 'Ship'}
                                 </button>
                                 <button
                                   onClick={() => handleUpdateOrderStatus(order.id, 'CANCELLED')}
                                   disabled={updatingStatus === order.id}
-                                  className="text-red-600 hover:text-red-900 text-xs px-2 py-1 border border-red-300 rounded hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className="text-red-600 hover:text-red-900 text-xs px-1 py-1 border border-red-300 rounded hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
                                   title="Cancel Order"
                                 >
-                                  {updatingStatus === order.id ? 'Updating...' : 'Cancel'}
+                                  {updatingStatus === order.id ? '...' : 'Cancel'}
                                 </button>
                               </>
                             ) : (

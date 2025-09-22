@@ -94,7 +94,7 @@ export default function AdminLoginPage() {
       }
     } catch (error) {
       console.error('Admin login error:', error)
-      if (error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         toast.error('Login request timed out. Please check your internet connection.')
       } else {
         toast.error('Admin login failed. Please check your internet connection and try again.')

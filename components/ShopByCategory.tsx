@@ -29,7 +29,7 @@ export function ShopByCategory() {
       if (data.success) {
         // Take first 16 categories for display to ensure Mobile Phones is included
         const categoriesToShow = data.data.slice(0, 16)
-        console.log('Categories being displayed:', categoriesToShow.map(c => c.name))
+        console.log('Categories being displayed:', categoriesToShow.map((c: Category) => c.name))
         setCategories(categoriesToShow)
       }
     } catch (error) {
@@ -87,10 +87,6 @@ export function ShopByCategory() {
       'Machines': '/images/machines.jpg',
       'Watches': '/images/watch.avif',
       'Home & Kitchen': '/images/machines.jpg',
-      'Beauty & Health': '/images/Beauty1.jpg',
-      'Audio & Headphones': '/images/Headphones.avif',
-      'Books & Media': '/images/Books.avif',
-      'Automotive': '/images/Automotives.avif',
       'Sports & Fitness': '/images/wearables.avif',
       'Toys & Games': '/images/games.avif',
       'Furniture': '/images/Funiture.jpg',

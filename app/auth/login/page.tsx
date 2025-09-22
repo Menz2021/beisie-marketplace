@@ -106,7 +106,7 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error('Login error:', error)
-      if (error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         toast.error('Login request timed out. Please check your internet connection.')
       } else {
         toast.error('Login failed. Please check your internet connection and try again.')

@@ -22,6 +22,7 @@ interface TrendingProduct {
   stock: number
   vendor?: string
   isFeatured: boolean
+  isNew: boolean
   trendingScore: number
   totalSales: number
   averageRating: number

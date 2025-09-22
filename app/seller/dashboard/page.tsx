@@ -1034,9 +1034,9 @@ export default function SellerDashboard() {
         </div>
         
         
-        <div className="flex flex-col h-full">
-          <nav className="flex-1 mt-6">
-            <div className="px-4 space-y-1">
+        <div className="flex flex-col h-full overflow-hidden">
+          <nav className="flex-1 mt-6 overflow-y-auto">
+            <div className="px-4 space-y-1 pb-4">
               <button
                 onClick={() => setActiveTab('overview')}
                 className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
@@ -1140,10 +1140,11 @@ export default function SellerDashboard() {
             </div>
           </nav>
           
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-gray-200 flex-shrink-0">
             <button 
               onClick={handleLogout}
-              className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md"
+              className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md touch-manipulation"
+              style={{ minHeight: '44px' }}
             >
               <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5" />
               Logout

@@ -22,12 +22,12 @@ interface Category {
 const getCategoryImage = (categoryName: string): string => {
   const imageMap: { [key: string]: string } = {
     'Electronics': 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=400&fit=crop&crop=center',
-    'Mobiles': '/images/Mobile phones.avif',
-    'Mobile Phones': '/images/Mobile phones.avif',
+    'Mobiles': '/images/Mobile phones.jpg',
+    'Mobile Phones': '/images/Mobile phones.jpg',
     'Gaming': '/images/games.avif',
     'Gaming Consoles': '/images/gaming consoles.avif',
     'Laptops': '/images/laptops.avif',
-    'Laptops & Computers': '/images/Lapptops and computers.avif',
+    'Laptops & Computers': '/images/Lapptops and computers.jpg',
     'Televisions': '/images/lg-uhd-tv.jpg.jpg',
     'TVs & Accessories': '/images/lg-uhd-tv.jpg.jpg',
     'Cameras': 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&h=400&fit=crop&crop=center',
@@ -45,6 +45,13 @@ const getCategoryImage = (categoryName: string): string => {
     'Sports': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
     'Sports & Fitness': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
     'Books': 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop&crop=center',
+    'Books & Media': '/images/Books.avif',
+    'Cameras & Photography': '/images/camera.avif',
+    'Camera & Photography': '/images/camera.avif',
+    'Furniture': '/images/Funiture.jpg',
+    'Jewelry': '/images/fragances.avif',
+    'Power Banks & Chargers': '/images/power bank.jpg',
+    'Toys & Games': '/images/Toys and games.jpg',
     'Automotive': '/images/Automotives.avif',
     'Watches': '/images/watch.avif',
     'Women\'s Fashion': '/images/womens fashion.avif',
@@ -164,16 +171,9 @@ export default function CategoriesPage() {
                   </div>
                   
                   {/* Category Name */}
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900">
                     {category.name}
                   </h3>
-                  
-                  {/* Category Description */}
-                  {category.description && (
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {category.description}
-                    </p>
-                  )}
                 </div>
               </Link>
             ))}

@@ -165,19 +165,22 @@ export function NewArrivals() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
-            {newArrivals.map((product) => {
-              let productImages = []
-              try {
-                productImages = product.images ? JSON.parse(product.images) : []
-              } catch (error) {
-                console.error('Error parsing product images:', error)
-                productImages = []
-              }
-              const mainImage = productImages.length > 0 ? productImages[0] : `/api/placeholder/300/300/${encodeURIComponent(product.name)}`
-              
-              return (
-                <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group relative">
+          <>
+            {/* Mobile horizontal scroll */}
+            <div className="lg:hidden overflow-x-auto scrollbar-hide">
+              <div className="flex space-x-4 pb-4" style={{ width: 'max-content' }}>
+                {newArrivals.map((product) => {
+                  let productImages = []
+                  try {
+                    productImages = product.images ? JSON.parse(product.images) : []
+                  } catch (error) {
+                    console.error('Error parsing product images:', error)
+                    productImages = []
+                  }
+                  const mainImage = productImages.length > 0 ? productImages[0] : `/api/placeholder/300/300/${encodeURIComponent(product.name)}`
+                  
+                  return (
+                    <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group relative flex-shrink-0 w-64">
                   <Link href={`/products/${product.slug}`} className="block">
                     <div className="relative">
                       {/* Product Image */}
@@ -288,10 +291,134 @@ export function NewArrivals() {
                       </div>
                     </div>
                   </Link>
-                </div>
-              )
-            })}
-          </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            
+            {/* Desktop grid */}
+            <div className="hidden lg:grid grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+              {newArrivals.map((product) => {
+                let productImages = []
+                try {
+                  productImages = product.images ? JSON.parse(product.images) : []
+                } catch (error) {
+                  console.error('Error parsing product images:', error)
+                  productImages = []
+                }
+                const mainImage = productImages.length > 0 ? productImages[0] : `/api/placeholder/300/300/${encodeURIComponent(product.name)}`
+                
+                return (
+                  <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group relative">
+                    <Link href={`/products/${product.slug}`} className="block">
+                      <div className="relative">
+                        {/* Product Image */}
+                        <div className="relative bg-gray-100" style={{ height: '300px' }}>
+                          <img
+                            src={mainImage}
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                          
+                          {/* Badges */}
+                          <div className="absolute top-3 left-3 flex flex-col gap-2">
+                            <span className="bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+                              New
+                            </span>
+                            {product.discount > 0 && (
+                              <span className="bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+                                -{product.discount}% OFF
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Favorite button */}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              toggleFavorite(product)
+                            }}
+                            className="absolute top-3 right-3 p-2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full transition-all group/fav"
+                          >
+                            {isInWishlist(product.id) ? (
+                              <HeartIcon className="h-4 w-4 text-red-500 fill-current" />
+                            ) : (
+                              <HeartIcon className="h-4 w-4 text-gray-600 group-hover/fav:text-red-500 transition-colors" />
+                            )}
+                          </button>
+                        </div>
+
+                        {/* Product Info */}
+                        <div className="p-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                              {product.category}
+                            </span>
+                            {product.averageRating > 0 && (
+                              <div className="flex items-center">
+                                <StarIcon className="h-4 w-4 text-yellow-400 fill-current" />
+                                <span className="text-xs text-gray-600 ml-1">
+                                  {product.averageRating.toFixed(1)} ({product.totalReviews})
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          
+                          <h3 className="text-sm font-medium text-gray-900 mb-2 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                            {product.name}
+                          </h3>
+                          
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg font-bold text-gray-900">
+                                {formatCurrency(product.price)}
+                              </span>
+                              {product.originalPrice && product.originalPrice > product.price && (
+                                <span className="text-sm text-gray-500 line-through">
+                                  {formatCurrency(product.originalPrice)}
+                                </span>
+                              )}
+                            </div>
+                            {product.stock <= 10 && product.stock > 0 && (
+                              <span className="text-xs text-orange-600 font-medium">
+                                Only {product.stock} left
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-xs text-green-600 font-medium">
+                              Added {product.daysSinceAdded} days ago
+                            </span>
+                            {product.vendor && (
+                              <span className="text-xs text-gray-500">
+                                by {product.vendor}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Add to Cart Button */}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              handleAddToCart(product)
+                            }}
+                            className="w-full flex items-center justify-center px-3 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
+                          >
+                            <ShoppingCartIcon className="h-4 w-4 mr-1" />
+                            Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                )
+              })}
+            </div>
+          </>
         )}
       </div>
     </section>

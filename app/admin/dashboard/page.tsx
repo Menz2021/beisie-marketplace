@@ -873,8 +873,9 @@ export default function AdminDashboard() {
           </button>
         </div>
         
-        <nav className="mt-8 flex-1">
-          <div className="px-4 space-y-2">
+        <div className="flex flex-col h-full overflow-hidden">
+          <nav className="mt-8 flex-1 overflow-y-auto">
+            <div className="px-4 space-y-2 pb-4">
             <button
               onClick={() => setActiveTab('overview')}
               className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${
@@ -973,10 +974,11 @@ export default function AdminDashboard() {
           </div>
         </nav>
         
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-gray-200 flex-shrink-0">
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md"
+            className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md touch-manipulation"
+            style={{ minHeight: '44px' }}
           >
             <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5" />
             Logout
@@ -1302,8 +1304,8 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* Account Statements Tab */}
-          {activeTab === 'statements' && (
+          {/* Financials Tab */}
+          {activeTab === 'financials' && (
             <div className="space-y-8">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-900">Account Statements</h2>
@@ -1732,7 +1734,7 @@ export default function AdminDashboard() {
           )}
 
           {/* Placeholder for other tabs */}
-          {activeTab !== 'overview' && activeTab !== 'settings' && activeTab !== 'refunds' && (
+          {activeTab !== 'overview' && activeTab !== 'settings' && activeTab !== 'refunds' && activeTab !== 'financials' && (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
               <div className="text-gray-500">
                 <ChartBarIcon className="h-12 w-12 mx-auto mb-4" />
@@ -1741,6 +1743,7 @@ export default function AdminDashboard() {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
     </div>

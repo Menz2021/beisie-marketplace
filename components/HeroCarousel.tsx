@@ -120,9 +120,10 @@ export function HeroCarousel() {
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
         {banners.map((banner) => (
-          <div
+          <Link
             key={banner.id}
-            className="w-full h-full flex-shrink-0 relative"
+            href={banner.buttonLink}
+            className="w-full h-full flex-shrink-0 relative block cursor-pointer group"
           >
             {/* Background */}
             <div 
@@ -130,19 +131,19 @@ export function HeroCarousel() {
                 banner.backgroundImage 
                   ? 'bg-cover bg-center bg-no-repeat' 
                   : 'bg-gray-500'
-              }`}
+              } group-hover:scale-105 transition-transform duration-300 ease-in-out`}
               style={banner.backgroundImage ? { backgroundImage: `url(${banner.backgroundImage})` } : {}}
             >
               {/* Overlay for better text readability */}
-              <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+              <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-40 transition-opacity duration-300"></div>
               
               {/* Content */}
               <div className="relative z-10 h-full flex items-center justify-center">
                 <div className="text-center max-w-2xl px-4 sm:px-8">
-                  <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 ${banner.textColor}`}>
+                  <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 ${banner.textColor} group-hover:scale-105 transition-transform duration-300`}>
                     {banner.title}
                   </h1>
-                  <p className={`text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 ${banner.textColor} opacity-90`}>
+                  <p className={`text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 ${banner.textColor} opacity-90 group-hover:opacity-100 transition-opacity duration-300`}>
                     {banner.description}
                   </p>
                   
@@ -186,16 +187,15 @@ export function HeroCarousel() {
                     </div>
                   )}
                   
-                  <Link
-                    href={banner.buttonLink}
-                    className="inline-block bg-white text-gray-900 px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base"
-                  >
-                    {banner.buttonText}
-                  </Link>
+                  {/* Click indicator */}
+                  <div className="inline-flex items-center text-white text-sm font-medium opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                    Click to explore
+                    <ChevronRightIcon className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
@@ -214,20 +214,6 @@ export function HeroCarousel() {
         <ChevronRightIcon className="h-6 w-6 text-white" />
       </button>
 
-      {/* Pagination Dots */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {banners.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
-              index === currentSlide 
-                ? 'bg-white' 
-                : 'bg-white bg-opacity-50 hover:bg-opacity-75'
-            }`}
-          />
-        ))}
-      </div>
     </div>
   )
 }

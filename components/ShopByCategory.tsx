@@ -27,8 +27,10 @@ export function ShopByCategory() {
       const data = await response.json()
       
       if (data.success) {
-        // Take first 12 categories for display
-        setCategories(data.data.slice(0, 12))
+        // Take first 16 categories for display to ensure Mobile Phones is included
+        const categoriesToShow = data.data.slice(0, 16)
+        console.log('Categories being displayed:', categoriesToShow.map(c => c.name))
+        setCategories(categoriesToShow)
       }
     } catch (error) {
       console.error('Error fetching categories:', error)
@@ -58,25 +60,48 @@ export function ShopByCategory() {
     )
   }
 
-  const categoryImages = [
-    '/images/Headphones.avif',             // Audio & Headphones
-    '/images/Automotives.avif',            // Automotive
-    '/images/Baby care.avif',              // Baby care
-    '/images/luggage.avif',                // Bags and Luggage
-    '/images/Beauty1.jpg',                 // Beauty & Health
-    '/images/Beddings.avif',               // Bedding & Bath
-    '/images/Books.avif',                  // Books & Media
-    '/images/camera.avif',                 // Camera & Photography
-    '/images/Electronics.avif',            // Electronics
-    '/images/Eyeware1.jpg',                // Eyeware
-    '/images/Fashion.avif',                // Fashion
-    '/images/fragances.avif',              // Fragrance
-    '/images/Mobile phones.avif',          // Mobile phones
-    '/images/wearables.avif',              // Wearables
-    '/images/Headphone and earphones.avif', // Audio & Headphones
-    '/images/Beddings.avif',               // Beddings & Bath
-    '/images/Books.avif'                   // Books
-  ]
+  // Function to get the appropriate image for each category
+  const getCategoryImage = (categoryName: string) => {
+    const categoryImageMap: { [key: string]: string } = {
+      'Audio & Headphones': '/images/Headphones.avif',
+      'Automotive': '/images/Automotives.avif',
+      'Baby care': '/images/Baby care.avif',
+      'Bags and Luggage': '/images/luggage.avif',
+      'Beauty & Health': '/images/Beauty1.jpg',
+      'Bedding & Bath': '/images/Beddings.avif',
+      'Books & Media': '/images/Books.avif',
+      'Cameras & Photography': '/images/camera.avif',
+      'Camera & Photography': '/images/camera.avif',
+      'Camera': '/images/camera.avif',
+      'Photography': '/images/camera.avif',
+      'Electronics': '/images/Electronics.jpg',
+      'Eyeware': '/images/Eyeware1.jpg',
+      'Fashion': '/images/Fashion.avif',
+      'Fragrance': '/images/fragances.avif',
+      'Mobile Phones': '/images/Mobile phones.jpg',
+      'Mobile phones': '/images/Mobile phones.jpg',
+      'Wearables': '/images/wearables.avif',
+      'Laptops & Computers': '/images/Lapptops and computers.jpg',
+      'Laptops and computers': '/images/Lapptops and computers.jpg',
+      'Gaming': '/images/games.avif',
+      'Machines': '/images/machines.jpg',
+      'Watches': '/images/watch.avif',
+      'Home & Kitchen': '/images/machines.jpg',
+      'Beauty & Health': '/images/Beauty1.jpg',
+      'Audio & Headphones': '/images/Headphones.avif',
+      'Books & Media': '/images/Books.avif',
+      'Automotive': '/images/Automotives.avif',
+      'Sports & Fitness': '/images/wearables.avif',
+      'Toys & Games': '/images/games.avif',
+      'Furniture': '/images/Funiture.jpg',
+      'Jewelry': '/images/fragances.avif',
+      'Power Banks & Chargers': '/images/power bank.jpg',
+      'Tablets': '/images/Electronics.jpg',
+      'TVs & Accessories': '/images/lg-uhd-tv.jpg.jpg'
+    }
+    
+    return categoryImageMap[categoryName] || '/images/Electronics.jpg' // Default fallback
+  }
 
   const categoryColors = [
     'bg-blue-100',
@@ -106,7 +131,7 @@ export function ShopByCategory() {
             >
               <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-2 flex items-center justify-center ${categoryColors[index % categoryColors.length]} group-hover:shadow-lg transition-shadow`}>
                 <Image
-                  src={categoryImages[index % categoryImages.length]}
+                  src={getCategoryImage(category.name)}
                   alt={category.name}
                   width={32}
                   height={32}

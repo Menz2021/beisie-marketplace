@@ -6,7 +6,7 @@ Add these **exact** environment variables to your Vercel project:
 
 ### 1. DATABASE_URL
 ```
-postgresql://postgres:x855bMcb160J86kv@db.jflezxcpylccucevhbkv.supabase.co:5432/postgres
+postgresql://postgres.blqarrlpyteuelqwslen:Mugoyaronald2020@aws-1-us-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true
 ```
 
 ### 2. NEXTAUTH_URL
@@ -33,7 +33,7 @@ production
 
 | Variable Name | Value | Environment |
 |---------------|-------|-------------|
-| `DATABASE_URL` | `postgresql://postgres:x855bMcb160J86kv@db.jflezxcpylccucevhbkv.supabase.co:5432/postgres` | Production |
+| `DATABASE_URL` | `postgresql://postgres.blqarrlpyteuelqwslen:Mugoyaronald2020@aws-1-us-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true` | Production |
 | `NEXTAUTH_URL` | `https://beisie-marketplace.vercel.app` | Production |
 | `NEXTAUTH_SECRET` | `your-random-secret-key-here-make-it-long-and-random` | Production |
 | `NODE_ENV` | `production` | Production |

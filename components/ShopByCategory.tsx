@@ -29,7 +29,6 @@ export function ShopByCategory() {
       if (data.success) {
         // Take first 16 categories for display to ensure Mobile Phones is included
         const categoriesToShow = data.data.slice(0, 16)
-        console.log('Categories being displayed:', categoriesToShow.map((c: Category) => c.name))
         setCategories(categoriesToShow)
       }
     } catch (error) {

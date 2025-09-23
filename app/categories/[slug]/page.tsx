@@ -117,18 +117,18 @@ export default function CategoryPage() {
   // Fallback category data
   const getFallbackCategory = (categorySlug: string) => {
     const fallbackCategories = [
-      { id: '1', name: 'Electronics', slug: 'electronics', description: 'Electronic devices and gadgets' },
-      { id: '2', name: 'Mobile Phones', slug: 'mobile-phones', description: 'Smartphones and mobile accessories' },
-      { id: '3', name: 'Laptops & Computers', slug: 'laptops-computers', description: 'Laptops, desktops and computer accessories' },
-      { id: '4', name: 'Fashion', slug: 'fashion', description: 'Clothing and fashion accessories' },
-      { id: '5', name: 'Beauty & Health', slug: 'beauty-health', description: 'Beauty products and health items' },
-      { id: '6', name: 'Home & Kitchen', slug: 'home-kitchen', description: 'Home and kitchen appliances' },
-      { id: '7', name: 'Sports & Fitness', slug: 'sports-fitness', description: 'Sports equipment and fitness gear' },
-      { id: '8', name: 'Books & Media', slug: 'books-media', description: 'Books, movies and media' },
-      { id: '9', name: 'Toys & Games', slug: 'toys-games', description: 'Toys and gaming products' },
-      { id: '10', name: 'Automotive', slug: 'automotive', description: 'Car parts and automotive accessories' },
-      { id: '11', name: 'Watches', slug: 'watches', description: 'Watches and timepieces' },
-      { id: '12', name: 'Audio & Headphones', slug: 'audio-headphones', description: 'Audio equipment and headphones' }
+      { id: '1', name: 'Electronics', slug: 'electronics', description: 'Electronic devices and gadgets', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '2', name: 'Mobile Phones', slug: 'mobile-phones', description: 'Smartphones and mobile accessories', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '3', name: 'Laptops & Computers', slug: 'laptops-computers', description: 'Laptops, desktops and computer accessories', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '4', name: 'Fashion', slug: 'fashion', description: 'Clothing and fashion accessories', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '5', name: 'Beauty & Health', slug: 'beauty-health', description: 'Beauty products and health items', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '6', name: 'Home & Kitchen', slug: 'home-kitchen', description: 'Home and kitchen appliances', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '7', name: 'Sports & Fitness', slug: 'sports-fitness', description: 'Sports equipment and fitness gear', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '8', name: 'Books & Media', slug: 'books-media', description: 'Books, movies and media', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '9', name: 'Toys & Games', slug: 'toys-games', description: 'Toys and gaming products', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '10', name: 'Automotive', slug: 'automotive', description: 'Car parts and automotive accessories', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '11', name: 'Watches', slug: 'watches', description: 'Watches and timepieces', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '12', name: 'Audio & Headphones', slug: 'audio-headphones', description: 'Audio equipment and headphones', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
     ]
     
     return fallbackCategories.find(cat => cat.slug === categorySlug) || null

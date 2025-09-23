@@ -26,10 +26,15 @@ export function ShopByCategory() {
       const response = await fetch('/api/categories')
       const data = await response.json()
       
+      console.log('Categories API response:', data) // Debug log
+      
       if (data.success) {
         // Take first 16 categories for display to ensure Mobile Phones is included
         const categoriesToShow = data.data.slice(0, 16)
+        console.log('Categories to show:', categoriesToShow) // Debug log
         setCategories(categoriesToShow)
+      } else {
+        console.error('API returned error:', data.error)
       }
     } catch (error) {
       console.error('Error fetching categories:', error)
@@ -117,28 +122,35 @@ export function ShopByCategory() {
           <p className="mt-2 text-gray-600">Discover products by category</p>
         </div>
         
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-4">
-          {categories.map((category, index) => (
-            <Link
-              key={category.id}
-              href={`/categories/${category.slug}`}
-              className="group text-center hover:scale-105 transition-transform duration-200"
-            >
-              <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-2 flex items-center justify-center ${categoryColors[index % categoryColors.length]} group-hover:shadow-lg transition-shadow`}>
-                <Image
-                  src={getCategoryImage(category.name)}
-                  alt={category.name}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover"
-                />
-              </div>
-              <p className="text-xs sm:text-sm font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
-                {category.name}
-              </p>
-            </Link>
-          ))}
-        </div>
+        {categories.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500">No categories available</p>
+            <p className="text-sm text-gray-400 mt-2">Check console for debug information</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-4">
+            {categories.map((category, index) => (
+              <Link
+                key={category.id}
+                href={`/categories/${category.slug}`}
+                className="group text-center hover:scale-105 transition-transform duration-200"
+              >
+                <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-2 flex items-center justify-center ${categoryColors[index % categoryColors.length]} group-hover:shadow-lg transition-shadow`}>
+                  <Image
+                    src={getCategoryImage(category.name)}
+                    alt={category.name}
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover"
+                  />
+                </div>
+                <p className="text-xs sm:text-sm font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
+                  {category.name}
+                </p>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

@@ -35,13 +35,33 @@ export function ShopByCategory() {
         setCategories(categoriesToShow)
       } else {
         console.error('API returned error:', data.error)
+        // Fallback to static categories if API fails
+        setCategories(getStaticCategories())
       }
     } catch (error) {
       console.error('Error fetching categories:', error)
+      // Fallback to static categories if API fails
+      setCategories(getStaticCategories())
     } finally {
       setIsLoading(false)
     }
   }
+
+  // Fallback static categories
+  const getStaticCategories = () => [
+    { id: '1', name: 'Electronics', slug: 'electronics', isActive: true },
+    { id: '2', name: 'Mobile Phones', slug: 'mobile-phones', isActive: true },
+    { id: '3', name: 'Laptops & Computers', slug: 'laptops-computers', isActive: true },
+    { id: '4', name: 'Fashion', slug: 'fashion', isActive: true },
+    { id: '5', name: 'Beauty & Health', slug: 'beauty-health', isActive: true },
+    { id: '6', name: 'Home & Kitchen', slug: 'home-kitchen', isActive: true },
+    { id: '7', name: 'Sports & Fitness', slug: 'sports-fitness', isActive: true },
+    { id: '8', name: 'Books & Media', slug: 'books-media', isActive: true },
+    { id: '9', name: 'Toys & Games', slug: 'toys-games', isActive: true },
+    { id: '10', name: 'Automotive', slug: 'automotive', isActive: true },
+    { id: '11', name: 'Watches', slug: 'watches', isActive: true },
+    { id: '12', name: 'Audio & Headphones', slug: 'audio-headphones', isActive: true }
+  ]
 
   if (isLoading) {
     return (

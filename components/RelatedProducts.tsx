@@ -5,11 +5,11 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { 
   StarIcon, 
-  HeartIcon, 
+  HeartIcon as HeartOutlineIcon, 
   ShoppingCartIcon,
   TruckIcon
 } from '@heroicons/react/24/outline'
-import { StarIcon as StarSolidIcon } from '@heroicons/react/24/solid'
+import { StarIcon as StarSolidIcon, HeartIcon } from '@heroicons/react/24/solid'
 import { useCartStore } from '@/store/cartStore'
 import toast from 'react-hot-toast'
 

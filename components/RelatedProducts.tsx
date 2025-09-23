@@ -450,7 +450,103 @@ export function RelatedProducts({ productSlug, limit = 6 }: RelatedProductsProps
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
       <h3 className="text-xl font-semibold text-gray-900 mb-6">You May Also Like</h3>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+      {/* Mobile: Horizontal scroll, Desktop: Grid */}
+      <div className="block sm:hidden">
+        <div className="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
+          {relatedProducts.map((product) => {
+            const productImages = getProductImages(product.images)
+            const isProductFavorite = isFavorite[product.id] || false
+
+            return (
+              <div
+                key={product.id}
+                className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow flex-shrink-0 w-48"
+              >
+                {/* Product Image */}
+                <div className="relative aspect-square overflow-hidden">
+                  <Link href={`/products/${product.slug}`}>
+                    <Image
+                      src={productImages[0] || '/api/placeholder/300/300'}
+                      alt={product.name}
+                      width={300}
+                      height={300}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                    />
+                  </Link>
+                  
+                  {/* Discount Badge */}
+                  {product.discount > 0 && (
+                    <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                      -{product.discount}%
+                    </div>
+                  )}
+                  
+                  {/* Featured Badge */}
+                  {product.isFeatured && (
+                    <div className="absolute top-2 right-2 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded">
+                      Featured
+                    </div>
+                  )}
+                  
+                  {/* Favorite Button */}
+                  <button
+                    onClick={() => handleToggleFavorite(product.id)}
+                    className="absolute top-2 right-2 p-1 bg-white/80 hover:bg-white rounded-full transition-colors"
+                  >
+                    {isProductFavorite ? (
+                      <HeartIcon className="h-4 w-4 text-red-500" />
+                    ) : (
+                      <HeartOutlineIcon className="h-4 w-4 text-gray-600" />
+                    )}
+                  </button>
+                </div>
+
+                {/* Product Info */}
+                <div className="p-3">
+                  <Link href={`/products/${product.slug}`}>
+                    <h4 className="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-red-600 transition-colors">
+                      {product.name}
+                    </h4>
+                  </Link>
+                  
+                  <div className="mt-2 flex items-center justify-between">
+                    <div className="flex items-center space-x-1">
+                      <span className="text-lg font-bold text-red-600">
+                        {formatCurrency(product.price)}
+                      </span>
+                      {product.originalPrice && product.originalPrice > product.price && (
+                        <span className="text-sm text-gray-500 line-through">
+                          {formatCurrency(product.originalPrice)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Rating */}
+                  <div className="mt-2 flex items-center space-x-1">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <StarSolidIcon
+                          key={i}
+                          className={`h-3 w-3 ${
+                            i < (product.averageRating || 0) ? 'text-yellow-400' : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-xs text-gray-500">
+                      ({product.totalReviews || 0})
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Desktop: Grid layout */}
+      <div className="hidden sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
         {relatedProducts.map((product) => {
           const productImages = getProductImages(product.images)
           const isProductFavorite = isFavorite[product.id] || false

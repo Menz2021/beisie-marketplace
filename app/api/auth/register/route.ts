@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
     const user = await registerUser(validatedData)
     
     // Try to generate confirmation token and send welcome email (optional)
+    // This is wrapped in try-catch because ConfirmationToken table might not exist yet
     try {
       const confirmationData = await createConfirmationToken(user.id, user.email, 'customer')
       
@@ -72,6 +73,11 @@ export async function POST(request: NextRequest) {
     
   } catch (error) {
     console.error('Registration error:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    })
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(

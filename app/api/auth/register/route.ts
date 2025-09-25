@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { registerUser } from '@/lib/auth'
+import { emailService } from '@/lib/email'
+import { createConfirmationToken } from '@/lib/confirmation'
 import { z } from 'zod'
 
 // Validation schema
@@ -34,10 +36,31 @@ export async function POST(request: NextRequest) {
     // Create the user
     const user = await registerUser(validatedData)
     
+    // Generate confirmation token and send welcome email
+    try {
+      const confirmationData = await createConfirmationToken(user.id, user.email, 'customer')
+      
+      // Send welcome email with confirmation link
+      const emailResult = await emailService.sendWelcomeEmail(
+        user.email,
+        user.name || 'User',
+        confirmationData.token,
+        'customer'
+      )
+      
+      if (!emailResult.success) {
+        console.error('Failed to send welcome email:', emailResult.error)
+        // Don't fail registration if email fails, just log it
+      }
+    } catch (error) {
+      console.error('Email confirmation setup error:', error)
+      // Don't fail registration if email setup fails
+    }
+    
     // Return success response (without password)
     return NextResponse.json({
       success: true,
-      message: 'User created successfully',
+      message: 'User created successfully. Please check your email for confirmation link.',
       user: {
         id: user.id,
         email: user.email,

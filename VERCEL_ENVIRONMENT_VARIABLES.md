@@ -24,6 +24,11 @@ your-random-secret-key-here-make-it-long-and-random
 production
 ```
 
+### 5. JWT_SECRET
+```
+your-super-secret-jwt-key-change-this-in-production-make-it-long-and-random
+```
+
 ## How to Add These in Vercel:
 
 1. **Go to**: https://vercel.com/dashboard
@@ -37,6 +42,7 @@ production
 | `NEXTAUTH_URL` | `https://beisie-marketplace.vercel.app` | Production |
 | `NEXTAUTH_SECRET` | `your-random-secret-key-here-make-it-long-and-random` | Production |
 | `NODE_ENV` | `production` | Production |
+| `JWT_SECRET` | `your-super-secret-jwt-key-change-this-in-production-make-it-long-and-random` | Production |
 
 ## Important Notes:
 

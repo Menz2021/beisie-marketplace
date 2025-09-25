@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { EyeIcon, EyeSlashIcon, ShieldCheckIcon } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
+import { clientSession } from '@/lib/secure-session'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -17,32 +18,26 @@ export default function AdminLoginPage() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true)
 
   useEffect(() => {
-    // Check if admin is already logged in
-    const adminData = localStorage.getItem('admin_session')
-    const userData = localStorage.getItem('user_session')
-    
-    if (adminData) {
-      router.push('/admin/dashboard')
-      return
-    }
-    
-    if (userData) {
-      const user = JSON.parse(userData)
-      if (user.role === 'ADMIN') {
-        router.push('/admin/dashboard')
-        return
-      } else {
-        // User is logged in but not admin, redirect to appropriate dashboard
-        if (user.role === 'SELLER') {
-          router.push('/seller/dashboard')
-        } else {
-          router.push('/')
+    // Check if admin is already logged in via secure cookie
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/admin/verify', {
+          method: 'GET',
+          credentials: 'include'
+        })
+        
+        if (response.ok) {
+          router.push('/admin/dashboard')
+          return
         }
-        return
+      } catch (error) {
+        console.error('Auth check error:', error)
       }
+      
+      setIsCheckingAuth(false)
     }
     
-    setIsCheckingAuth(false)
+    checkAuth()
   }, [router])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +63,7 @@ export default function AdminLoginPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+        credentials: 'include', // Include cookies
         signal: controller.signal
       })
 
@@ -77,17 +73,8 @@ export default function AdminLoginPage() {
       if (response.ok) {
         toast.success('Admin login successful!')
         
-        // Store admin data in localStorage with error handling for mobile
-        try {
-          localStorage.setItem('admin_session', JSON.stringify(data.admin))
-        } catch (storageError) {
-          console.error('localStorage error:', storageError)
-          toast.error('Unable to save login session. Please try again.')
-          setIsLoading(false)
-          return
-        }
-        
-        // Use router.push for better mobile compatibility
+        // Session is now stored in secure HTTP-only cookie
+        // Redirect to admin dashboard
         router.push('/admin/dashboard')
       } else {
         toast.error(data.error || 'Admin login failed. Please try again.')

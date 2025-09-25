@@ -31,7 +31,7 @@ export async function generateToken(payload: Omit<SecureSession, 'exp'>): Promis
 export async function verifyToken(token: string): Promise<SecureSession | null> {
   try {
     const { payload } = await jwtVerify(token, secret)
-    return payload as SecureSession
+    return payload as unknown as SecureSession
   } catch (error) {
     return null
   }

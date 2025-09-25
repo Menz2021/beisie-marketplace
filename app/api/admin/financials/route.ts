@@ -60,14 +60,14 @@ export async function GET(request: NextRequest) {
           ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter })
         },
         _sum: { total: true }
-      }).then(result => result._sum.total || 0),
+      }).then((result: any) => result._sum.total || 0),
       prisma.order.aggregate({
         where: { 
           status: 'DELIVERED',
           ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter })
         },
         _sum: { total: true }
-      }).then(result => (result._sum.total || 0) * 0.1), // 10% commission
+      }).then((result: any) => (result._sum.total || 0) * 0.1), // 10% commission
       prisma.user.count({
         where: { role: 'SELLER' }
       }),
@@ -142,10 +142,10 @@ export async function GET(request: NextRequest) {
     })
 
     // Calculate financial data for each seller
-    const sellerFinancials = sellers.map(seller => {
+    const sellerFinancials = sellers.map((seller: any) => {
       // Get orders where this seller's products were sold
-      const sellerOrders = seller.orders.filter(order => 
-        order.orderItems.some(item => item.product.vendorId === seller.id)
+      const sellerOrders = seller.orders.filter((order: any) =>
+        order.orderItems.some((item: any) => item.product.vendorId === seller.id)
       )
 
       // Calculate seller's revenue from their products
@@ -155,8 +155,8 @@ export async function GET(request: NextRequest) {
       let orderCount = 0
 
       for (const order of sellerOrders) {
-        const sellerItems = order.orderItems.filter(item => item.product.vendorId === seller.id)
-        const sellerOrderTotal = sellerItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+        const sellerItems = order.orderItems.filter((item: any) => item.product.vendorId === seller.id)
+        const sellerOrderTotal = sellerItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0)
         
         sellerRevenue += sellerOrderTotal
         sellerCommission += sellerOrderTotal * 0.1
@@ -165,9 +165,9 @@ export async function GET(request: NextRequest) {
       }
 
       // Get recent transactions for this seller
-      const recentTransactions = sellerOrders.slice(0, 5).map(order => {
-        const sellerItems = order.orderItems.filter(item => item.product.vendorId === seller.id)
-        const sellerOrderTotal = sellerItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+      const recentTransactions = sellerOrders.slice(0, 5).map((order: any) => {
+        const sellerItems = order.orderItems.filter((item: any) => item.product.vendorId === seller.id)
+        const sellerOrderTotal = sellerItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0)
         
         return {
           id: order.id,
@@ -191,10 +191,10 @@ export async function GET(request: NextRequest) {
         totalPayout: sellerPayout,
         orderCount: orderCount,
         productCount: seller.products.length,
-        activeProductCount: seller.products.filter(p => p.isActive).length,
+        activeProductCount: seller.products.filter((p: any) => p.isActive).length,
         recentTransactions: recentTransactions
       }
-    }).sort((a, b) => b.totalRevenue - a.totalRevenue) // Sort by revenue
+    }).sort((a: any, b: any) => b.totalRevenue - a.totalRevenue) // Sort by revenue
 
     // Get recent platform transactions (last 20 orders)
     const recentPlatformOrders = await prisma.order.findMany({
@@ -224,7 +224,7 @@ export async function GET(request: NextRequest) {
       take: 20
     })
 
-    const recentTransactions = recentPlatformOrders.map(order => {
+    const recentTransactions = recentPlatformOrders.map((order: any) => {
       const totalCommission = order.total * 0.1
       const sellerPayout = order.total * 0.9
       
@@ -237,7 +237,7 @@ export async function GET(request: NextRequest) {
         sellerPayout: sellerPayout,
         date: order.createdAt.toISOString().split('T')[0],
         status: 'completed',
-        items: order.orderItems.map(item => ({
+        items: order.orderItems.map((item: any) => ({
           productName: item.product.name,
           quantity: item.quantity,
           price: item.price
@@ -258,7 +258,7 @@ export async function GET(request: NextRequest) {
       activeSellers,
       averageOrderValue: totalOrders > 0 ? totalRevenue / totalOrders : 0,
       averageSellerRevenue: sellerFinancials.length > 0 ? 
-        sellerFinancials.reduce((sum, seller) => sum + seller.totalRevenue, 0) / sellerFinancials.length : 0
+        sellerFinancials.reduce((sum: number, seller: any) => sum + seller.totalRevenue, 0) / sellerFinancials.length : 0
     }
 
     return NextResponse.json({

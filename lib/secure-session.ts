@@ -65,8 +65,8 @@ export function clearSecureCookie(response: NextResponse, name: string = 'sessio
 }
 
 // Middleware to check authentication
-export async function requireAuth(request: NextRequest): Promise<SecureSession | null> {
-  const token = getTokenFromRequest(request)
+export async function requireAuth(request: NextRequest, cookieName: string = 'session'): Promise<SecureSession | null> {
+  const token = getTokenFromRequest(request, cookieName)
   if (!token) return null
   
   const session = await verifyToken(token)
@@ -77,7 +77,7 @@ export async function requireAuth(request: NextRequest): Promise<SecureSession |
 
 // Middleware to check admin authentication
 export async function requireAdmin(request: NextRequest): Promise<SecureSession | null> {
-  const session = await requireAuth(request)
+  const session = await requireAuth(request, 'admin_session')
   if (!session || session.role !== 'ADMIN') return null
   
   return session

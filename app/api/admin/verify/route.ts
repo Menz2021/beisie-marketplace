@@ -3,9 +3,14 @@ import { requireAdmin } from '@/lib/secure-session'
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('🔍 Admin verify called')
+    console.log('Cookies:', request.cookies.getAll())
+    
     const adminSession = await requireAdmin(request)
+    console.log('Admin session:', adminSession)
     
     if (!adminSession) {
+      console.log('❌ No admin session found')
       return NextResponse.json(
         { error: 'Not authenticated' },
         { status: 401 }

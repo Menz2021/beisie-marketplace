@@ -11,54 +11,84 @@ export async function createConfirmationToken(userId: string, email: string, use
   const token = generateConfirmationToken()
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
   
-  // Store in database (you might want to create a separate table for this)
-  // For now, we'll use a simple approach with the existing user table
+  // Store token in database
+  const confirmationToken = await prisma.confirmationToken.create({
+    data: {
+      token,
+      userId,
+      email,
+      type: 'EMAIL_CONFIRMATION',
+      expiresAt
+    }
+  })
   
   return {
-    token,
-    expiresAt,
-    userId,
-    email,
+    token: confirmationToken.token,
+    expiresAt: confirmationToken.expiresAt,
+    userId: confirmationToken.userId,
+    email: confirmationToken.email,
     userType
   }
 }
 
 // Verify confirmation token
 export async function verifyConfirmationToken(token: string) {
-  // In a real implementation, you'd store tokens in a separate table
-  // For now, we'll implement a simple verification
-  // You should create a ConfirmationToken table in your database
-  
   try {
-    // This is a simplified version - you should implement proper token storage
-    const user = await prisma.user.findFirst({
-      where: {
-        // You'd need to add a confirmationToken field to your User model
-        // confirmationToken: token,
-        // confirmationTokenExpires: {
-        //   gt: new Date()
-        // }
-      }
+    // Find the token in database
+    const confirmationToken = await prisma.confirmationToken.findUnique({
+      where: { token },
+      include: { user: true }
     })
     
-    if (!user) {
-      return { valid: false, error: 'Invalid or expired token' }
+    if (!confirmationToken) {
+      return { valid: false, error: 'Invalid token' }
     }
+    
+    // Check if token is expired
+    if (confirmationToken.expiresAt < new Date()) {
+      return { valid: false, error: 'Token has expired' }
+    }
+    
+    // Check if token is already used
+    if (confirmationToken.used) {
+      return { valid: false, error: 'Token has already been used' }
+    }
+    
+    // Mark token as used
+    await prisma.confirmationToken.update({
+      where: { id: confirmationToken.id },
+      data: { used: true }
+    })
     
     // Mark user as verified
     await prisma.user.update({
-      where: { id: user.id },
-      data: { 
-        isVerified: true,
-        // confirmationToken: null,
-        // confirmationTokenExpires: null
-      }
+      where: { id: confirmationToken.userId },
+      data: { isVerified: true }
     })
     
-    return { valid: true, user }
+    return { valid: true, user: confirmationToken.user }
   } catch (error) {
     console.error('Token verification error:', error)
     return { valid: false, error: 'Token verification failed' }
+  }
+}
+
+// Clean up expired tokens (can be run as a cron job)
+export async function cleanupExpiredTokens() {
+  try {
+    const result = await prisma.confirmationToken.deleteMany({
+      where: {
+        expiresAt: {
+          lt: new Date()
+        }
+      }
+    })
+    
+    console.log(`Cleaned up ${result.count} expired tokens`)
+    return result.count
+  } catch (error) {
+    console.error('Error cleaning up expired tokens:', error)
+    return 0
   }
 }
 

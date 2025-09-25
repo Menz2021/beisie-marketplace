@@ -29,6 +29,21 @@ production
 your-super-secret-jwt-key-change-this-in-production-make-it-long-and-random
 ```
 
+### 6. SMTP_USER (Optional - for email confirmation)
+```
+your-email@gmail.com
+```
+
+### 7. SMTP_PASS (Optional - for email confirmation)
+```
+your-app-password
+```
+
+### 8. NEXT_PUBLIC_APP_URL (Optional - for email links)
+```
+https://your-site.vercel.app
+```
+
 ## How to Add These in Vercel:
 
 1. **Go to**: https://vercel.com/dashboard
@@ -43,6 +58,9 @@ your-super-secret-jwt-key-change-this-in-production-make-it-long-and-random
 | `NEXTAUTH_SECRET` | `your-random-secret-key-here-make-it-long-and-random` | Production |
 | `NODE_ENV` | `production` | Production |
 | `JWT_SECRET` | `your-super-secret-jwt-key-change-this-in-production-make-it-long-and-random` | Production |
+| `SMTP_USER` | `your-email@gmail.com` | Production (Optional) |
+| `SMTP_PASS` | `your-app-password` | Production (Optional) |
+| `NEXT_PUBLIC_APP_URL` | `https://your-site.vercel.app` | Production (Optional) |
 
 ## Important Notes:
 

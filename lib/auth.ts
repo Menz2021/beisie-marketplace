@@ -54,7 +54,7 @@ export async function registerUser(data: RegisterData): Promise<User> {
       name: data.name,
       password: hashedPassword,
       role: data.role || 'CUSTOMER',
-      isVerified: false,
+      isVerified: false, // Users need to confirm email
       isActive: true,
       language: 'en'
     }

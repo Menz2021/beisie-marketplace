@@ -1,8 +1,8 @@
 import nodemailer from 'nodemailer'
 
-// Email configuration
+// Email configuration with fallback to Gmail
 const transporter = nodemailer.createTransporter({
-  host: process.env.SMTP_HOST,
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.SMTP_PORT || '587'),
   secure: false, // true for 465, false for other ports
   auth: {
@@ -132,13 +132,19 @@ export const emailTemplates = {
 export const emailService = {
   // Send welcome email with confirmation link
   async sendWelcomeEmail(email: string, name: string, confirmationToken: string, userType: 'customer' | 'seller' = 'customer', businessName?: string) {
-    const confirmationLink = `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm?token=${confirmationToken}`
+    const confirmationLink = `${process.env.NEXT_PUBLIC_APP_URL || 'https://your-site.vercel.app'}/auth/confirm?token=${confirmationToken}`
     
     const template = userType === 'seller' 
       ? emailTemplates.sellerWelcome(name, businessName || '', confirmationLink)
       : emailTemplates.welcome(name, confirmationLink)
     
     try {
+      // Check if SMTP is configured
+      if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+        console.log('SMTP not configured, skipping email send')
+        return { success: false, error: 'SMTP not configured' }
+      }
+      
       await transporter.sendMail({
         from: `"Beisie Marketplace" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
         to: email,

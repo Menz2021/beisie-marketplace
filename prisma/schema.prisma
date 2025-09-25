@@ -41,6 +41,7 @@ model User {
   notifications Notification[]
   refundsRequested Refund[] @relation("RefundCustomer")
   refundsProcessed Refund[] @relation("RefundAdmin")
+  confirmationTokens ConfirmationToken[]
 
   @@map("users")
 }
@@ -295,6 +296,22 @@ model Refund {
   admin       User?    @relation("RefundAdmin", fields: [processedBy], references: [id])
 
   @@map("refunds")
+}
+
+model ConfirmationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  email     String
+  type      String   // EMAIL_CONFIRMATION, PASSWORD_RESET, etc.
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("confirmation_tokens")
 }
 
 // Note: PostgreSQL supports enums, but keeping strings for compatibility

@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Create the user
+    // Create the user (initially unverified)
     const user = await registerUser(validatedData)
     
     // Generate confirmation token and send welcome email
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     // Return success response (without password)
     return NextResponse.json({
       success: true,
-      message: 'User created successfully. Please check your email for confirmation link.',
+      message: 'Account created successfully! Please check your email for a confirmation link to activate your account.',
       user: {
         id: user.id,
         email: user.email,

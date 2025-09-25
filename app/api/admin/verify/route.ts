@@ -3,7 +3,7 @@ import { requireAdmin } from '@/lib/secure-session'
 
 export async function GET(request: NextRequest) {
   try {
-    const adminSession = requireAdmin(request)
+    const adminSession = await requireAdmin(request)
     
     if (!adminSession) {
       return NextResponse.json(

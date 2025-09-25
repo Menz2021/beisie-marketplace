@@ -1,4 +1,4 @@
-// Development Prisma schema with SQLite for local development
+// Production Prisma schema with PostgreSQL
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -297,8 +297,10 @@ model Refund {
   @@map("refunds")
 }
 
-// Note: SQLite doesn't support enums, using strings instead
+// Note: PostgreSQL supports enums, but keeping strings for compatibility
 // Role: "CUSTOMER", "SELLER", "ADMIN"
 // OrderStatus: "PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"
 // PaymentMethod: "MTN_MOBILE_MONEY", "AIRTEL_MONEY", "VISA", "MASTERCARD"
 // PaymentStatus: "PENDING", "COMPLETED", "FAILED", "REFUNDED"
+
+

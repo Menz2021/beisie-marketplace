@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     // Create the user (initially unverified)
     const user = await registerUser(validatedData)
     
-    // Generate confirmation token and send welcome email
+    // Try to generate confirmation token and send welcome email (optional)
     try {
       const confirmationData = await createConfirmationToken(user.id, user.email, 'customer')
       
@@ -50,17 +50,17 @@ export async function POST(request: NextRequest) {
       
       if (!emailResult.success) {
         console.error('Failed to send welcome email:', emailResult.error)
-        // Don't fail registration if email fails, just log it
       }
     } catch (error) {
       console.error('Email confirmation setup error:', error)
-      // Don't fail registration if email setup fails
+      console.log('Email confirmation disabled - user created without email verification')
+      // Continue with registration even if email confirmation fails
     }
     
     // Return success response (without password)
     return NextResponse.json({
       success: true,
-      message: 'Account created successfully! Please check your email for a confirmation link to activate your account.',
+      message: 'Account created successfully! You can now log in.',
       user: {
         id: user.id,
         email: user.email,

@@ -134,8 +134,8 @@ export default function RegisterPage() {
       console.log('Response data:', data)
 
       if (response.ok) {
-        // Success - show success message about email confirmation
-        alert('Account created successfully! Please check your email for a confirmation link to activate your account.')
+        // Success - show success message
+        alert('Account created successfully! You can now log in.')
         window.location.href = '/auth/login'
       } else {
         // Handle API errors

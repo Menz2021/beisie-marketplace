@@ -1036,7 +1036,7 @@ export default function SellerDashboard() {
         
         <div className="flex flex-col h-full overflow-hidden">
           <nav className="flex-1 mt-6 overflow-y-auto">
-            <div className="px-4 space-y-1 pb-4">
+            <div className="px-4 space-y-2 pb-4">
               <button
                 onClick={() => setActiveTab('overview')}
                 className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
@@ -1265,69 +1265,69 @@ export default function SellerDashboard() {
         <div className="px-2 sm:px-4 lg:px-6 pb-4 sm:pb-6 lg:pb-8">
           {activeTab === 'overview' && (
             <div className="space-y-4">
-              {/* Stats Cards at Top */}
-              <div className="bg-gradient-to-r from-purple-50/95 to-blue-50/95 backdrop-blur-sm border border-gray-200/50 rounded-lg px-4 py-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+              {/* Stats Cards at Top - Mobile Optimized */}
+              <div className="bg-gradient-to-r from-purple-50/95 to-blue-50/95 backdrop-blur-sm border border-gray-200/50 rounded-lg px-3 py-3 sm:px-4">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-3 sm:p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
             <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors duration-300">
-                        <ShoppingBagIcon className="h-5 w-5 text-blue-600" />
+                      <div className="p-1.5 sm:p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors duration-300">
+                        <ShoppingBagIcon className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                       </div>
               </div>
-              <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Products</p>
-                      <p className="text-2xl font-bold text-gray-900">
+              <div className="ml-2 sm:ml-4">
+                      <p className="text-xs sm:text-sm font-medium text-gray-600">Total Products</p>
+                      <p className="text-lg sm:text-2xl font-bold text-gray-900">
                         {statsLoading ? '...' : (stats?.totalProducts || 0)}
                       </p>
               </div>
             </div>
           </div>
 
-                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-3 sm:p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
             <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <div className="p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors duration-300">
-                        <ShoppingBagIcon className="h-5 w-5 text-green-600" />
+                      <div className="p-1.5 sm:p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors duration-300">
+                        <ShoppingBagIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                       </div>
               </div>
-              <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Orders This Week</p>
-                      <p className="text-2xl font-bold text-gray-900">
+              <div className="ml-2 sm:ml-4">
+                      <p className="text-xs sm:text-sm font-medium text-gray-600">Orders This Week</p>
+                      <p className="text-lg sm:text-2xl font-bold text-gray-900">
                         {statsLoading ? '...' : (stats?.weeklyOrders || 0)}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">📅 Weekly Performance</p>
+                      <p className="text-xs text-gray-500 mt-1 hidden sm:block">📅 Weekly Performance</p>
               </div>
             </div>
           </div>
 
-                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-3 sm:p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
             <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <div className="p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors duration-300">
-                        <CurrencyDollarIcon className="h-5 w-5 text-purple-600" />
+                      <div className="p-1.5 sm:p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors duration-300">
+                        <CurrencyDollarIcon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
                       </div>
               </div>
-              <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Revenue This Week</p>
-                      <p className="text-2xl font-bold text-gray-900">
+              <div className="ml-2 sm:ml-4">
+                      <p className="text-xs sm:text-sm font-medium text-gray-600">Revenue This Week</p>
+                      <p className="text-lg sm:text-2xl font-bold text-gray-900">
                         {statsLoading ? '...' : formatCurrency(stats?.weeklyRevenue || 0)}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">📅 Weekly Performance</p>
+                      <p className="text-xs text-gray-500 mt-1 hidden sm:block">📅 Weekly Performance</p>
               </div>
             </div>
           </div>
 
-                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-3 sm:p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
             <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <div className="p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors duration-300">
-                        <CurrencyDollarIcon className="h-5 w-5 text-green-600" />
+                      <div className="p-1.5 sm:p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors duration-300">
+                        <CurrencyDollarIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                       </div>
               </div>
-              <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Amount to be Paid</p>
-                      <p className="text-2xl font-bold text-gray-900">
+              <div className="ml-2 sm:ml-4">
+                      <p className="text-xs sm:text-sm font-medium text-gray-600">Amount to be Paid</p>
+                      <p className="text-lg sm:text-2xl font-bold text-gray-900">
                         {statsLoading ? '...' : formatCurrency(stats?.amountToBePaid || 0)}
                       </p>
               </div>
@@ -1336,8 +1336,8 @@ export default function SellerDashboard() {
                 </div>
               </div>
 
-              {/* Dashboard Content */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[calc(100vh-16rem)] overflow-hidden">
+              {/* Dashboard Content - Mobile Optimized */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[calc(100vh-12rem)] sm:h-[calc(100vh-16rem)] overflow-hidden">
               {/* Left Column */}
               <div className="space-y-4">
                 {/* Recent Orders */}
@@ -1503,19 +1503,69 @@ export default function SellerDashboard() {
           {/* Products Management Tab */}
           {activeTab === 'products' && (
             <div className="h-[calc(100vh-6rem)] overflow-hidden">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-900">Product Management</h2>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">Product Management</h2>
                 <button
                   onClick={() => setActiveTab('add-product')}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700"
+                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 w-full sm:w-auto justify-center"
                 >
                 <PlusIcon className="h-4 w-4 mr-2" />
                   Add New Product
               </button>
             </div>
 
-              {/* Products Table */}
-              <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-[calc(100vh-10rem)]">
+              {/* Mobile Card Layout */}
+              <div className="block sm:hidden">
+                <div className="space-y-3 overflow-y-auto h-[calc(100vh-10rem)]">
+                  {products.map((product) => (
+                    <div key={product.id} className="bg-white shadow-sm border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-start space-x-3">
+                        <img
+                          src={(product as any).images ? (Array.isArray((product as any).images) ? (product as any).images[0] : JSON.parse((product as any).images)[0]) : (product as any).image || '/api/placeholder/100/100'}
+                          alt={product.name}
+                          className="h-12 w-12 rounded-lg object-cover flex-shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-medium text-gray-900 truncate">{product.name}</h3>
+                          <p className="text-sm text-gray-600 mt-1">{formatCurrency(product.price)}</p>
+                          <div className="flex items-center justify-between mt-2">
+                            <span className="text-xs text-gray-500">Stock: {product.stock}</span>
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor((product as any).approvalStatus || (product as any).status || 'pending')}`}>
+                              {((product as any).approvalStatus || (product as any).status || 'pending').replace('_', ' ')}
+                            </span>
+                          </div>
+                          <div className="flex space-x-2 mt-3">
+                            <button
+                              onClick={() => setPreviewProduct(product)}
+                              className="flex-1 inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
+                            >
+                              <EyeIcon className="h-3 w-3 mr-1" />
+                              View
+                            </button>
+                            <button 
+                              onClick={() => handleEditProduct(product)}
+                              className="flex-1 inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100"
+                            >
+                              <PencilIcon className="h-3 w-3 mr-1" />
+                              Edit
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteProduct(product.id)}
+                              className="flex-1 inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100"
+                            >
+                              <TrashIcon className="h-3 w-3 mr-1" />
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Desktop Table Layout */}
+              <div className="hidden sm:block bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-[calc(100vh-10rem)]">
               <div className="overflow-auto h-full">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50 sticky top-0">
@@ -1589,20 +1639,20 @@ export default function SellerDashboard() {
 
           {/* Add Product Tab */}
           {activeTab === 'add-product' && (
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Add New Product</h2>
+            <div className="space-y-4 sm:space-y-6">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Add New Product</h2>
                 <button
                   onClick={() => setActiveTab('products')}
-                  className="text-sm text-gray-600 hover:text-gray-900"
+                  className="text-sm text-gray-600 hover:text-gray-900 self-start sm:self-auto"
                 >
                   ← Back to Products
                 </button>
               </div>
 
-              <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6">
-                <form onSubmit={handleAddProduct} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-4 sm:p-6">
+                <form onSubmit={handleAddProduct} className="space-y-4 sm:space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Product Name</label>
                       <input

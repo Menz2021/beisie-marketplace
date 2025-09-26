@@ -262,31 +262,31 @@ const mockProductPromotions = [
   }
 ]
 
-// Mock settings data
-const mockSellerProfile = {
-  id: '1',
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  phone: '+256 700 123 456',
-  avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
-  businessName: 'Tech Solutions Uganda',
-  businessType: 'Electronics Retailer',
-  businessRegistration: 'REG-2023-001234',
-  address: 'Kampala Central, Uganda',
-  city: 'Kampala',
-  country: 'Uganda',
-  website: 'https://techsolutions.ug',
-  description: 'Leading electronics retailer in Uganda specializing in mobile phones, laptops, and accessories.',
-  joinedDate: '2023-01-15',
-  verificationStatus: 'verified',
+// Default empty settings - will be populated from API
+const defaultSellerProfile = {
+  id: '',
+  name: '',
+  email: '',
+  phone: '',
+  avatar: '',
+  businessName: '',
+  businessType: '',
+  businessRegistration: '',
+  address: '',
+  city: '',
+  country: '',
+  website: '',
+  description: '',
+  joinedDate: '',
+  verificationStatus: 'pending',
   bankAccount: {
-    bankName: 'Stanbic Bank Uganda',
-    accountNumber: '****1234',
-    accountName: 'Tech Solutions Uganda'
+    bankName: '',
+    accountNumber: '',
+    accountName: ''
   }
 }
 
-const mockNotificationSettings = {
+const defaultNotificationSettings = {
   emailNotifications: {
     newOrders: true,
     lowStock: true,
@@ -310,15 +310,15 @@ const mockNotificationSettings = {
   }
 }
 
-const mockSecuritySettings = {
+const defaultSecuritySettings = {
   twoFactorAuth: false,
   loginAlerts: true,
   sessionTimeout: 30, // minutes
-  lastPasswordChange: '2023-12-01',
-  activeSessions: 2
+  lastPasswordChange: '',
+  activeSessions: 1
 }
 
-const mockHolidayModeSettings = {
+const defaultHolidayModeSettings = {
   isEnabled: false,
   startDate: '',
   endDate: '',
@@ -326,22 +326,13 @@ const mockHolidayModeSettings = {
   autoDisable: true,
   hideProducts: true,
   showMessage: true,
-  previousHolidays: [
-    {
-      id: '1',
-      startDate: '2023-12-20',
-      endDate: '2023-12-27',
-      message: 'Holiday break - Merry Christmas!',
-      status: 'completed'
-    },
-    {
-      id: '2',
-      startDate: '2023-08-15',
-      endDate: '2023-08-20',
-      message: 'Summer vacation',
-      status: 'completed'
-    }
-  ]
+  previousHolidays: [] as Array<{
+    id: string;
+    startDate: string;
+    endDate: string;
+    message: string;
+    status: string;
+  }>
 }
 
 export default function SellerDashboard() {
@@ -366,10 +357,10 @@ export default function SellerDashboard() {
   const [statementsLoading, setStatementsLoading] = useState(false)
   const [selectedPeriod, setSelectedPeriod] = useState('all')
   const [settingsTab, setSettingsTab] = useState('profile')
-  const [profile, setProfile] = useState(mockSellerProfile)
-  const [notifications, setNotifications] = useState(mockNotificationSettings)
-  const [security, setSecurity] = useState(mockSecuritySettings)
-  const [holidayMode, setHolidayMode] = useState(mockHolidayModeSettings)
+  const [profile, setProfile] = useState(defaultSellerProfile)
+  const [notifications, setNotifications] = useState(defaultNotificationSettings)
+  const [security, setSecurity] = useState(defaultSecuritySettings)
+  const [holidayMode, setHolidayMode] = useState(defaultHolidayModeSettings)
   const [categories, setCategories] = useState<any[]>([])
   
   // Add product form state
@@ -450,6 +441,91 @@ export default function SellerDashboard() {
     }
   }
 
+  const fetchSellerSettings = async () => {
+    try {
+      const response = await fetch('/api/seller/settings', {
+        method: 'GET',
+        credentials: 'include'
+      })
+      const data = await response.json()
+      
+      if (data.success) {
+        setProfile(data.data.profile)
+        setNotifications(data.data.notifications)
+        setSecurity(data.data.security)
+        setHolidayMode(data.data.holidayMode)
+      } else {
+        console.error('Failed to fetch seller settings:', data.error)
+        // Keep default values as fallback
+      }
+    } catch (error) {
+      console.error('Error fetching seller settings:', error)
+      // Keep default values as fallback
+    }
+  }
+
+  const updateSellerSettings = async (type: string, data: any) => {
+    try {
+      const response = await fetch('/api/seller/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ type, data }),
+        credentials: 'include'
+      })
+      
+      const result = await response.json()
+      
+      if (result.success) {
+        console.log(`${type} settings updated successfully`)
+        return true
+      } else {
+        console.error(`Failed to update ${type} settings:`, result.error)
+        return false
+      }
+    } catch (error) {
+      console.error(`Error updating ${type} settings:`, error)
+      return false
+    }
+  }
+
+  const handleProfileSave = async () => {
+    const success = await updateSellerSettings('profile', profile)
+    if (success) {
+      alert('Profile updated successfully!')
+    } else {
+      alert('Failed to update profile. Please try again.')
+    }
+  }
+
+  const handleNotificationSave = async () => {
+    const success = await updateSellerSettings('notifications', notifications)
+    if (success) {
+      alert('Notification settings updated successfully!')
+    } else {
+      alert('Failed to update notification settings. Please try again.')
+    }
+  }
+
+  const handleSecuritySave = async () => {
+    const success = await updateSellerSettings('security', security)
+    if (success) {
+      alert('Security settings updated successfully!')
+    } else {
+      alert('Failed to update security settings. Please try again.')
+    }
+  }
+
+  const handleHolidayModeSave = async () => {
+    const success = await updateSellerSettings('holidayMode', holidayMode)
+    if (success) {
+      alert('Holiday mode settings updated successfully!')
+    } else {
+      alert('Failed to update holiday mode settings. Please try again.')
+    }
+  }
+
   const fetchFinancialData = async (sellerId: string) => {
     try {
       setFinancialLoading(true)
@@ -490,6 +566,7 @@ export default function SellerDashboard() {
     fetchSellerOrders(user.id)
     fetchSellerRefunds(user.id)
     fetchStatementsData(user.id, selectedPeriod)
+    fetchSellerSettings() // Fetch seller settings from API
     setIsLoading(false)
   }, [router])
 
@@ -3033,7 +3110,10 @@ export default function SellerDashboard() {
                       </div>
 
                       <div className="flex justify-end">
-                        <button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <button 
+                          onClick={handleProfileSave}
+                          className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                        >
                           Save Changes
                         </button>
                       </div>
@@ -3149,7 +3229,10 @@ export default function SellerDashboard() {
                       </div>
 
                       <div className="flex justify-end">
-                        <button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <button 
+                          onClick={handleProfileSave}
+                          className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                        >
                           Save Business Information
                         </button>
                       </div>
@@ -3257,7 +3340,10 @@ export default function SellerDashboard() {
                       </div>
 
                       <div className="flex justify-end">
-                        <button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <button 
+                          onClick={handleNotificationSave}
+                          className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                        >
                           Save Notification Settings
                         </button>
                       </div>
@@ -3353,7 +3439,10 @@ export default function SellerDashboard() {
                       </div>
 
                       <div className="flex justify-end">
-                        <button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <button 
+                          onClick={handleSecuritySave}
+                          className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                        >
                           Save Security Settings
                         </button>
                       </div>
@@ -3549,7 +3638,10 @@ export default function SellerDashboard() {
                       </div>
 
                       <div className="flex justify-end">
-                        <button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <button 
+                          onClick={handleHolidayModeSave}
+                          className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                        >
                           Save Holiday Settings
                         </button>
                       </div>

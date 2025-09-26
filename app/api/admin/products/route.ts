@@ -214,6 +214,10 @@ export async function POST(request: NextRequest) {
     const imageFiles = formData.getAll('images') as File[]
     const imageUrls: string[] = []
     
+    console.log('🔍 Image upload debug:')
+    console.log('  - Total image files received:', imageFiles.length)
+    console.log('  - Image files:', imageFiles.map(f => ({ name: f.name, size: f.size, type: f.type })))
+    
     // Validate image files
     if (imageFiles.length > 0) {
       for (const file of imageFiles) {
@@ -247,9 +251,14 @@ export async function POST(request: NextRequest) {
     for (const file of imageFiles) {
       if (file && file.size > 0) {
         try {
+          console.log(`📁 Processing image: ${file.name} (${file.size} bytes)`)
+          
           // Create uploads directory if it doesn't exist
           const uploadsDir = join(process.cwd(), 'public', 'uploads', 'products')
+          console.log(`📁 Uploads directory: ${uploadsDir}`)
+          
           if (!existsSync(uploadsDir)) {
+            console.log('📁 Creating uploads directory...')
             await mkdir(uploadsDir, { recursive: true })
           }
 
@@ -259,33 +268,47 @@ export async function POST(request: NextRequest) {
           const fileExtension = file.name.split('.').pop() || 'jpg'
           const fileName = `${timestamp}-${randomString}.${fileExtension}`
           
+          console.log(`📁 Generated filename: ${fileName}`)
+          
           // Convert file to buffer
           const bytes = await file.arrayBuffer()
           const buffer = Buffer.from(bytes)
+          console.log(`📁 Buffer size: ${buffer.length} bytes`)
 
           // Write file to uploads directory
           const filePath = join(uploadsDir, fileName)
+          console.log(`📁 Writing to: ${filePath}`)
           await writeFile(filePath, buffer)
+          console.log(`✅ File written successfully`)
 
           // Add the public URL
           const imageUrl = `/uploads/products/${fileName}`
           imageUrls.push(imageUrl)
           
-          console.log('Successfully uploaded image:', imageUrl)
+          console.log('✅ Successfully uploaded image:', imageUrl)
         } catch (error) {
-          console.error('Error uploading image:', error)
+          console.error('❌ Error uploading image:', error)
+          console.error('❌ Error details:', {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined
+          })
           // Fallback to placeholder if upload fails
           const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
           imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
         }
+      } else {
+        console.log(`⚠️ Skipping empty file: ${file?.name || 'unknown'}`)
       }
     }
     
     // If no images were uploaded, create at least one placeholder image
     if (imageUrls.length === 0) {
+      console.log('⚠️ No images uploaded, creating placeholder')
       const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
       imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
     }
+    
+    console.log('📸 Final image URLs:', imageUrls)
     
     // Generate slug
     const slug = validatedData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')

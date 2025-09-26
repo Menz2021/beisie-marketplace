@@ -161,6 +161,30 @@ export async function POST(request: NextRequest) {
     // Validate the product data
     const validatedData = productSchema.parse(productData)
     
+    // Validate that category exists
+    const category = await prisma.category.findUnique({
+      where: { id: validatedData.categoryId }
+    })
+    
+    if (!category) {
+      return NextResponse.json(
+        { error: 'Category not found. Please select a valid category.' },
+        { status: 400 }
+      )
+    }
+    
+    // Validate that vendor exists
+    const vendor = await prisma.user.findUnique({
+      where: { id: validatedData.vendorId }
+    })
+    
+    if (!vendor) {
+      return NextResponse.json(
+        { error: 'Vendor not found. Please select a valid vendor.' },
+        { status: 400 }
+      )
+    }
+    
     // Handle image uploads
     const imageFiles = formData.getAll('images') as File[]
     const imageUrls: string[] = []
@@ -268,6 +292,11 @@ export async function POST(request: NextRequest) {
     
   } catch (error) {
     console.error('Error creating product:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    })
     
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -276,8 +305,28 @@ export async function POST(request: NextRequest) {
       )
     }
     
+    // Handle Prisma errors
+    if (error && typeof error === 'object' && 'code' in error) {
+      const prismaError = error as any
+      if (prismaError.code === 'P2002') {
+        return NextResponse.json(
+          { error: 'A product with this SKU already exists' },
+          { status: 400 }
+        )
+      }
+      if (prismaError.code === 'P2003') {
+        return NextResponse.json(
+          { error: 'Invalid category or vendor reference' },
+          { status: 400 }
+        )
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }

@@ -209,7 +209,7 @@ export default function AdminDashboard() {
               </div>
               <button
                 onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-900 text-sm sm:text-base"
+                className="text-gray-600 hover:text-gray-900 text-sm sm:text-base px-2 py-1 rounded-md hover:bg-gray-100 active:bg-gray-200 transition-colors"
               >
                 Logout
               </button>
@@ -219,12 +219,12 @@ export default function AdminDashboard() {
           {/* Mobile Navigation */}
           <div className="md:hidden pb-4">
             <nav className="flex flex-wrap gap-2">
-              <Link href="/admin/users" className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200">Users</Link>
-              <Link href="/admin/sellers" className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200">Sellers</Link>
-              <Link href="/admin/sellers/financials" className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200">Financials</Link>
-              <Link href="/admin/products" className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200">Products</Link>
-              <Link href="/admin/orders" className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200">Orders</Link>
-              <Link href="/admin/refunds" className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200">Refunds</Link>
+              <Link href="/admin/users" className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors">Users</Link>
+              <Link href="/admin/sellers" className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors">Sellers</Link>
+              <Link href="/admin/sellers/financials" className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors">Financials</Link>
+              <Link href="/admin/products" className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors">Products</Link>
+              <Link href="/admin/orders" className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors">Orders</Link>
+              <Link href="/admin/refunds" className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors">Refunds</Link>
             </nav>
           </div>
         </div>

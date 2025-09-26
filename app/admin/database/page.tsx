@@ -71,9 +71,19 @@ export default function DatabaseViewerPage() {
     }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('admin_session')
-    router.push('/admin/login')
+  const handleLogout = async () => {
+    try {
+      // Clear secure cookie via API
+      await fetch('/api/admin/logout', {
+        method: 'POST',
+        credentials: 'include'
+      })
+    } catch (error) {
+      console.error('Logout error:', error)
+    } finally {
+      // Redirect to admin login
+      router.push('/admin/login')
+    }
   }
 
   return (

@@ -128,18 +128,11 @@ export async function GET(request: NextRequest) {
 // POST - Create new product
 export async function POST(request: NextRequest) {
   try {
-    // For now, we'll skip authentication check in API
-    // In a real app, you'd use JWT tokens or session cookies
-    // const adminSession = getAdminSession()
-    // if (!adminSession || adminSession.type !== 'admin') {
-    //   return NextResponse.json(
-    //     { error: 'Unauthorized. Admin access required.' },
-    //     { status: 401 }
-    //   )
-    // }
-
+    console.log('🚀 Admin product creation started')
+    
     // Parse form data
     const formData = await request.formData()
+    console.log('📝 Form data parsed successfully')
     
     // Extract product data
     const productData = {
@@ -162,12 +155,16 @@ export async function POST(request: NextRequest) {
     }
     
     // Validate the product data
+    console.log('🔍 Validating product data...')
     const validatedData = productSchema.parse(productData)
+    console.log('✅ Product data validated')
     
     // Validate that category exists
+    console.log('🔍 Checking category exists...')
     const category = await prisma.category.findUnique({
       where: { id: validatedData.categoryId }
     })
+    console.log('✅ Category check completed')
     
     if (!category) {
       return NextResponse.json(
@@ -177,13 +174,14 @@ export async function POST(request: NextRequest) {
     }
     
     // For admin-created products, use "Beisie" as the vendor
-    // First, try to find or create a "Beisie" vendor user
+    console.log('🔍 Finding Beisie vendor...')
     let vendor = await prisma.user.findFirst({
       where: { 
         role: 'ADMIN',
         name: { contains: 'Beisie' }
       }
     })
+    console.log('✅ Vendor search completed')
     
     // If no Beisie admin exists, create one or use the first admin
     if (!vendor) {
@@ -209,12 +207,14 @@ export async function POST(request: NextRequest) {
     
     // Override the vendorId with the Beisie vendor
     validatedData.vendorId = vendor.id
+    console.log('✅ Vendor ID set:', vendor.id)
     
     // Handle image uploads
+    console.log('🔍 Processing image uploads...')
     const imageFiles = formData.getAll('images') as File[]
     const imageUrls: string[] = []
     
-    console.log('🔍 Image upload debug:')
+    console.log('📸 Image upload debug:')
     console.log('  - Total image files received:', imageFiles.length)
     console.log('  - Image files:', imageFiles.map(f => ({ name: f.name, size: f.size, type: f.type })))
     
@@ -324,6 +324,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Create product in database
+    console.log('💾 Creating product in database...')
     const newProduct = await prisma.product.create({
       data: {
         ...validatedData,
@@ -338,6 +339,7 @@ export async function POST(request: NextRequest) {
         vendor: true
       }
     })
+    console.log('✅ Product created successfully:', newProduct.id)
     
     return NextResponse.json({
       success: true,
@@ -346,8 +348,8 @@ export async function POST(request: NextRequest) {
     }, { status: 201 })
     
   } catch (error) {
-    console.error('Error creating product:', error)
-    console.error('Error details:', {
+    console.error('❌ Error creating product:', error)
+    console.error('❌ Error details:', {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       name: error instanceof Error ? error.name : undefined

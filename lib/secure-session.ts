@@ -6,10 +6,6 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-pro
 const secret = new TextEncoder().encode(JWT_SECRET)
 const SESSION_DURATION = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
 
-// Debug logging for JWT secret
-console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET)
-console.log('JWT_SECRET length:', JWT_SECRET.length)
-console.log('NODE_ENV:', process.env.NODE_ENV)
 
 export interface SecureSession {
   id: string

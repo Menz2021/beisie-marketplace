@@ -61,10 +61,6 @@ export async function POST(request: NextRequest) {
     
     // Set secure HTTP-only cookie
     setSecureCookie(response, token, 'admin_session')
-    console.log('✅ Admin login successful, cookie set')
-    console.log('Token generated:', token.substring(0, 20) + '...')
-    console.log('Cookie name: admin_session')
-    console.log('Response headers:', response.headers.getSetCookie())
     
     return response
     

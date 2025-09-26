@@ -4,8 +4,8 @@ import { requireAdmin, requireAuth } from '@/lib/secure-session'
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   
-  // Admin routes protection
-  if (pathname.startsWith('/admin')) {
+  // Admin routes protection (except login page)
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     const adminSession = await requireAdmin(request)
     
     if (!adminSession) {

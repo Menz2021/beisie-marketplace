@@ -151,13 +151,34 @@ export async function POST(request: NextRequest) {
     const imageFiles = formData.getAll('images') as File[]
     const imageUrls: string[] = []
     
-    // For now, we'll store placeholder URLs. In a real app, you'd upload to cloud storage
-    for (let i = 0; i < imageFiles.length; i++) {
-      const file = imageFiles[i]
+    // Process uploaded images
+    for (const file of imageFiles) {
       if (file && file.size > 0) {
-        // For demo purposes, we'll use placeholder URLs
-        const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
-        imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+        try {
+          // Upload image to our upload API
+          const uploadFormData = new FormData()
+          uploadFormData.append('image', file)
+          
+          const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/upload/image`, {
+            method: 'POST',
+            body: uploadFormData
+          })
+          
+          if (uploadResponse.ok) {
+            const uploadResult = await uploadResponse.json()
+            imageUrls.push(uploadResult.imageUrl)
+          } else {
+            console.error('Failed to upload image:', file.name)
+            // Fallback to placeholder if upload fails
+            const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
+            imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+          }
+        } catch (error) {
+          console.error('Error uploading image:', error)
+          // Fallback to placeholder if upload fails
+          const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
+          imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+        }
       }
     }
     
@@ -259,13 +280,34 @@ export async function PUT(request: NextRequest) {
     const imageFiles = formData.getAll('images') as File[]
     const imageUrls: string[] = []
     
-    // For now, we'll store placeholder URLs. In a real app, you'd upload to cloud storage
-    for (let i = 0; i < imageFiles.length; i++) {
-      const file = imageFiles[i]
+    // Process uploaded images
+    for (const file of imageFiles) {
       if (file && file.size > 0) {
-        // For demo purposes, we'll use placeholder URLs
-        const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
-        imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+        try {
+          // Upload image to our upload API
+          const uploadFormData = new FormData()
+          uploadFormData.append('image', file)
+          
+          const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/upload/image`, {
+            method: 'POST',
+            body: uploadFormData
+          })
+          
+          if (uploadResponse.ok) {
+            const uploadResult = await uploadResponse.json()
+            imageUrls.push(uploadResult.imageUrl)
+          } else {
+            console.error('Failed to upload image:', file.name)
+            // Fallback to placeholder if upload fails
+            const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
+            imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+          }
+        } catch (error) {
+          console.error('Error uploading image:', error)
+          // Fallback to placeholder if upload fails
+          const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
+          imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+        }
       }
     }
     

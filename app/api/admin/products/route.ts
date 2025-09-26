@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { getAdminSession } from '@/lib/session'
+import { writeFile, mkdir } from 'fs/promises'
+import { join } from 'path'
+import { existsSync } from 'fs'
 
 // Validation schemas
 const productSchema = z.object({
@@ -240,28 +243,35 @@ export async function POST(request: NextRequest) {
       }
     }
     
-    // Process uploaded images
+    // Process uploaded images directly (no HTTP call needed)
     for (const file of imageFiles) {
       if (file && file.size > 0) {
         try {
-          // Upload image to our upload API
-          const uploadFormData = new FormData()
-          uploadFormData.append('image', file)
-          
-          const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/upload/image`, {
-            method: 'POST',
-            body: uploadFormData
-          })
-          
-          if (uploadResponse.ok) {
-            const uploadResult = await uploadResponse.json()
-            imageUrls.push(uploadResult.imageUrl)
-          } else {
-            console.error('Failed to upload image:', file.name)
-            // Fallback to placeholder if upload fails
-            const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
-            imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+          // Create uploads directory if it doesn't exist
+          const uploadsDir = join(process.cwd(), 'public', 'uploads', 'products')
+          if (!existsSync(uploadsDir)) {
+            await mkdir(uploadsDir, { recursive: true })
           }
+
+          // Generate unique filename
+          const timestamp = Date.now()
+          const randomString = Math.random().toString(36).substring(2, 15)
+          const fileExtension = file.name.split('.').pop() || 'jpg'
+          const fileName = `${timestamp}-${randomString}.${fileExtension}`
+          
+          // Convert file to buffer
+          const bytes = await file.arrayBuffer()
+          const buffer = Buffer.from(bytes)
+
+          // Write file to uploads directory
+          const filePath = join(uploadsDir, fileName)
+          await writeFile(filePath, buffer)
+
+          // Add the public URL
+          const imageUrl = `/uploads/products/${fileName}`
+          imageUrls.push(imageUrl)
+          
+          console.log('Successfully uploaded image:', imageUrl)
         } catch (error) {
           console.error('Error uploading image:', error)
           // Fallback to placeholder if upload fails

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { writeFile, mkdir } from 'fs/promises'
+import { join } from 'path'
+import { existsSync } from 'fs'
 
 // Validation schema for product
 const productSchema = z.object({
@@ -176,8 +179,8 @@ export async function POST(request: NextRequest) {
         } catch (error) {
           console.error('Error uploading image:', error)
           // Fallback to placeholder if upload fails
-          const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
-          imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+        const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
+        imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
         }
       }
     }
@@ -305,8 +308,8 @@ export async function PUT(request: NextRequest) {
         } catch (error) {
           console.error('Error uploading image:', error)
           // Fallback to placeholder if upload fails
-          const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
-          imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+        const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
+        imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
         }
       }
     }

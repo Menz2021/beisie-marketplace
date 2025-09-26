@@ -181,7 +181,7 @@ export async function POST(request: NextRequest) {
     let vendor = await prisma.user.findFirst({
       where: { 
         role: 'ADMIN',
-        name: { contains: 'Beisie', mode: 'insensitive' }
+        name: { contains: 'Beisie' }
       }
     })
     

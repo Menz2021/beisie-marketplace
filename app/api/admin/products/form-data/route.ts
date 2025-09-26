@@ -15,25 +15,45 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    // Get all users who can be vendors (SELLER or ADMIN role)
-    const vendors = await prisma.user.findMany({
-      where: {
-        role: {
-          in: ['SELLER', 'ADMIN']
-        },
-        isActive: true
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        businessName: true
-      },
-      orderBy: {
-        name: 'asc'
+    // For admin products, always use "Beisie" as the vendor
+    // Find or create a Beisie vendor
+    let beisieVendor = await prisma.user.findFirst({
+      where: { 
+        role: 'ADMIN',
+        name: { contains: 'Beisie', mode: 'insensitive' }
       }
     })
+    
+    // If no Beisie admin exists, create one or use the first admin
+    if (!beisieVendor) {
+      beisieVendor = await prisma.user.findFirst({
+        where: { role: 'ADMIN' }
+      })
+      
+      // If still no admin exists, create a default Beisie vendor
+      if (!beisieVendor) {
+        beisieVendor = await prisma.user.create({
+          data: {
+            email: 'admin@beisie.com',
+            name: 'Beisie Marketplace',
+            password: 'default-password',
+            role: 'ADMIN',
+            isVerified: true,
+            isActive: true,
+            businessName: 'Beisie Marketplace'
+          }
+        })
+      }
+    }
+    
+    // Return only the Beisie vendor for admin products
+    const vendors = [{
+      id: beisieVendor.id,
+      name: beisieVendor.name || 'Beisie Marketplace',
+      email: beisieVendor.email,
+      role: beisieVendor.role,
+      businessName: beisieVendor.businessName || 'Beisie Marketplace'
+    }]
 
     return NextResponse.json({
       success: true,

@@ -89,21 +89,44 @@ export default function AdminOrdersPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Check if admin is logged in
-    const adminData = localStorage.getItem('admin_session')
-    if (!adminData) {
-      router.push('/admin/login')
-      return
+    // Check if admin is logged in via secure cookie
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/admin/verify', {
+          method: 'GET',
+          credentials: 'include'
+        })
+        
+        if (response.ok) {
+          fetchOrders()
+        } else {
+          // Redirect to admin login if not logged in
+          router.push('/admin/login')
+        }
+      } catch (error) {
+        console.error('Auth check error:', error)
+        router.push('/admin/login')
+      } finally {
+        setIsLoading(false)
+      }
     }
     
-    fetchOrders()
+    checkAuth()
   }, [router])
 
-  const handleLogout = () => {
-    // Clear admin session
-    localStorage.removeItem('admin_session')
-    // Redirect to admin login
-    router.push('/admin/login')
+  const handleLogout = async () => {
+    try {
+      // Clear secure cookie via API
+      await fetch('/api/admin/logout', {
+        method: 'POST',
+        credentials: 'include'
+      })
+    } catch (error) {
+      console.error('Logout error:', error)
+    } finally {
+      // Redirect to admin login
+      router.push('/admin/login')
+    }
   }
 
   const fetchOrders = async () => {

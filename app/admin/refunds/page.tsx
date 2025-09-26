@@ -51,15 +51,30 @@ export default function RefundManagementPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Check if admin is logged in
-    const adminData = localStorage.getItem('admin_session')
-    if (!adminData) {
-      router.push('/admin/login')
-      return
+    // Check if admin is logged in via secure cookie
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/admin/verify', {
+          method: 'GET',
+          credentials: 'include'
+        })
+        
+        if (response.ok) {
+          fetchRefunds()
+        } else {
+          // Redirect to admin login if not logged in
+          router.push('/admin/login')
+        }
+      } catch (error) {
+        console.error('Auth check error:', error)
+        router.push('/admin/login')
+      } finally {
+        setLoading(false)
+      }
     }
     
-    fetchRefunds()
-  }, [router, statusFilter, searchTerm, dateFilter, sellerFilter, currentPage])
+    checkAuth()
+  }, [router])
 
   const fetchRefunds = async () => {
     setLoading(true)

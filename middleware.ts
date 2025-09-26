@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin, requireAuth } from '@/lib/secure-session'
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   
   // Admin routes protection
   if (pathname.startsWith('/admin')) {
-    const adminSession = requireAdmin(request)
+    const adminSession = await requireAdmin(request)
     
     if (!adminSession) {
       // Redirect to admin login if not authenticated
@@ -16,7 +16,7 @@ export function middleware(request: NextRequest) {
   
   // Protected user routes
   if (pathname.startsWith('/account') || pathname.startsWith('/orders') || pathname.startsWith('/wishlist')) {
-    const userSession = requireAuth(request)
+    const userSession = await requireAuth(request)
     
     if (!userSession) {
       // Redirect to login if not authenticated

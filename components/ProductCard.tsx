@@ -147,14 +147,14 @@ export function ProductCard({ product }: ProductCardProps) {
               </p>
             )}
 
-            <div className="flex items-center gap-2 mb-4">
+            <div className="mb-4">
               <span className="text-2xl font-bold text-gray-900">
                 UGX {product.price.toLocaleString()}
               </span>
               {product.originalPrice && (
-                <span className="text-lg text-gray-500 line-through">
+                <div className="text-lg text-gray-500 line-through mt-1">
                   UGX {product.originalPrice.toLocaleString()}
-                </span>
+                </div>
               )}
             </div>
 

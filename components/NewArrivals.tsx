@@ -40,7 +40,7 @@ export function NewArrivals() {
 
   const fetchNewArrivals = async () => {
     try {
-      const response = await fetch('/api/new-arrivals?limit=4')
+      const response = await fetch('/api/new-arrivals?limit=8')
       const data = await response.json()
       
       if (data.success) {
@@ -298,7 +298,7 @@ export function NewArrivals() {
             </div>
             
             {/* Desktop grid */}
-            <div className="hidden lg:grid grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+            <div className="hidden lg:grid grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
               {newArrivals.map((product) => {
                 let productImages = []
                 try {

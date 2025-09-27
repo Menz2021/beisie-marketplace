@@ -158,24 +158,28 @@ export async function POST(request: NextRequest) {
     for (const file of imageFiles) {
       if (file && file.size > 0) {
         try {
-          // Upload image to our upload API
-          const uploadFormData = new FormData()
-          uploadFormData.append('image', file)
-          
-          const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/upload/image`, {
-            method: 'POST',
-            body: uploadFormData
-          })
-          
-          if (uploadResponse.ok) {
-            const uploadResult = await uploadResponse.json()
-            imageUrls.push(uploadResult.imageUrl)
-          } else {
-            console.error('Failed to upload image:', file.name)
-            // Fallback to placeholder if upload fails
-            const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
-            imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+          // Validate file type
+          const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+          if (!validTypes.includes(file.type)) {
+            console.error(`❌ Invalid file type: ${file.type}`)
+            continue
           }
+          
+          // Validate file size (max 2MB for base64)
+          const maxSize = 2 * 1024 * 1024 // 2MB
+          if (file.size > maxSize) {
+            console.error(`❌ File too large: ${file.size} bytes`)
+            continue
+          }
+          
+          // Convert file to base64 data URL
+          const bytes = await file.arrayBuffer()
+          const buffer = Buffer.from(bytes)
+          const base64 = buffer.toString('base64')
+          const dataUrl = `data:${file.type};base64,${base64}`
+          
+          imageUrls.push(dataUrl)
+          console.log(`✅ Successfully processed image as base64: ${file.name}`)
         } catch (error) {
           console.error('Error uploading image:', error)
           // Fallback to placeholder if upload fails
@@ -287,24 +291,28 @@ export async function PUT(request: NextRequest) {
     for (const file of imageFiles) {
       if (file && file.size > 0) {
         try {
-          // Upload image to our upload API
-          const uploadFormData = new FormData()
-          uploadFormData.append('image', file)
-          
-          const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/upload/image`, {
-            method: 'POST',
-            body: uploadFormData
-          })
-          
-          if (uploadResponse.ok) {
-            const uploadResult = await uploadResponse.json()
-            imageUrls.push(uploadResult.imageUrl)
-          } else {
-            console.error('Failed to upload image:', file.name)
-            // Fallback to placeholder if upload fails
-            const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
-            imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+          // Validate file type
+          const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+          if (!validTypes.includes(file.type)) {
+            console.error(`❌ Invalid file type: ${file.type}`)
+            continue
           }
+          
+          // Validate file size (max 2MB for base64)
+          const maxSize = 2 * 1024 * 1024 // 2MB
+          if (file.size > maxSize) {
+            console.error(`❌ File too large: ${file.size} bytes`)
+            continue
+          }
+          
+          // Convert file to base64 data URL
+          const bytes = await file.arrayBuffer()
+          const buffer = Buffer.from(bytes)
+          const base64 = buffer.toString('base64')
+          const dataUrl = `data:${file.type};base64,${base64}`
+          
+          imageUrls.push(dataUrl)
+          console.log(`✅ Successfully processed image as base64: ${file.name}`)
         } catch (error) {
           console.error('Error uploading image:', error)
           // Fallback to placeholder if upload fails

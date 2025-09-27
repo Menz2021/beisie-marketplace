@@ -247,52 +247,37 @@ export async function POST(request: NextRequest) {
       }
     }
     
-    // Process uploaded images directly (no HTTP call needed)
+    // Process uploaded images as base64 data URLs (Vercel-compatible)
     for (const file of imageFiles) {
       if (file && file.size > 0) {
         try {
           console.log(`📁 Processing image: ${file.name} (${file.size} bytes)`)
           
-          // Create uploads directory if it doesn't exist
-          const uploadsDir = join(process.cwd(), 'public', 'uploads', 'products')
-          console.log(`📁 Uploads directory: ${uploadsDir}`)
-          
-          if (!existsSync(uploadsDir)) {
-            console.log('📁 Creating uploads directory...')
-            await mkdir(uploadsDir, { recursive: true })
+          // Validate file type
+          const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+          if (!validTypes.includes(file.type)) {
+            console.error(`❌ Invalid file type: ${file.type}`)
+            continue
           }
-
-          // Generate unique filename
-          const timestamp = Date.now()
-          const randomString = Math.random().toString(36).substring(2, 15)
-          const fileExtension = file.name.split('.').pop() || 'jpg'
-          const fileName = `${timestamp}-${randomString}.${fileExtension}`
           
-          console.log(`📁 Generated filename: ${fileName}`)
+          // Validate file size (max 2MB for base64)
+          const maxSize = 2 * 1024 * 1024 // 2MB
+          if (file.size > maxSize) {
+            console.error(`❌ File too large: ${file.size} bytes`)
+            continue
+          }
           
-          // Convert file to buffer
+          // Convert file to base64 data URL
           const bytes = await file.arrayBuffer()
           const buffer = Buffer.from(bytes)
-          console.log(`📁 Buffer size: ${buffer.length} bytes`)
-
-          // Write file to uploads directory
-          const filePath = join(uploadsDir, fileName)
-          console.log(`📁 Writing to: ${filePath}`)
-          await writeFile(filePath, buffer)
-          console.log(`✅ File written successfully`)
-
-          // Add the public URL
-          const imageUrl = `/uploads/products/${fileName}`
-          imageUrls.push(imageUrl)
+          const base64 = buffer.toString('base64')
+          const dataUrl = `data:${file.type};base64,${base64}`
           
-          console.log('✅ Successfully uploaded image:', imageUrl)
+          imageUrls.push(dataUrl)
+          console.log(`✅ Successfully processed image as base64: ${file.name}`)
         } catch (error) {
-          console.error('❌ Error uploading image:', error)
-          console.error('❌ Error details:', {
-            message: error instanceof Error ? error.message : 'Unknown error',
-            stack: error instanceof Error ? error.stack : undefined
-          })
-          // Fallback to placeholder if upload fails
+          console.error('❌ Error processing image:', error)
+          // Fallback to placeholder if processing fails
           const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
           imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
         }
@@ -461,56 +446,35 @@ export async function PUT(request: NextRequest) {
     const imageFiles = formData.getAll('images') as File[]
     const imageUrls: string[] = []
     
-    // Process uploaded images directly (same logic as POST)
+    // Process uploaded images as base64 data URLs (Vercel-compatible)
     for (const file of imageFiles) {
       if (file && file.size > 0) {
         try {
           // Validate file type
           const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
           if (!validTypes.includes(file.type)) {
-            return NextResponse.json(
-              { error: 'Invalid file type. Only JPEG, PNG, and WebP images are allowed.' },
-              { status: 400 }
-            )
+            console.error(`❌ Invalid file type: ${file.type}`)
+            continue
           }
           
-          // Validate file size (max 5MB)
-          const maxSize = 5 * 1024 * 1024 // 5MB
+          // Validate file size (max 2MB for base64)
+          const maxSize = 2 * 1024 * 1024 // 2MB
           if (file.size > maxSize) {
-            return NextResponse.json(
-              { error: 'Image file size must be smaller than 5MB.' },
-              { status: 400 }
-            )
+            console.error(`❌ File too large: ${file.size} bytes`)
+            continue
           }
           
-          // Create uploads directory if it doesn't exist
-          const uploadsDir = join(process.cwd(), 'public', 'uploads', 'products')
-          
-          if (!existsSync(uploadsDir)) {
-            await mkdir(uploadsDir, { recursive: true })
-          }
-
-          // Generate unique filename
-          const timestamp = Date.now()
-          const randomString = Math.random().toString(36).substring(2, 15)
-          const fileExtension = file.name.split('.').pop() || 'jpg'
-          const fileName = `${timestamp}-${randomString}.${fileExtension}`
-          
-          // Convert file to buffer
+          // Convert file to base64 data URL
           const bytes = await file.arrayBuffer()
           const buffer = Buffer.from(bytes)
-
-          // Write file to uploads directory
-          const filePath = join(uploadsDir, fileName)
-          await writeFile(filePath, buffer)
-
-          // Add the public URL
-          const imageUrl = `/uploads/products/${fileName}`
-          imageUrls.push(imageUrl)
+          const base64 = buffer.toString('base64')
+          const dataUrl = `data:${file.type};base64,${base64}`
           
+          imageUrls.push(dataUrl)
+          console.log(`✅ Successfully processed image as base64: ${file.name}`)
         } catch (error) {
-          console.error('Error uploading image:', error)
-          // Fallback to placeholder if upload fails
+          console.error('Error processing image:', error)
+          // Fallback to placeholder if processing fails
           const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
           imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
         }

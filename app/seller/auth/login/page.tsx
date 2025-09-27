@@ -17,30 +17,29 @@ export default function SellerLoginPage() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true)
 
   useEffect(() => {
-    // Check if user is already logged in
-    const userData = localStorage.getItem('user_session')
-    const adminData = localStorage.getItem('admin_session')
-    
-    if (userData) {
-      const user = JSON.parse(userData)
-      if (user.role === 'SELLER') {
-        router.push('/seller/dashboard')
-        return
-      } else if (user.role === 'ADMIN') {
-        router.push('/admin/dashboard')
-        return
-      } else {
-        router.push('/')
-        return
+    // Check if seller is already logged in via secure cookie
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/verify', {
+          method: 'GET',
+          credentials: 'include'
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          if (data.user.role === 'SELLER') {
+            router.push('/seller/dashboard')
+            return
+          }
+        }
+      } catch (error) {
+        console.error('Auth check error:', error)
       }
+
+      setIsCheckingAuth(false)
     }
-    
-    if (adminData) {
-      router.push('/admin/dashboard')
-      return
-    }
-    
-    setIsCheckingAuth(false)
+
+    checkAuth()
   }, [router])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +65,7 @@ export default function SellerLoginPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+        credentials: 'include', // Include cookies
         signal: controller.signal
       })
 
@@ -81,17 +81,8 @@ export default function SellerLoginPage() {
         
         toast.success('Seller login successful!')
         
-        // Store user data in localStorage with error handling for mobile
-        try {
-          localStorage.setItem('user_session', JSON.stringify(data.user))
-        } catch (storageError) {
-          console.error('localStorage error:', storageError)
-          toast.error('Unable to save login session. Please try again.')
-          setIsLoading(false)
-          return
-        }
-        
-        // Use router.push for better mobile compatibility
+        // Session is now stored in secure HTTP-only cookie
+        // Redirect to seller dashboard
         router.push('/seller/dashboard')
       } else {
         toast.error(data.error || 'Login failed. Please try again.')

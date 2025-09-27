@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { loginUser } from '@/lib/auth'
+import { generateToken, setSecureCookie } from '@/lib/secure-session'
 import { z } from 'zod'
 
 // Validation schema
@@ -25,8 +26,18 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Return success response (without password)
-    return NextResponse.json({
+    // Generate secure JWT token
+    const token = await generateToken({
+      id: user.id,
+      email: user.email,
+      name: user.name || '',
+      role: user.role,
+      isVerified: user.isVerified,
+      isActive: user.isActive
+    })
+
+    // Create response with secure cookie
+    const response = NextResponse.json({
       success: true,
       message: 'Login successful',
       user: {
@@ -38,6 +49,11 @@ export async function POST(request: NextRequest) {
         isActive: user.isActive
       }
     }, { status: 200 })
+
+    // Set secure HTTP-only cookie
+    setSecureCookie(response, token, 'session')
+    
+    return response
     
   } catch (error) {
     console.error('Login error:', error)

@@ -148,6 +148,8 @@ export default function SellerProductsPage() {
         })
         const data = await response.json()
         
+        console.log('🔍 Seller products API response:', data)
+        
         if (data.success) {
           // Transform the data to match our interface
           const transformedProducts = data.data.map((product: any) => ({
@@ -167,9 +169,10 @@ export default function SellerProductsPage() {
             approvalStatus: product.approvalStatus,
             isActive: product.isActive
           }))
+          console.log('✅ Transformed products:', transformedProducts)
           setProducts(transformedProducts)
         } else {
-          console.error('Failed to fetch products:', data.error)
+          console.error('❌ Failed to fetch products:', data.error)
           toast.error('Failed to load products')
           // Use mock data as fallback
           setProducts(mockProducts)

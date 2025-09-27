@@ -377,15 +377,21 @@ export async function POST(request: NextRequest) {
 // PUT - Update product
 export async function PUT(request: NextRequest) {
   try {
+    console.log('🚀 Admin product update started')
+    
     const formData = await request.formData()
+    console.log('📝 Form data parsed successfully')
     
     const productId = formData.get('productId') as string
     if (!productId) {
+      console.log('❌ No product ID provided')
       return NextResponse.json(
         { error: 'Product ID is required' },
         { status: 400 }
       )
     }
+    
+    console.log('📝 Product ID:', productId)
 
     // Extract product data from form
     const productData = {
@@ -395,19 +401,23 @@ export async function PUT(request: NextRequest) {
       originalPrice: formData.get('originalPrice') ? parseFloat(formData.get('originalPrice') as string) : undefined,
       discountedPrice: formData.get('discountedPrice') ? parseFloat(formData.get('discountedPrice') as string) : undefined,
       stock: formData.get('stock') ? parseInt(formData.get('stock') as string) : undefined,
-      sku: formData.get('sku') as string,
-      brand: formData.get('brand') as string,
+      sku: formData.get('sku') as string || undefined,
+      brand: formData.get('brand') as string || undefined,
       weight: formData.get('weight') ? parseFloat(formData.get('weight') as string) : undefined,
       categoryId: formData.get('categoryId') as string,
       vendorId: formData.get('vendorId') as string,
       isActive: formData.get('isActive') === 'true',
       isFeatured: formData.get('isFeatured') === 'true',
       deliveryTimeDays: formData.get('deliveryTimeDays') ? parseInt(formData.get('deliveryTimeDays') as string) : 0,
-      deliveryTimeText: formData.get('deliveryTimeText') as string
+      deliveryTimeText: formData.get('deliveryTimeText') as string || undefined,
+      specifications: formData.get('specifications') as string || undefined
     }
 
     // Validate the product data
+    console.log('🔍 Validating product data...')
+    console.log('📝 Product data:', productData)
     const validatedData = productSchema.parse(productData)
+    console.log('✅ Product data validated')
     
     // For admin-created products, use "Beisie" as the vendor
     let vendor = await prisma.user.findFirst({
@@ -549,9 +559,15 @@ export async function PUT(request: NextRequest) {
     }, { status: 200 })
     
   } catch (error) {
-    console.error('Error updating product:', error)
+    console.error('❌ Error updating product:', error)
+    console.error('❌ Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    })
     
     if (error instanceof z.ZodError) {
+      console.error('❌ Validation errors:', error.errors)
       return NextResponse.json(
         { error: 'Validation failed', details: error.errors },
         { status: 400 }

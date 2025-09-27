@@ -10,7 +10,8 @@ import {
   Bars3Icon,
   XMarkIcon,
   HeartIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  ShoppingBagIcon
 } from '@heroicons/react/24/outline'
 import { useCartStore } from '@/store/cartStore'
 import { LanguageSwitcher } from './LanguageSwitcher'
@@ -44,16 +45,20 @@ export function Navbar() {
   }, [])
 
   useEffect(() => {
-    // Close user menu when clicking outside
-    const handleClickOutside = (event: MouseEvent) => {
+    // Close user menu when clicking outside or touching outside
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (showUserMenu) {
         setShowUserMenu(false)
       }
     }
 
+    // Add both click and touch event listeners for better mobile support
     document.addEventListener('click', handleClickOutside)
+    document.addEventListener('touchstart', handleClickOutside)
+    
     return () => {
       document.removeEventListener('click', handleClickOutside)
+      document.removeEventListener('touchstart', handleClickOutside)
     }
   }, [showUserMenu])
 
@@ -163,32 +168,34 @@ export function Navbar() {
                     <span className="text-xs font-medium mt-1">Account</span>
                   </button>
                   
-                  {/* User Dropdown Menu */}
+                  {/* User Dropdown Menu - Desktop */}
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
-                      <div className="px-4 py-2 border-b border-gray-100">
-                        <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                        <p className="text-xs text-gray-500">{user.email}</p>
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200 animate-in slide-in-from-top-2 duration-200">
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
+                        <p className="text-xs text-gray-500 truncate mt-1">{user.email}</p>
                       </div>
                       <Link
                         href="/account"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                         onClick={() => setShowUserMenu(false)}
                       >
+                        <UserIcon className="h-4 w-4 mr-3 text-gray-400" />
                         My Account
                       </Link>
                       <Link
                         href="/orders"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                         onClick={() => setShowUserMenu(false)}
                       >
+                        <ShoppingBagIcon className="h-4 w-4 mr-3 text-gray-400" />
                         My Orders
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                        className="flex items-center w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
                       >
-                        <ArrowRightOnRectangleIcon className="h-4 w-4 inline mr-2" />
+                        <ArrowRightOnRectangleIcon className="h-4 w-4 mr-3" />
                         Logout
                       </button>
                     </div>
@@ -260,41 +267,43 @@ export function Navbar() {
                   <div className="relative">
                     <button
                       onClick={() => setShowUserMenu(!showUserMenu)}
-                      className="flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+                      className="flex items-center justify-center p-3 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 active:bg-gray-200 transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
                     >
-                      <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-purple-600">
+                      <div className="w-7 h-7 bg-purple-100 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-medium text-purple-600">
                           {user.name.charAt(0).toUpperCase()}
                         </span>
                       </div>
                     </button>
                     
-                    {/* User Dropdown Menu */}
+                    {/* User Dropdown Menu - Mobile Optimized */}
                     {showUserMenu && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
-                        <div className="px-4 py-2 border-b border-gray-100">
-                          <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                          <p className="text-xs text-gray-500">{user.email}</p>
+                      <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200 animate-in slide-in-from-top-2 duration-200">
+                        <div className="px-4 py-3 border-b border-gray-100">
+                          <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
+                          <p className="text-xs text-gray-500 truncate mt-1">{user.email}</p>
                         </div>
                         <Link
                           href="/account"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors touch-manipulation"
                           onClick={() => setShowUserMenu(false)}
                         >
+                          <UserIcon className="h-4 w-4 mr-3 text-gray-400" />
                           My Account
-                </Link>
+                        </Link>
                         <Link
                           href="/orders"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors touch-manipulation"
                           onClick={() => setShowUserMenu(false)}
                         >
+                          <ShoppingBagIcon className="h-4 w-4 mr-3 text-gray-400" />
                           My Orders
-                    </Link>
+                        </Link>
                         <button
                           onClick={handleLogout}
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                          className="flex items-center w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 active:bg-red-100 transition-colors touch-manipulation"
                         >
-                          <ArrowRightOnRectangleIcon className="h-4 w-4 inline mr-2" />
+                          <ArrowRightOnRectangleIcon className="h-4 w-4 mr-3" />
                           Logout
                         </button>
                       </div>

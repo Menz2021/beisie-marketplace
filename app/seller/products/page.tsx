@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { 
   PlusIcon, 
   PencilIcon, 
@@ -12,8 +13,27 @@ import {
   FunnelIcon,
   ShoppingBagIcon
 } from '@heroicons/react/24/outline'
+import toast from 'react-hot-toast'
 
-// Mock product data
+interface Product {
+  id: string
+  name: string
+  price: number
+  originalPrice?: number
+  discountedPrice?: number
+  category: string
+  stock: number
+  sales?: number
+  status: string
+  image?: string
+  images?: string
+  sku?: string
+  createdAt: string
+  approvalStatus?: string
+  isActive?: boolean
+}
+
+// Mock product data (fallback)
 const mockProducts = [
   {
     id: '1',
@@ -110,11 +130,62 @@ const categories = [
 ]
 
 export default function SellerProductsPage() {
-  const [products, setProducts] = useState(mockProducts)
+  const router = useRouter()
+  const [products, setProducts] = useState<Product[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All Categories')
   const [selectedStatus, setSelectedStatus] = useState('All Status')
   const [showFilters, setShowFilters] = useState(false)
+
+  // Fetch seller products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch('/api/seller/products', {
+          credentials: 'include'
+        })
+        const data = await response.json()
+        
+        if (data.success) {
+          // Transform the data to match our interface
+          const transformedProducts = data.data.map((product: any) => ({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            originalPrice: product.originalPrice,
+            discountedPrice: product.discountedPrice,
+            category: product.category?.name || 'Uncategorized',
+            stock: product.stock,
+            sales: 0, // We'll add sales tracking later
+            status: product.isActive ? 'active' : 'inactive',
+            image: product.images ? JSON.parse(product.images)[0] : '/api/placeholder/300/300/Product',
+            images: product.images,
+            sku: product.sku,
+            createdAt: new Date(product.createdAt).toLocaleDateString(),
+            approvalStatus: product.approvalStatus,
+            isActive: product.isActive
+          }))
+          setProducts(transformedProducts)
+        } else {
+          console.error('Failed to fetch products:', data.error)
+          toast.error('Failed to load products')
+          // Use mock data as fallback
+          setProducts(mockProducts)
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error)
+        toast.error('Failed to load products')
+        // Use mock data as fallback
+        setProducts(mockProducts)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-UG', {
@@ -134,14 +205,42 @@ export default function SellerProductsPage() {
     }
   }
 
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         product.sku.toLowerCase().includes(searchQuery.toLowerCase())
+                         product.sku?.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = selectedCategory === 'All Categories' || product.category === selectedCategory
     const matchesStatus = selectedStatus === 'All Status' || product.status === selectedStatus
     
     return matchesSearch && matchesCategory && matchesStatus
   })
+
+  const getProductImage = (product: Product) => {
+    if (product.image && !product.image.startsWith('/api/placeholder')) {
+      return product.image
+    }
+    if (product.images) {
+      try {
+        const images = JSON.parse(product.images)
+        if (images.length > 0 && !images[0].startsWith('/api/placeholder')) {
+          return images[0]
+        }
+      } catch {
+        // Fallback to placeholder
+      }
+    }
+    return '/api/placeholder/300/300/Product'
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading products...</p>
+        </div>
+      </div>
+    )
+  }
 
   const handleDeleteProduct = (productId: string) => {
     if (confirm('Are you sure you want to delete this product?')) {
@@ -287,7 +386,7 @@ export default function SellerProductsPage() {
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-12 w-12">
                           <Image
-                            src={product.image}
+                            src={getProductImage(product)}
                             alt={product.name}
                             width={48}
                             height={48}
@@ -314,7 +413,7 @@ export default function SellerProductsPage() {
                       <div className="text-sm text-gray-900">
                         {formatCurrency(product.price)}
                       </div>
-                      {product.originalPrice > product.price && (
+                      {product.originalPrice && product.originalPrice > product.price && (
                         <div className="text-sm text-gray-500 line-through">
                           {formatCurrency(product.originalPrice)}
                         </div>

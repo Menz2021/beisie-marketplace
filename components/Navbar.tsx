@@ -47,8 +47,13 @@ export function Navbar() {
   useEffect(() => {
     // Close user menu when clicking outside or touching outside
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (showUserMenu) {
-        setShowUserMenu(false)
+      const target = event.target as Element
+      // Don't close if clicking on the dropdown button or inside the dropdown menu
+      if (showUserMenu && !target.closest('[data-dropdown-menu]') && !target.closest('[data-dropdown-button]')) {
+        // Small delay to prevent interference with menu item clicks
+        setTimeout(() => {
+          setShowUserMenu(false)
+        }, 10)
       }
     }
 
@@ -70,7 +75,7 @@ export function Navbar() {
     localStorage.removeItem('user_preferences')
     localStorage.removeItem('recent_searches')
     
-    // Reset user state
+    // Reset user state and close menu
     setUser(null)
     setShowUserMenu(false)
     
@@ -158,6 +163,7 @@ export function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
+                    data-dropdown-button
                     className="flex flex-col items-center text-gray-600 hover:text-gray-900"
                   >
                     <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
@@ -170,7 +176,10 @@ export function Navbar() {
                   
                   {/* User Dropdown Menu - Desktop */}
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200 animate-in slide-in-from-top-2 duration-200">
+                    <div 
+                      data-dropdown-menu
+                      className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200 animate-in slide-in-from-top-2 duration-200"
+                    >
                       <div className="px-4 py-3 border-b border-gray-100">
                         <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
                         <p className="text-xs text-gray-500 truncate mt-1">{user.email}</p>
@@ -267,6 +276,7 @@ export function Navbar() {
                   <div className="relative">
                     <button
                       onClick={() => setShowUserMenu(!showUserMenu)}
+                      data-dropdown-button
                       className="flex items-center justify-center p-3 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 active:bg-gray-200 transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
                     >
                       <div className="w-7 h-7 bg-purple-100 rounded-full flex items-center justify-center">
@@ -278,7 +288,10 @@ export function Navbar() {
                     
                     {/* User Dropdown Menu - Mobile Optimized */}
                     {showUserMenu && (
-                      <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200 animate-in slide-in-from-top-2 duration-200">
+                      <div 
+                        data-dropdown-menu
+                        className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200 animate-in slide-in-from-top-2 duration-200"
+                      >
                         <div className="px-4 py-3 border-b border-gray-100">
                           <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
                           <p className="text-xs text-gray-500 truncate mt-1">{user.email}</p>

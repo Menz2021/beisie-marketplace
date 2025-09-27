@@ -8,6 +8,9 @@ import { MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useState, useEffect } from 'react'
 import { CouponInput } from '@/components/CouponInput'
 import { couponService } from '@/lib/coupons'
+import { SwipeToDelete } from '@/components/SwipeToDelete'
+import { FloatingCartSummary } from '@/components/FloatingCartSummary'
+import { CartItem } from '@/components/CartItem'
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, clearCart, getTotalPrice } = useCartStore()
@@ -17,18 +20,20 @@ export default function CartPage() {
   const [appliedDiscount, setAppliedDiscount] = useState<number>(0)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
 
-  // Check authentication status
+  // Check authentication status using secure cookies
   useEffect(() => {
-    const checkAuth = () => {
-      const userSession = localStorage.getItem('user_session')
-      if (userSession) {
-        try {
-          const user = JSON.parse(userSession)
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/verify', {
+          method: 'GET',
+          credentials: 'include'
+        })
+        if (response.ok) {
           setIsAuthenticated(true)
-        } catch (error) {
+        } else {
           setIsAuthenticated(false)
         }
-      } else {
+      } catch (error) {
         setIsAuthenticated(false)
       }
     }
@@ -97,16 +102,19 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-16">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
           <div className="text-center">
-            <div className="mx-auto h-24 w-24 text-gray-400 mb-4">
+            <div className="mx-auto h-16 w-16 sm:h-24 sm:w-24 text-gray-400 mb-4">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h1>
-            <p className="text-gray-600 mb-8">Looks like you haven't added any items to your cart yet.</p>
-            <Link href="/products" className="btn-primary btn-lg">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h1>
+            <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Looks like you haven't added any items to your cart yet.</p>
+            <Link 
+              href="/products" 
+              className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-colors touch-manipulation min-h-[48px] text-sm sm:text-base"
+            >
               Start Shopping
             </Link>
           </div>
@@ -117,92 +125,51 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-8 pb-20 lg:pb-8">
+        {/* Mobile-optimized header */}
+        <div className="flex items-center justify-between mb-4 sm:mb-8">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Shopping Cart</h1>
           <button
             onClick={clearCart}
-            className="text-red-600 hover:text-red-700 text-sm font-medium"
+            className="text-red-600 hover:text-red-700 text-xs sm:text-sm font-medium px-2 py-1 rounded-md hover:bg-red-50 transition-colors touch-manipulation"
           >
             Clear Cart
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Mobile-first responsive grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Cart Items */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 order-2 lg:order-1">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="p-4 sm:p-6">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">
                   Cart Items ({items.length})
                 </h2>
                 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {items.map((item) => (
-                    <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-200 last:border-b-0">
-                      <div className="relative h-20 w-20 flex-shrink-0">
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          fill
-                          className="object-cover rounded-lg"
-                        />
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-medium text-gray-900 truncate">
-                          {item.name}
-                        </h3>
-                        <p className="text-sm text-gray-500">Vendor ID: {item.vendorId}</p>
-                        <p className="text-lg font-semibold text-gray-900">
-                          {formatCurrency(item.price)}
-                        </p>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="p-1 rounded-full hover:bg-gray-100"
-                        >
-                          <MinusIcon className="h-4 w-4" />
-                        </button>
-                        <span className="w-8 text-center text-sm font-medium">
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="p-1 rounded-full hover:bg-gray-100"
-                        >
-                          <PlusIcon className="h-4 w-4" />
-                        </button>
-                      </div>
-                      
-                      <div className="text-right">
-                        <p className="text-lg font-semibold text-gray-900">
-                          {formatCurrency(item.price * item.quantity)}
-                        </p>
-                        <button
-                          onClick={() => removeItem(item.id)}
-                          className="text-red-600 hover:text-red-700 mt-1"
-                        >
-                          <TrashIcon className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
+                    <CartItem
+                      key={item.id}
+                      item={item}
+                      onUpdateQuantity={updateQuantity}
+                      onRemoveItem={removeItem}
+                      formatCurrency={formatCurrency}
+                    />
                   ))}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-8">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          {/* Order Summary - Mobile optimized */}
+          <div className="lg:col-span-1 order-1 lg:order-2">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 sticky top-4 sm:top-8 lg:block hidden">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">
                 Order Summary
               </h2>
               
-              <div className="space-y-3 mb-6">
+              <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Subtotal</span>
                   <span className="font-medium">{formatCurrency(subtotal)}</span>
@@ -223,10 +190,10 @@ export default function CartPage() {
                   <span className="text-gray-600">Tax (18%)</span>
                   <span className="font-medium">{formatCurrency(tax)}</span>
                 </div>
-                <div className="border-t border-gray-200 pt-3">
+                <div className="border-t border-gray-200 pt-2 sm:pt-3">
                   <div className="flex justify-between">
-                    <span className="text-lg font-semibold text-gray-900">Total</span>
-                    <span className="text-lg font-semibold text-gray-900">
+                    <span className="text-base sm:text-lg font-semibold text-gray-900">Total</span>
+                    <span className="text-base sm:text-lg font-semibold text-gray-900">
                       {formatCurrency(total)}
                     </span>
                   </div>
@@ -234,7 +201,7 @@ export default function CartPage() {
               </div>
 
               {/* Coupon Input */}
-              <div className="mb-6">
+              <div className="mb-4 sm:mb-6">
                 <CouponInput
                   cartItems={items.map(item => ({
                     id: item.id,
@@ -252,14 +219,14 @@ export default function CartPage() {
               <button
                 onClick={handleCheckout}
                 disabled={isCheckingOut}
-                className="w-full btn-primary btn-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 sm:py-4 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors touch-manipulation min-h-[48px] text-sm sm:text-base"
               >
                 {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
               </button>
               
               <Link
                 href="/products"
-                className="block w-full text-center mt-3 text-primary-600 hover:text-primary-700 font-medium"
+                className="block w-full text-center mt-3 text-purple-600 hover:text-purple-700 font-medium text-sm sm:text-base py-2 rounded-lg hover:bg-purple-50 transition-colors touch-manipulation"
               >
                 Continue Shopping
               </Link>
@@ -267,6 +234,9 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+
+      {/* Floating Cart Summary for Mobile */}
+      <FloatingCartSummary />
     </div>
   )
 }

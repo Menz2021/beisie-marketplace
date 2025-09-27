@@ -17,6 +17,7 @@ import { useCartStore } from '@/store/cartStore'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { Notifications } from './Notifications'
 import { Sidebar } from './Sidebar'
+import { MobileCartDrawer } from './MobileCartDrawer'
 
 interface User {
   id: string
@@ -28,6 +29,7 @@ interface User {
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [user, setUser] = useState<User | null>(null)
   const [showUserMenu, setShowUserMenu] = useState(false)
@@ -225,7 +227,10 @@ export function Navbar() {
 
               {/* Cart */}
               {user ? (
-                <Link href="/cart" className="flex flex-col items-center text-gray-600 hover:text-gray-900 relative">
+                <button 
+                  onClick={() => setIsCartDrawerOpen(true)}
+                  className="flex flex-col items-center text-gray-600 hover:text-gray-900 relative touch-manipulation"
+                >
                   <ShoppingCartIcon className="h-6 w-6" />
                   <span className="text-xs font-medium mt-1">Cart</span>
                   {cartItemsCount > 0 && (
@@ -233,7 +238,7 @@ export function Navbar() {
                       {cartItemsCount}
                     </span>
                   )}
-                </Link>
+                </button>
               ) : (
                 <Link href="/auth/login?redirect=/cart" className="flex flex-col items-center text-gray-600 hover:text-gray-900 relative">
                   <ShoppingCartIcon className="h-6 w-6" />
@@ -335,14 +340,17 @@ export function Navbar() {
 
                 {/* Cart */}
                 {user ? (
-                  <Link href="/cart" className="flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors relative">
+                  <button 
+                    onClick={() => setIsCartDrawerOpen(true)}
+                    className="flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors relative touch-manipulation"
+                  >
                     <ShoppingCartIcon className="h-5 w-5" />
                     {cartItemsCount > 0 && (
                       <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                         {cartItemsCount}
                       </span>
                     )}
-                    </Link>
+                  </button>
                 ) : (
                   <Link href="/auth/login?redirect=/cart" className="flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors relative">
                     <ShoppingCartIcon className="h-5 w-5" />
@@ -351,7 +359,7 @@ export function Navbar() {
                         {cartItemsCount}
                       </span>
                     )}
-                    </Link>
+                  </Link>
                 )}
               </div>
             </div>
@@ -384,6 +392,12 @@ export function Navbar() {
       <Sidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 
+      />
+
+      {/* Mobile Cart Drawer */}
+      <MobileCartDrawer 
+        isOpen={isCartDrawerOpen} 
+        onClose={() => setIsCartDrawerOpen(false)} 
       />
     </>
   )

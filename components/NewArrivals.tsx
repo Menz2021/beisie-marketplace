@@ -21,6 +21,7 @@ interface NewArrival {
   brand?: string
   stock: number
   vendor?: string
+  businessName?: string
   isFeatured: boolean
   averageRating: number
   totalReviews: number
@@ -235,8 +236,8 @@ export function NewArrivals() {
                           <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">
                             {product.name}
                           </h3>
-                          {product.brand && (
-                            <p className="text-xs text-gray-500">{product.brand}</p>
+                          {(product.businessName || product.brand) && (
+                            <p className="text-xs text-gray-500">{product.businessName || product.brand}</p>
                           )}
                           <p className="text-xs text-gray-400">
                             Added {product.daysSinceAdded === 0 ? 'today' : `${product.daysSinceAdded} days ago`}
@@ -392,9 +393,9 @@ export function NewArrivals() {
                             <span className="text-xs text-green-600 font-medium">
                               Added {product.daysSinceAdded} days ago
                             </span>
-                            {product.vendor && (
+                            {(product.businessName || product.vendor) && (
                               <span className="text-xs text-gray-500">
-                                by {product.vendor}
+                                by {product.businessName || product.vendor}
                               </span>
                             )}
                           </div>

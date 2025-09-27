@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          const user = await loginUser(credentials.email, credentials.password)
+          const user = await loginUser(credentials)
           if (user) {
             return {
               id: user.id,

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { MinusIcon, PlusIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SwipeToDelete } from './SwipeToDelete'
 
 interface MobileCartDrawerProps {
@@ -43,7 +43,7 @@ export function MobileCartDrawer({ isOpen, onClose }: MobileCartDrawerProps) {
   }
 
   // Prevent body scroll when drawer is open
-  useState(() => {
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
     } else {
@@ -53,7 +53,7 @@ export function MobileCartDrawer({ isOpen, onClose }: MobileCartDrawerProps) {
     return () => {
       document.body.style.overflow = 'unset'
     }
-  })
+  }, [isOpen])
 
   return (
     <>

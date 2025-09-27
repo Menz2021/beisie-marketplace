@@ -509,19 +509,21 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Price */}
-            <div className="flex items-center space-x-4 mb-6">
-              <span className="text-3xl font-bold text-gray-900">
-                {formatCurrency(product.price)}
-              </span>
+            <div className="mb-6">
+              <div className="flex items-center space-x-4">
+                <span className="text-3xl font-bold text-gray-900">
+                  {formatCurrency(product.price)}
+                </span>
+                {product.discount && product.discount > 0 && (
+                  <span className="bg-red-500 text-white text-sm font-medium px-2 py-1 rounded">
+                    -{product.discount}%
+                  </span>
+                )}
+              </div>
               {product.originalPrice && (
-                <span className="text-xl text-gray-500 line-through">
+                <div className="text-xl text-gray-500 line-through mt-1">
                   {formatCurrency(product.originalPrice)}
-                </span>
-              )}
-              {product.discount && product.discount > 0 && (
-                <span className="bg-red-500 text-white text-sm font-medium px-2 py-1 rounded">
-                  -{product.discount}%
-                </span>
+                </div>
               )}
             </div>
 

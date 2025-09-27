@@ -116,7 +116,7 @@ export function ProductFilters({
           {/* Price Range */}
           <div>
             <h4 className="text-sm font-medium text-gray-900 mb-3">
-              Price Range: ${priceRange[0]} - ${priceRange[1]}
+              Price Range: Ush {priceRange[0].toLocaleString()} - Ush {priceRange[1].toLocaleString()}
             </h4>
             <div className="space-y-3">
               <input
@@ -138,8 +138,8 @@ export function ProductFilters({
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
               />
               <div className="flex justify-between text-xs text-gray-500">
-                <span>$0</span>
-                <span>$1000</span>
+                <span>Ush 0</span>
+                <span>Ush 1,000</span>
               </div>
             </div>
           </div>

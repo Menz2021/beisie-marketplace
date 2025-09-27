@@ -1,27 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAuth } from '@/lib/secure-session'
 
-// GET - Fetch a single product by slug for seller (includes pending products)
+// GET - Fetch a single product by slug or ID for seller (includes pending products)
 export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
   try {
     const { slug } = params
-    const { searchParams } = new URL(request.url)
-    const vendorId = searchParams.get('vendorId')
-
-    if (!vendorId) {
+    
+    // Get seller session
+    const session = await requireAuth(request)
+    if (!session) {
       return NextResponse.json(
-        { error: 'Vendor ID is required' },
-        { status: 400 }
+        { error: 'Unauthorized' },
+        { status: 401 }
       )
     }
 
+    // Check if user is a seller
+    if (session.role !== 'SELLER') {
+      return NextResponse.json(
+        { error: 'Access denied. Seller privileges required.' },
+        { status: 403 }
+      )
+    }
+
+    // Check if the slug is actually an ID (UUID format)
+    const isId = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)
+
     const product = await prisma.product.findFirst({
       where: {
-        slug: slug,
-        vendorId: vendorId // Only allow seller to view their own products
+        ...(isId ? { id: slug } : { slug: slug }),
+        vendorId: session.id // Only allow seller to view their own products
       },
       include: {
         category: {

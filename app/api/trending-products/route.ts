@@ -25,7 +25,9 @@ export async function GET(request: NextRequest) {
           select: {
             id: true,
             name: true,
-            email: true
+            email: true,
+            businessName: true,
+            role: true
           }
         },
         orderItems: {
@@ -101,7 +103,8 @@ export async function GET(request: NextRequest) {
         totalReviews,
         recentReviews,
         wishlistCount,
-        recentWishlist
+        recentWishlist,
+        businessName: product.vendor?.businessName || (product.vendor?.role === 'ADMIN' ? 'Beisie' : product.vendor?.name)
       }
     })
 

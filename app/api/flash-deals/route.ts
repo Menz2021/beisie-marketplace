@@ -31,7 +31,9 @@ export async function GET(request: NextRequest) {
           select: {
             id: true,
             name: true,
-            email: true
+            email: true,
+            businessName: true,
+            role: true
           }
         }
       },
@@ -60,7 +62,8 @@ export async function GET(request: NextRequest) {
         slug: product.slug,
         brand: product.brand,
         stock: product.stock,
-        vendor: product.vendor?.name
+        vendor: product.vendor?.name,
+        businessName: product.vendor?.businessName || (product.vendor?.role === 'ADMIN' ? 'Beisie' : product.vendor?.name)
       }
     })
 

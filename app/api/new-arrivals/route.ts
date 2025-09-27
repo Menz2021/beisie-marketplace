@@ -31,7 +31,9 @@ export async function GET(request: NextRequest) {
           select: {
             id: true,
             name: true,
-            email: true
+            email: true,
+            businessName: true,
+            role: true
           }
         },
         reviews: {
@@ -67,6 +69,7 @@ export async function GET(request: NextRequest) {
         brand: product.brand,
         stock: product.stock,
         vendor: product.vendor?.name,
+        businessName: product.vendor?.businessName || (product.vendor?.role === 'ADMIN' ? 'Beisie' : product.vendor?.name),
         isFeatured: product.isFeatured,
         averageRating: Math.round(averageRating * 10) / 10, // Round to 1 decimal
         totalReviews,

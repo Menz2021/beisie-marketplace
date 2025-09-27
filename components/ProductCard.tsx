@@ -149,11 +149,11 @@ export function ProductCard({ product }: ProductCardProps) {
 
             <div className="mb-4">
               <span className="text-2xl font-bold text-gray-900">
-                UGX {product.price.toLocaleString()}
+                Ush {product.price.toLocaleString()}
               </span>
               {product.originalPrice && (
                 <div className="text-lg text-gray-500 line-through mt-1">
-                  UGX {product.originalPrice.toLocaleString()}
+                  Ush {product.originalPrice.toLocaleString()}
                 </div>
               )}
             </div>

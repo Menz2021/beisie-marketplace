@@ -32,7 +32,7 @@ export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [sortBy, setSortBy] = useState('featured')
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000]) // UGX range
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000]) // Ush range
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [hasMore, setHasMore] = useState(true)

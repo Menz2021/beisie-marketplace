@@ -141,8 +141,13 @@ export default function RegisterPage() {
         // Handle API errors
         console.error('Registration failed:', data)
         if (data.error) {
-          if (data.error === 'User with this email already exists') {
-            setErrors({ email: 'An account with this email already exists' })
+          if (data.error === 'Email already registered' || data.error === 'User with this email already exists') {
+            setErrors({ email: data.message || 'An account with this email address already exists' })
+          } else if (data.error === 'Phone number already registered') {
+            setErrors({ phone: data.message || 'An account with this phone number already exists' })
+          } else if (data.field) {
+            // Handle field-specific errors
+            setErrors({ [data.field]: data.message || data.error })
           } else if (data.details) {
             // Handle validation errors from API
             const apiErrors: Record<string, string> = {}
@@ -153,7 +158,7 @@ export default function RegisterPage() {
             })
             setErrors(apiErrors)
           } else {
-            alert(`Registration failed: ${data.error}`)
+            alert(`Registration failed: ${data.message || data.error}`)
           }
         } else {
           alert('Registration failed. Please try again.')

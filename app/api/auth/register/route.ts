@@ -20,17 +20,41 @@ export async function POST(request: NextRequest) {
     // Validate the request body
     const validatedData = registerSchema.parse(body)
     
-    // Check if user already exists
+    // Check if user already exists (email or phone)
     const { prisma } = await import('@/lib/prisma')
-    const existingUser = await prisma.user.findUnique({
+    
+    // Check for existing email
+    const existingEmail = await prisma.user.findUnique({
       where: { email: validatedData.email }
     })
     
-    if (existingUser) {
+    if (existingEmail) {
       return NextResponse.json(
-        { error: 'User with this email already exists' },
+        { 
+          error: 'Email already registered',
+          message: 'An account with this email address already exists. Please use a different email or try logging in.',
+          field: 'email'
+        },
         { status: 400 }
       )
+    }
+    
+    // Check for existing phone number (if provided)
+    if (validatedData.phone) {
+      const existingPhone = await prisma.user.findUnique({
+        where: { phone: validatedData.phone }
+      })
+      
+      if (existingPhone) {
+        return NextResponse.json(
+          { 
+            error: 'Phone number already registered',
+            message: 'An account with this phone number already exists. Please use a different phone number or try logging in.',
+            field: 'phone'
+          },
+          { status: 400 }
+        )
+      }
     }
     
     // Create the user (initially unverified)

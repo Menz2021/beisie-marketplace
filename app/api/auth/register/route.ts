@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const user = await registerUser(validatedData)
     
     // Try to generate confirmation token and send welcome email (optional)
-    // This is wrapped in try-catch because ConfirmationToken table might not exist yet
+    // This is wrapped in try-catch because email service might not be configured
     try {
       const confirmationData = await createConfirmationToken(user.id, user.email, 'customer')
       
@@ -51,10 +51,13 @@ export async function POST(request: NextRequest) {
       
       if (!emailResult.success) {
         console.error('Failed to send welcome email:', emailResult.error)
+        console.log('User created successfully but email confirmation failed')
+      } else {
+        console.log('Welcome email sent successfully')
       }
     } catch (error) {
       console.error('Email confirmation setup error:', error)
-      console.log('Email confirmation disabled - user created without email verification')
+      console.log('User created successfully but email confirmation is disabled')
       // Continue with registration even if email confirmation fails
     }
     
@@ -86,8 +89,14 @@ export async function POST(request: NextRequest) {
       )
     }
     
+    // Return more specific error message for debugging
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        details: errorMessage,
+        timestamp: new Date().toISOString()
+      },
       { status: 500 }
     )
   }

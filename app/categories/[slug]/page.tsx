@@ -437,16 +437,14 @@ export default function CategoryPage() {
 
                         {/* Price */}
                         <div className="mb-3">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-lg font-bold text-gray-900">
-                              {formatCurrency(product.price)}
-                            </span>
-                            {product.originalPrice && (
-                              <span className="text-sm text-gray-500 line-through">
-                                {formatCurrency(product.originalPrice)}
-                              </span>
-                            )}
-                          </div>
+                          <span className="text-lg font-bold text-gray-900">
+                            {formatCurrency(product.price)}
+                          </span>
+                          {product.originalPrice && (
+                            <div className="text-sm text-gray-500 line-through mt-1">
+                              {formatCurrency(product.originalPrice)}
+                            </div>
+                          )}
                         </div>
 
                         {/* Actions */}

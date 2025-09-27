@@ -424,17 +424,96 @@ export async function PUT(request: NextRequest) {
     // Validate the product data
     const validatedData = productSchema.parse(productData)
     
+    // For admin-created products, use "Beisie" as the vendor
+    let vendor = await prisma.user.findFirst({
+      where: { 
+        role: 'ADMIN',
+        name: { contains: 'Beisie' }
+      }
+    })
+    
+    // If no Beisie admin exists, create one or use the first admin
+    if (!vendor) {
+      vendor = await prisma.user.findFirst({
+        where: { role: 'ADMIN' }
+      })
+      
+      // If still no admin exists, create a default Beisie vendor
+      if (!vendor) {
+        vendor = await prisma.user.create({
+          data: {
+            email: 'admin@beisie.com',
+            name: 'Beisie Marketplace',
+            password: 'default-password', // This will be hashed if needed
+            role: 'ADMIN',
+            isVerified: true,
+            isActive: true,
+            businessName: 'Beisie Marketplace'
+          }
+        })
+      }
+    }
+    
+    // Override the vendorId with the Beisie vendor
+    validatedData.vendorId = vendor.id
+    
     // Handle image uploads
     const imageFiles = formData.getAll('images') as File[]
     const imageUrls: string[] = []
     
-    // For now, we'll store placeholder URLs. In a real app, you'd upload to cloud storage
-    for (let i = 0; i < imageFiles.length; i++) {
-      const file = imageFiles[i]
+    // Process uploaded images directly (same logic as POST)
+    for (const file of imageFiles) {
       if (file && file.size > 0) {
-        // For demo purposes, we'll use placeholder URLs
-        const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
-        imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+        try {
+          // Validate file type
+          const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+          if (!validTypes.includes(file.type)) {
+            return NextResponse.json(
+              { error: 'Invalid file type. Only JPEG, PNG, and WebP images are allowed.' },
+              { status: 400 }
+            )
+          }
+          
+          // Validate file size (max 5MB)
+          const maxSize = 5 * 1024 * 1024 // 5MB
+          if (file.size > maxSize) {
+            return NextResponse.json(
+              { error: 'Image file size must be smaller than 5MB.' },
+              { status: 400 }
+            )
+          }
+          
+          // Create uploads directory if it doesn't exist
+          const uploadsDir = join(process.cwd(), 'public', 'uploads', 'products')
+          
+          if (!existsSync(uploadsDir)) {
+            await mkdir(uploadsDir, { recursive: true })
+          }
+
+          // Generate unique filename
+          const timestamp = Date.now()
+          const randomString = Math.random().toString(36).substring(2, 15)
+          const fileExtension = file.name.split('.').pop() || 'jpg'
+          const fileName = `${timestamp}-${randomString}.${fileExtension}`
+          
+          // Convert file to buffer
+          const bytes = await file.arrayBuffer()
+          const buffer = Buffer.from(bytes)
+
+          // Write file to uploads directory
+          const filePath = join(uploadsDir, fileName)
+          await writeFile(filePath, buffer)
+
+          // Add the public URL
+          const imageUrl = `/uploads/products/${fileName}`
+          imageUrls.push(imageUrl)
+          
+        } catch (error) {
+          console.error('Error uploading image:', error)
+          // Fallback to placeholder if upload fails
+          const productName = validatedData.name.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 20)
+          imageUrls.push(`/api/placeholder/400/400/${encodeURIComponent(productName)}`)
+        }
       }
     }
     

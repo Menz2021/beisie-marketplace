@@ -89,7 +89,8 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
-              role: true
+              role: true,
+              businessName: true
             }
           }
         },

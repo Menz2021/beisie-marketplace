@@ -50,6 +50,7 @@ interface Product {
     name: string
     email: string
     role: string
+    businessName?: string
   }
 }
 
@@ -737,7 +738,9 @@ export default function AdminProductsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{product.vendor?.name || 'Unknown'}</div>
+                      <div className="text-sm text-gray-900">
+                        {product.vendor?.businessName || (product.vendor?.role === 'ADMIN' ? 'Beisie' : product.vendor?.name) || 'Unknown'}
+                      </div>
                       <div className="text-xs text-gray-500">{product.vendor?.email}</div>
                       <span className={`inline-flex px-1 py-0.5 text-xs font-semibold rounded-full ${
                         product.vendor?.role === 'ADMIN' ? 'bg-red-100 text-red-800' :

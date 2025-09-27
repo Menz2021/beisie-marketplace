@@ -28,7 +28,8 @@ export async function GET(
             id: true,
             name: true,
             email: true,
-            role: true
+            role: true,
+            businessName: true
           }
         },
         reviews: {

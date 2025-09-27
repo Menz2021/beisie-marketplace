@@ -20,6 +20,7 @@ interface Product {
   brand?: string
   stock: number
   vendor?: string
+  businessName?: string
   isFeatured: boolean
   averageRating: number
   totalReviews: number
@@ -140,9 +141,9 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.name}
             </h3>
 
-            {product.brand && (
+            {(product.businessName || product.brand) && (
               <p className="text-sm text-gray-600 mb-3">
-                {product.brand}
+                {product.businessName || product.brand}
               </p>
             )}
 

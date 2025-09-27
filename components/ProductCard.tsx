@@ -141,9 +141,9 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.name}
             </h3>
 
-            {(product.businessName || product.brand) && (
+            {product.brand && (
               <p className="text-sm text-gray-600 mb-3">
-                {product.businessName || product.brand}
+                {product.brand}
               </p>
             )}
 

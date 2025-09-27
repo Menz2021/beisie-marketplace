@@ -225,8 +225,8 @@ export function FlashDeals() {
                           <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">
                             {product.name}
                           </h3>
-                          {(product.businessName || product.brand) && (
-                            <p className="text-xs text-gray-500">{product.businessName || product.brand}</p>
+                          {product.brand && (
+                            <p className="text-xs text-gray-500">{product.brand}</p>
                           )}
                           <p className="text-xs text-purple-600">{product.category}</p>
                         </div>

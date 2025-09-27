@@ -547,27 +547,38 @@ export default function SellerDashboard() {
   }
 
   useEffect(() => {
-    // Check if user is logged in and is a seller
-    const userData = localStorage.getItem('user_session')
-    if (!userData) {
-      router.push('/auth/login')
-      return
+    // Check if seller is authenticated via secure cookie
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/verify', {
+          method: 'GET',
+          credentials: 'include'
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          if (data.user.role === 'SELLER') {
+            setSeller(data.user)
+            fetchSellerStats(data.user.id)
+            fetchFinancialData(data.user.id)
+            fetchSellerOrders(data.user.id)
+            fetchSellerRefunds(data.user.id)
+            fetchStatementsData(data.user.id, selectedPeriod)
+            fetchSellerSettings() // Fetch seller settings from API
+            setIsLoading(false)
+            return
+          }
+        }
+        
+        // If not authenticated or not a seller, redirect
+        router.push('/seller/auth/login')
+      } catch (error) {
+        console.error('Auth check error:', error)
+        router.push('/seller/auth/login')
+      }
     }
 
-    const user = JSON.parse(userData)
-    if (user.role !== 'SELLER') {
-      router.push('/')
-      return
-    }
-
-    setSeller(user)
-    fetchSellerStats(user.id)
-    fetchFinancialData(user.id)
-    fetchSellerOrders(user.id)
-    fetchSellerRefunds(user.id)
-    fetchStatementsData(user.id, selectedPeriod)
-    fetchSellerSettings() // Fetch seller settings from API
-    setIsLoading(false)
+    checkAuth()
   }, [router])
 
   // Refetch statements data when period changes
@@ -726,11 +737,19 @@ export default function SellerDashboard() {
     fetchProducts()
   }, [seller])
 
-  const handleLogout = () => {
-    // Clear user session
-    localStorage.removeItem('user_session')
-    // Redirect to login
-    router.push('/auth/login')
+  const handleLogout = async () => {
+    try {
+      // Call secure logout API
+      await fetch('/api/auth/logout', { 
+        method: 'POST',
+        credentials: 'include'
+      })
+    } catch (error) {
+      console.error('Logout error:', error)
+    } finally {
+      // Redirect to seller login page
+      router.push('/seller/auth/login')
+    }
   }
 
   // Handle image selection

@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { 
         error: 'Internal server error',
-        details: errorMessage,
+        details: [{ message: errorMessage }], // Make details an array to match frontend expectations
         timestamp: new Date().toISOString()
       },
       { status: 500 }

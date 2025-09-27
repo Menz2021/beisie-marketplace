@@ -395,7 +395,7 @@ export function NewArrivals() {
                             </span>
                             {(product.businessName || product.vendor) && (
                               <span className="text-xs text-gray-500">
-                                by {product.businessName || product.vendor}
+                                {product.businessName || product.vendor}
                               </span>
                             )}
                           </div>

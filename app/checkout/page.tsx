@@ -12,6 +12,7 @@ import {
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
 import { formatUgandaCurrency, validateUgandaPhoneNumber, formatUgandaPhoneNumber } from '@/lib/payments'
+import { MobileCheckoutSummary } from '@/components/MobileCheckoutSummary'
 
 interface DeliveryZone {
   id: string
@@ -248,37 +249,54 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
-          <p className="text-gray-600 mt-2">Complete your order</p>
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-8 pb-20 lg:pb-8">
+        {/* Mobile-optimized Header */}
+        <div className="mb-4 sm:mb-8">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Checkout</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Complete your order</p>
         </div>
 
-        {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-8">
+        {/* Mobile Back Button */}
+        {step > 1 && (
+          <div className="lg:hidden mb-4">
+            <button
+              onClick={() => setStep(step - 1)}
+              className="flex items-center text-purple-600 hover:text-purple-700 font-medium touch-manipulation min-h-[44px]"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back
+            </button>
+          </div>
+        )}
+
+        {/* Mobile Progress Steps */}
+        <div className="mb-4 sm:mb-8">
+          <div className="flex items-center justify-center space-x-2 sm:space-x-8">
             {[
               { number: 1, title: 'Shipping', active: step >= 1 },
               { number: 2, title: 'Payment', active: step >= 2 },
               { number: 3, title: 'Review', active: step >= 3 }
             ].map((stepItem, index) => (
               <div key={index} className="flex items-center">
-                <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
+                <div className={`flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full border-2 ${
                   stepItem.active 
-                    ? 'bg-primary-600 border-primary-600 text-white' 
+                    ? 'bg-purple-600 border-purple-600 text-white' 
                     : 'border-gray-300 text-gray-500'
                 }`}>
-                  {stepItem.active ? '✓' : stepItem.number}
+                  <span className="text-xs sm:text-sm">
+                    {stepItem.active ? '✓' : stepItem.number}
+                  </span>
                 </div>
-                <span className={`ml-2 text-sm font-medium ${
-                  stepItem.active ? 'text-primary-600' : 'text-gray-500'
-                }`}>
+                <span className={`ml-1 sm:ml-2 text-xs sm:text-sm font-medium ${
+                  stepItem.active ? 'text-purple-600' : 'text-gray-500'
+                } hidden sm:block`}>
                   {stepItem.title}
                 </span>
                 {index < 2 && (
-                  <div className={`w-16 h-0.5 ml-4 ${
-                    stepItem.active ? 'bg-primary-600' : 'bg-gray-300'
+                  <div className={`w-4 sm:w-16 h-0.5 ml-1 sm:ml-4 ${
+                    stepItem.active ? 'bg-purple-600' : 'bg-gray-300'
                   }`} />
                 )}
               </div>
@@ -286,16 +304,16 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 order-2 lg:order-1">
             {step === 1 && (
-              <div className="card">
-                <div className="card-header">
-                  <h2 className="text-xl font-semibold text-gray-900">Shipping Information</h2>
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div className="p-4 sm:p-6">
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Shipping Information</h2>
                 </div>
-                <div className="card-content">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-4 sm:p-6 pt-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Full Name *
@@ -305,7 +323,7 @@ export default function CheckoutPage() {
                         name="fullName"
                         value={formData.fullName}
                         onChange={handleInputChange}
-                        className="input"
+                        className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                         required
                       />
                     </div>
@@ -320,7 +338,7 @@ export default function CheckoutPage() {
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="+256 700 000 000"
-                        className="input"
+                        className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                         required
                       />
                     </div>
@@ -334,7 +352,7 @@ export default function CheckoutPage() {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="input"
+                        className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                         required
                       />
                     </div>
@@ -348,7 +366,7 @@ export default function CheckoutPage() {
                         name="city"
                         value={formData.city}
                         onChange={handleInputChange}
-                        className="input"
+                        className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                         required
                       />
                     </div>
@@ -361,7 +379,7 @@ export default function CheckoutPage() {
                         name="district"
                         value={formData.district}
                         onChange={handleInputChange}
-                        className="input"
+                        className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                         required
                       >
                         <option value="">Select District</option>
@@ -402,7 +420,7 @@ export default function CheckoutPage() {
                         name="postalCode"
                         value={formData.postalCode}
                         onChange={handleInputChange}
-                        className="input"
+                        className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                       />
                     </div>
                   </div>
@@ -416,7 +434,7 @@ export default function CheckoutPage() {
                       value={formData.address}
                       onChange={handleInputChange}
                       rows={3}
-                      className="input"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                       placeholder="Enter your complete address"
                       required
                     />
@@ -426,17 +444,17 @@ export default function CheckoutPage() {
             )}
 
             {step === 2 && (
-              <div className="card">
-                <div className="card-header">
-                  <h2 className="text-xl font-semibold text-gray-900">Payment Method</h2>
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div className="p-4 sm:p-6">
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Payment Method</h2>
                 </div>
-                <div className="card-content">
+                <div className="p-4 sm:p-6 pt-0">
                   <div className="space-y-4 mb-6">
                     {paymentMethods.map((method) => (
-                      <label key={method.id} className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                      <label key={method.id} className={`flex items-center p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all touch-manipulation min-h-[60px] ${
                         formData.paymentMethod === method.id 
                           ? 'border-purple-500 bg-purple-50' 
-                          : 'border-gray-200 hover:bg-gray-50'
+                          : 'border-gray-200 hover:bg-gray-50 active:bg-gray-100'
                       }`}>
                         <input
                           type="radio"
@@ -444,7 +462,7 @@ export default function CheckoutPage() {
                           value={method.id}
                           checked={formData.paymentMethod === method.id}
                           onChange={handleInputChange}
-                          className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300"
+                          className="h-5 w-5 sm:h-4 sm:w-4 text-purple-600 focus:ring-purple-500 border-gray-300 touch-manipulation"
                         />
                         <method.icon className={`h-6 w-6 ml-3 ${method.color}`} />
                         <div className="ml-3 flex-1">
@@ -491,7 +509,7 @@ export default function CheckoutPage() {
                               value={formData.phoneNumber}
                               onChange={handleInputChange}
                               placeholder="+256 700 000 000"
-                              className="input"
+                              className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                               required
                             />
                             <p className="text-sm text-gray-500 mt-1">
@@ -528,7 +546,7 @@ export default function CheckoutPage() {
                             value={formData.cardNumber}
                             onChange={handleInputChange}
                             placeholder="1234 5678 9012 3456"
-                            className="input"
+                            className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                             required
                           />
                         </div>
@@ -543,7 +561,7 @@ export default function CheckoutPage() {
                             value={formData.cardName}
                             onChange={handleInputChange}
                             placeholder="John Doe"
-                            className="input"
+                            className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                             required
                           />
                         </div>
@@ -558,7 +576,7 @@ export default function CheckoutPage() {
                             value={formData.expiryDate}
                             onChange={handleInputChange}
                             placeholder="MM/YY"
-                            className="input"
+                            className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                             required
                           />
                         </div>
@@ -573,7 +591,7 @@ export default function CheckoutPage() {
                             value={formData.cvv}
                             onChange={handleInputChange}
                             placeholder="123"
-                            className="input"
+                            className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base sm:text-sm touch-manipulation min-h-[48px]"
                             required
                           />
                         </div>
@@ -646,12 +664,12 @@ export default function CheckoutPage() {
               </div>
             )}
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8">
+            {/* Navigation Buttons - Hidden on mobile (shown in floating summary) */}
+            <div className="hidden lg:flex justify-between mt-8">
               {step > 1 && (
                 <button
                   onClick={() => setStep(step - 1)}
-                  className="btn-outline btn-md"
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors touch-manipulation min-h-[44px]"
                 >
                   Back
                 </button>
@@ -660,7 +678,7 @@ export default function CheckoutPage() {
               {step < 3 ? (
                 <button
                   onClick={handleNext}
-                  className="btn-primary btn-md ml-auto"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors touch-manipulation min-h-[44px] ml-auto"
                 >
                   Continue
                 </button>
@@ -668,7 +686,7 @@ export default function CheckoutPage() {
                 <button
                   onClick={handlePlaceOrder}
                   disabled={isProcessing}
-                  className="btn-primary btn-md ml-auto disabled:opacity-50"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors touch-manipulation min-h-[44px] ml-auto"
                 >
                   {isProcessing ? 'Processing...' : `Place Order - ${formatUgandaCurrency(total)}`}
                 </button>
@@ -677,12 +695,12 @@ export default function CheckoutPage() {
           </div>
 
           {/* Order Summary Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="card sticky top-8">
-              <div className="card-header">
-                <h3 className="text-lg font-semibold text-gray-900">Order Summary</h3>
+          <div className="lg:col-span-1 order-1 lg:order-2">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 sticky top-4 sm:top-8 lg:block hidden">
+              <div className="p-4 sm:p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
               </div>
-              <div className="card-content">
+              <div className="p-4 sm:p-6 pt-0">
                 <div className="space-y-4">
                   {items.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm">
@@ -741,6 +759,18 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Checkout Summary */}
+      <MobileCheckoutSummary
+        step={step}
+        total={total}
+        subtotal={subtotal}
+        shippingCost={shippingCost}
+        tax={tax}
+        onNext={handleNext}
+        onPlaceOrder={handlePlaceOrder}
+        isProcessing={isProcessing}
+      />
     </div>
   )
 }

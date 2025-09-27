@@ -58,6 +58,7 @@ interface Product {
     name: string
     email: string
     role: string
+    businessName?: string
   }
   reviews?: {
     id: string
@@ -452,7 +453,7 @@ export default function ProductDetailPage() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-2">
                 {product.vendor && (
-                  <span className="text-sm text-gray-600">by {product.vendor.name}</span>
+                  <span className="text-sm text-gray-600">by {product.vendor.businessName || (product.vendor.role === 'ADMIN' ? 'Beisie' : product.vendor.name)}</span>
                 )}
                 {product.isFeatured && (
                   <span className="bg-purple-500 text-white text-xs font-medium px-2 py-1 rounded-full">
@@ -484,8 +485,8 @@ export default function ProductDetailPage() {
 
             <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
             
-            {product.brand && (
-              <p className="text-lg text-gray-600 mb-2">by {product.brand}</p>
+            {(product.vendor?.businessName || product.brand) && (
+              <p className="text-lg text-gray-600 mb-2">by {product.vendor?.businessName || (product.vendor?.role === 'ADMIN' ? 'Beisie' : product.brand)}</p>
             )}
 
             {/* Rating */}

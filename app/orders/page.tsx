@@ -293,8 +293,8 @@ export default function OrdersPage() {
 
   const filteredOrders = useMemo(() => {
     return filterStatus === 'all' 
-      ? orders 
-      : orders.filter(order => order.status === filterStatus)
+    ? orders 
+    : orders.filter(order => order.status === filterStatus)
   }, [orders, filterStatus])
 
   const handleViewOrder = useCallback((order: Order) => {

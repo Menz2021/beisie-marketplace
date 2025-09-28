@@ -151,30 +151,30 @@ export default function CategoryPage() {
 
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.description.toLowerCase().includes(searchTerm.toLowerCase())
-      
-      const matchesPrice = (!priceRange.min || product.price >= parseInt(priceRange.min)) &&
-                          (!priceRange.max || product.price <= parseInt(priceRange.max))
-      
-      return matchesSearch && matchesPrice
-    })
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         product.description.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    const matchesPrice = (!priceRange.min || product.price >= parseInt(priceRange.min)) &&
+                        (!priceRange.max || product.price <= parseInt(priceRange.max))
+    
+    return matchesSearch && matchesPrice
+  })
   }, [products, searchTerm, priceRange])
 
   const sortedProducts = useMemo(() => {
     return [...filteredProducts].sort((a, b) => {
-      switch (sortBy) {
-        case 'price-low':
-          return a.price - b.price
-        case 'price-high':
-          return b.price - a.price
-        case 'name':
-          return a.name.localeCompare(b.name)
-        case 'newest':
-        default:
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      }
-    })
+    switch (sortBy) {
+      case 'price-low':
+        return a.price - b.price
+      case 'price-high':
+        return b.price - a.price
+      case 'name':
+        return a.name.localeCompare(b.name)
+      case 'newest':
+      default:
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    }
+  })
   }, [filteredProducts, sortBy])
 
   const formatCurrency = useCallback((amount: number) => {

@@ -132,9 +132,9 @@ export default function CategoriesPage() {
     if (!searchTerm.trim()) return categories
     
     return categories.filter(category =>
-      category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (category.description && category.description.toLowerCase().includes(searchTerm.toLowerCase()))
-    )
+    category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (category.description && category.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  )
   }, [categories, searchTerm])
 
   // Memoize category image function

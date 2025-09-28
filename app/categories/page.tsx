@@ -1,10 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { 
   MagnifyingGlassIcon,
-  FunnelIcon
+  FunnelIcon,
+  Bars3Icon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 
 interface Category {
@@ -101,6 +103,8 @@ export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [showMobileSearch, setShowMobileSearch] = useState(false)
 
   useEffect(() => {
     fetchCategories()
@@ -123,10 +127,20 @@ export default function CategoriesPage() {
     }
   }
 
-  const filteredCategories = categories.filter(category =>
-    category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (category.description && category.description.toLowerCase().includes(searchTerm.toLowerCase()))
-  )
+  // Memoize filtered categories for better performance
+  const filteredCategories = useMemo(() => {
+    if (!searchTerm.trim()) return categories
+    
+    return categories.filter(category =>
+      category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (category.description && category.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
+  }, [categories, searchTerm])
+
+  // Memoize category image function
+  const getCategoryImageMemo = useCallback((categoryName: string) => {
+    return getCategoryImage(categoryName)
+  }, [])
 
   if (isLoading) {
     return (
@@ -141,8 +155,68 @@ export default function CategoriesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      {/* Mobile Header */}
+      <div className="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold text-gray-900">Categories</h1>
+            <div className="flex items-center space-x-2">
+              {/* View Mode Toggle */}
+              <div className="flex bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-md transition-colors touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center ${
+                    viewMode === 'grid' ? 'bg-white shadow-sm' : 'text-gray-500'
+                  }`}
+                >
+                  <Bars3Icon className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-md transition-colors touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center ${
+                    viewMode === 'list' ? 'bg-white shadow-sm' : 'text-gray-500'
+                  }`}
+                >
+                  <Bars3Icon className="h-4 w-4 rotate-90" />
+                </button>
+              </div>
+              
+              {/* Mobile Search Button */}
+              <button
+                onClick={() => setShowMobileSearch(true)}
+                className="p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
+              >
+                <MagnifyingGlassIcon className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+          
+          {/* Mobile Search Overlay */}
+          {showMobileSearch && (
+            <div className="mt-3">
+              <div className="relative">
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search categories..."
+                  className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-base"
+                />
+                <button
+                  onClick={() => setShowMobileSearch(false)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors touch-manipulation min-h-[32px] min-w-[32px] flex items-center justify-center"
+                >
+                  <XMarkIcon className="h-4 w-4 text-gray-500" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Desktop Header */}
+      <div className="hidden lg:block bg-white border-b border-gray-200">
         <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900">All Categories</h1>
@@ -153,9 +227,9 @@ export default function CategoriesPage() {
         </div>
       </div>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search */}
-        <div className="mb-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
+        {/* Desktop Search */}
+        <div className="hidden lg:block mb-8">
           <div className="max-w-md mx-auto">
             <div className="relative">
               <input
@@ -170,35 +244,68 @@ export default function CategoriesPage() {
           </div>
         </div>
 
+        {/* Mobile Results Count */}
+        <div className="lg:hidden mb-4">
+          <p className="text-sm text-gray-600">
+            {filteredCategories.length} categories found
+          </p>
+        </div>
+
         {/* Categories Grid */}
         {filteredCategories.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 lg:p-12 text-center">
             <div className="text-gray-500">
               <FunnelIcon className="h-12 w-12 mx-auto mb-4" />
               <p className="text-lg font-medium">No categories found</p>
-              <p className="text-sm">Try adjusting your search</p>
+              <p className="text-sm mt-2">Try adjusting your search</p>
+              <button
+                onClick={() => setSearchTerm('')}
+                className="mt-4 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors touch-manipulation min-h-[48px]"
+              >
+                Clear Search
+              </button>
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+          <div className={`grid gap-4 ${
+            viewMode === 'grid' 
+              ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7' 
+              : 'grid-cols-1'
+          }`}>
             {filteredCategories.map((category) => (
               <Link
                 key={category.id}
                 href={`/categories/${category.slug}`}
                 className="group"
               >
-                <div className="bg-white rounded-xl border border-gray-200 p-6 text-center hover:shadow-lg transition-all duration-300 hover:border-gray-300">
+                <div className={`bg-white rounded-xl border border-gray-200 text-center hover:shadow-lg transition-all duration-300 hover:border-gray-300 touch-manipulation ${
+                  viewMode === 'grid' 
+                    ? 'p-4 lg:p-6' 
+                    : 'p-4 flex items-center space-x-4'
+                }`}>
                   {/* Category Image */}
-                  <div className="w-24 h-24 mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className={`group-hover:scale-110 transition-transform duration-300 ${
+                    viewMode === 'grid' 
+                      ? 'w-16 h-16 lg:w-24 lg:h-24 mx-auto mb-3 lg:mb-4' 
+                      : 'w-16 h-16 flex-shrink-0'
+                  }`}>
                     <img
-                      src={getCategoryImage(category.name)}
+                      src={getCategoryImageMemo(category.name)}
                       alt={category.name}
                       className="w-full h-full object-cover rounded-xl"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.src = '/api/placeholder/64/64/Category'
+                      }}
                     />
                   </div>
                   
                   {/* Category Name */}
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className={`font-semibold text-gray-900 ${
+                    viewMode === 'grid' 
+                      ? 'text-sm lg:text-lg' 
+                      : 'text-lg flex-1 text-left'
+                  }`}>
                     {category.name}
                   </h3>
                 </div>

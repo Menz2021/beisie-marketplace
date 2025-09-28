@@ -41,14 +41,24 @@ export async function GET(request: NextRequest) {
     })
 
     // Transform to match frontend CartItem interface
-    const transformedItems = cartItems.map(item => ({
-      id: item.product.id,
-      name: item.product.name,
-      price: item.product.price,
-      image: item.product.images,
-      quantity: item.quantity,
-      vendorId: item.product.vendorId || ''
-    }))
+    const transformedItems = cartItems.map(item => {
+      let productImages = []
+      try {
+        productImages = item.product.images ? JSON.parse(item.product.images) : []
+      } catch (error) {
+        console.error('Error parsing product images:', error)
+        productImages = []
+      }
+      
+      return {
+        id: item.product.id,
+        name: item.product.name,
+        price: item.product.price,
+        image: productImages.length > 0 ? productImages[0] : '/api/placeholder/200/200',
+        quantity: item.quantity,
+        vendorId: item.product.vendorId || ''
+      }
+    })
 
     return NextResponse.json({
       success: true,
@@ -121,13 +131,22 @@ export async function POST(request: NextRequest) {
         }
       })
 
+      // Parse product images
+      let productImages = []
+      try {
+        productImages = updatedItem.product.images ? JSON.parse(updatedItem.product.images) : []
+      } catch (error) {
+        console.error('Error parsing product images:', error)
+        productImages = []
+      }
+
       return NextResponse.json({
         success: true,
         data: {
           id: updatedItem.product.id,
           name: updatedItem.product.name,
           price: updatedItem.product.price,
-          image: updatedItem.product.images,
+          image: productImages.length > 0 ? productImages[0] : '/api/placeholder/200/200',
           quantity: updatedItem.quantity,
           vendorId: updatedItem.product.vendorId || ''
         }
@@ -162,13 +181,22 @@ export async function POST(request: NextRequest) {
         }
       })
 
+      // Parse product images
+      let productImages = []
+      try {
+        productImages = cartItem.product.images ? JSON.parse(cartItem.product.images) : []
+      } catch (error) {
+        console.error('Error parsing product images:', error)
+        productImages = []
+      }
+
       return NextResponse.json({
         success: true,
         data: {
           id: cartItem.product.id,
           name: cartItem.product.name,
           price: cartItem.product.price,
-          image: cartItem.product.images,
+          image: productImages.length > 0 ? productImages[0] : '/api/placeholder/200/200',
           quantity: cartItem.quantity,
           vendorId: cartItem.product.vendorId || ''
         }
@@ -245,13 +273,22 @@ export async function PUT(request: NextRequest) {
       }
     })
 
+    // Parse product images
+    let productImages = []
+    try {
+      productImages = updatedItem.product.images ? JSON.parse(updatedItem.product.images) : []
+    } catch (error) {
+      console.error('Error parsing product images:', error)
+      productImages = []
+    }
+
     return NextResponse.json({
       success: true,
       data: {
         id: updatedItem.product.id,
         name: updatedItem.product.name,
         price: updatedItem.product.price,
-        image: updatedItem.product.images,
+        image: productImages.length > 0 ? productImages[0] : '/api/placeholder/200/200',
         quantity: updatedItem.quantity,
         vendorId: updatedItem.product.vendorId || ''
       }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { 
   ShoppingBagIcon,
@@ -14,7 +14,9 @@ import {
   MapPinIcon,
   CalendarIcon,
   CreditCardIcon,
-  PhoneIcon
+  PhoneIcon,
+  Bars3Icon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
 
@@ -50,6 +52,7 @@ export default function OrdersPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [showOrderDetails, setShowOrderDetails] = useState(false)
   const [showRefundModal, setShowRefundModal] = useState(false)
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
   const [refundForm, setRefundForm] = useState({
     reason: '',
     type: 'FULL',
@@ -288,16 +291,18 @@ export default function OrdersPage() {
     }
   }
 
-  const filteredOrders = filterStatus === 'all' 
-    ? orders 
-    : orders.filter(order => order.status === filterStatus)
+  const filteredOrders = useMemo(() => {
+    return filterStatus === 'all' 
+      ? orders 
+      : orders.filter(order => order.status === filterStatus)
+  }, [orders, filterStatus])
 
-  const handleViewOrder = (order: Order) => {
+  const handleViewOrder = useCallback((order: Order) => {
     setSelectedOrder(order)
     setShowOrderDetails(true)
-  }
+  }, [])
 
-  const handleCancelOrder = async (orderId: string) => {
+  const handleCancelOrder = useCallback(async (orderId: string) => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -306,9 +311,9 @@ export default function OrdersPage() {
     } catch (error) {
       toast.error('Failed to cancel order')
     }
-  }
+  }, [])
 
-  const handleReturnOrder = (orderId: string) => {
+  const handleReturnOrder = useCallback((orderId: string) => {
     const order = orders.find(o => o.id === orderId)
     if (order) {
       setSelectedOrder(order)
@@ -321,9 +326,9 @@ export default function OrdersPage() {
       setShowRefundModal(true)
       setShowOrderDetails(false) // Close order details modal if open
     }
-  }
+  }, [orders])
 
-  const handleRefundRequest = async (e: React.FormEvent) => {
+  const handleRefundRequest = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedOrder || !user) return
 
@@ -360,15 +365,15 @@ export default function OrdersPage() {
       console.error('Error submitting refund request:', error)
       toast.error('Failed to submit refund request')
     }
-  }
+  }, [selectedOrder, user, refundForm])
 
-  const formatDate = (dateString: string) => {
+  const formatDate = useCallback((dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     })
-  }
+  }, [])
 
   if (isLoading) {
     return (
@@ -387,8 +392,119 @@ export default function OrdersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      {/* Mobile Header */}
+      <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => router.back()}
+                className="flex items-center text-gray-600 hover:text-gray-900 touch-manipulation min-h-[40px] min-w-[40px] justify-center"
+              >
+                <ArrowLeftIcon className="h-5 w-5" />
+              </button>
+              <h1 className="text-lg font-semibold text-gray-900">My Orders</h1>
+            </div>
+            <button
+              onClick={() => setShowMobileFilters(true)}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
+            >
+              <Bars3Icon className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Filters Overlay */}
+      {showMobileFilters && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">
+          <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl overflow-y-auto">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Filter Orders</h3>
+                <button
+                  onClick={() => setShowMobileFilters(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+            <div className="p-4">
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    setFilterStatus('all')
+                    setShowMobileFilters(false)
+                  }}
+                  className={`w-full text-left py-3 px-3 rounded-lg font-medium text-sm touch-manipulation min-h-[48px] flex items-center ${
+                    filterStatus === 'all'
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  All Orders ({orders.length})
+                </button>
+                <button
+                  onClick={() => {
+                    setFilterStatus('pending')
+                    setShowMobileFilters(false)
+                  }}
+                  className={`w-full text-left py-3 px-3 rounded-lg font-medium text-sm touch-manipulation min-h-[48px] flex items-center ${
+                    filterStatus === 'pending'
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Pending ({orders.filter(o => o.status === 'pending').length})
+                </button>
+                <button
+                  onClick={() => {
+                    setFilterStatus('processing')
+                    setShowMobileFilters(false)
+                  }}
+                  className={`w-full text-left py-3 px-3 rounded-lg font-medium text-sm touch-manipulation min-h-[48px] flex items-center ${
+                    filterStatus === 'processing'
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Processing ({orders.filter(o => o.status === 'processing').length})
+                </button>
+                <button
+                  onClick={() => {
+                    setFilterStatus('shipped')
+                    setShowMobileFilters(false)
+                  }}
+                  className={`w-full text-left py-3 px-3 rounded-lg font-medium text-sm touch-manipulation min-h-[48px] flex items-center ${
+                    filterStatus === 'shipped'
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Shipped ({orders.filter(o => o.status === 'shipped').length})
+                </button>
+                <button
+                  onClick={() => {
+                    setFilterStatus('delivered')
+                    setShowMobileFilters(false)
+                  }}
+                  className={`w-full text-left py-3 px-3 rounded-lg font-medium text-sm touch-manipulation min-h-[48px] flex items-center ${
+                    filterStatus === 'delivered'
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Delivered ({orders.filter(o => o.status === 'delivered').length})
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Header */}
+      <div className="hidden lg:block bg-white shadow-sm border-b border-gray-200">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
             <button
@@ -403,9 +519,9 @@ export default function OrdersPage() {
         </div>
       </div>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filter Tabs */}
-        <div className="mb-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
+        {/* Desktop Filter Tabs */}
+        <div className="hidden lg:block mb-8">
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8">
               <button
@@ -462,8 +578,23 @@ export default function OrdersPage() {
           </div>
         </div>
 
+        {/* Mobile Filter Status Display */}
+        <div className="lg:hidden mb-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-gray-600">
+              {filterStatus === 'all' ? 'All Orders' : getStatusText(filterStatus)} ({filteredOrders.length})
+            </p>
+            <button
+              onClick={() => setShowMobileFilters(true)}
+              className="px-3 py-2 text-sm font-medium text-purple-600 hover:text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 touch-manipulation min-h-[40px]"
+            >
+              Filter
+            </button>
+          </div>
+        </div>
+
         {/* Orders List */}
-        <div className="space-y-6">
+        <div className="space-y-4 lg:space-y-6">
           {ordersLoading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
@@ -482,10 +613,10 @@ export default function OrdersPage() {
             </div>
           ) : (
             filteredOrders.map((order) => (
-              <div key={order.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Order #{order.orderNumber}</h3>
+              <div key={order.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-3">
+                  <div className="flex-1">
+                    <h3 className="text-base lg:text-lg font-semibold text-gray-900">Order #{order.orderNumber}</h3>
                     <p className="text-sm text-gray-500">Placed on {formatDate(order.date)}</p>
                     {order.estimatedDelivery && (
                       <p className="text-sm text-gray-500">
@@ -493,7 +624,7 @@ export default function OrdersPage() {
                       </p>
                     )}
                   </div>
-                  <div className="text-right">
+                  <div className="text-left sm:text-right">
                     <p className="text-lg font-semibold text-gray-900">UGX {order.total.toLocaleString()}</p>
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
                       {getStatusIcon(order.status)}
@@ -504,49 +635,49 @@ export default function OrdersPage() {
 
                 {/* Order Items Preview */}
                 <div className="mb-4">
-                  <div className="flex items-center space-x-4">
-                    {order.orderItems.slice(0, 3).map((item, index) => (
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                    {order.orderItems.slice(0, 2).map((item, index) => (
                       <div key={item.id} className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center">
+                        <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-200 rounded-md flex items-center justify-center">
                           <span className="text-xs text-gray-500">IMG</span>
                         </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">{item.name}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
                           <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                         </div>
                       </div>
                     ))}
-                    {order.orderItems.length > 3 && (
+                    {order.orderItems.length > 2 && (
                       <div className="text-sm text-gray-500">
-                        +{order.orderItems.length - 3} more items
+                        +{order.orderItems.length - 2} more items
                       </div>
                     )}
                   </div>
                 </div>
 
                 {/* Order Actions */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-200 gap-3">
+                  <div className="flex flex-col space-y-2 text-sm text-gray-500">
                     <div className="flex items-center">
-                      <MapPinIcon className="h-4 w-4 mr-1" />
-                      {order.shippingAddress}
+                      <MapPinIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+                      <span className="truncate">{order.shippingAddress}</span>
                     </div>
                     <div className="flex items-center">
-                      <CreditCardIcon className="h-4 w-4 mr-1" />
-                      {order.paymentMethod}
+                      <CreditCardIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+                      <span className="truncate">{order.paymentMethod}</span>
                     </div>
                     {order.trackingNumber && (
                       <div className="flex items-center">
-                        <TruckIcon className="h-4 w-4 mr-1" />
-                        Track: {order.trackingNumber}
+                        <TruckIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+                        <span className="truncate">Track: {order.trackingNumber}</span>
                       </div>
                     )}
                   </div>
                   
-                  <div className="flex items-center space-x-3">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
                     <button
                       onClick={() => handleViewOrder(order)}
-                      className="flex items-center px-4 py-2 text-sm font-medium text-purple-600 hover:text-purple-700"
+                      className="flex items-center justify-center px-4 py-3 lg:py-2 text-sm font-medium text-purple-600 hover:text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 touch-manipulation min-h-[48px]"
                     >
                       <EyeIcon className="h-4 w-4 mr-2" />
                       View Details
@@ -555,7 +686,7 @@ export default function OrdersPage() {
                     {order.status === 'pending' && (
                       <button
                         onClick={() => handleCancelOrder(order.id)}
-                        className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 border border-red-300 rounded-md hover:bg-red-50"
+                        className="px-4 py-3 lg:py-2 text-sm font-medium text-red-600 hover:text-red-700 border border-red-300 rounded-lg hover:bg-red-50 touch-manipulation min-h-[48px]"
                       >
                         Cancel Order
                       </button>
@@ -564,7 +695,7 @@ export default function OrdersPage() {
                     {order.status === 'delivered' && (
                       <button
                         onClick={() => handleReturnOrder(order.id)}
-                        className="px-4 py-2 text-sm font-medium text-purple-600 hover:text-purple-700 border border-purple-300 rounded-md hover:bg-purple-50"
+                        className="px-4 py-3 lg:py-2 text-sm font-medium text-purple-600 hover:text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 touch-manipulation min-h-[48px]"
                       >
                         Return Item
                       </button>
@@ -580,24 +711,24 @@ export default function OrdersPage() {
       {/* Order Details Modal */}
       {showOrderDetails && selectedOrder && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-4 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
+          <div className="relative top-4 lg:top-20 mx-auto p-4 lg:p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
             <div className="mt-3">
               {/* Modal Header */}
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">
+              <div className="flex justify-between items-center mb-4 lg:mb-6">
+                <h3 className="text-base lg:text-lg font-semibold text-gray-900">
                   Order Details - #{selectedOrder.orderNumber}
                 </h3>
                 <button
                   onClick={() => setShowOrderDetails(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
                 >
                   <XCircleIcon className="h-6 w-6" />
                 </button>
               </div>
 
               {/* Order Status */}
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center justify-between">
+              <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-gray-50 rounded-lg">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div>
                     <h4 className="font-medium text-gray-900">Order Status</h4>
                     <p className="text-sm text-gray-500">Placed on {formatDate(selectedOrder.date)}</p>
@@ -609,24 +740,24 @@ export default function OrdersPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                 {/* Order Items */}
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-4">Order Items</h4>
-                  <div className="space-y-4">
+                  <h4 className="font-medium text-gray-900 mb-3 lg:mb-4">Order Items</h4>
+                  <div className="space-y-3 lg:space-y-4">
                     {selectedOrder.orderItems.map((item) => (
-                      <div key={item.id} className="flex items-center space-x-4 p-3 border border-gray-200 rounded-lg">
-                        <div className="w-16 h-16 bg-gray-200 rounded-md flex items-center justify-center">
+                      <div key={item.id} className="flex items-center space-x-3 lg:space-x-4 p-3 border border-gray-200 rounded-lg">
+                        <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gray-200 rounded-md flex items-center justify-center">
                           <span className="text-xs text-gray-500">IMG</span>
                         </div>
-                        <div className="flex-1">
-                          <h5 className="font-medium text-gray-900">{item.name}</h5>
+                        <div className="flex-1 min-w-0">
+                          <h5 className="font-medium text-gray-900 text-sm lg:text-base truncate">{item.name}</h5>
                           <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                           {item.color && <p className="text-sm text-gray-500">Color: {item.color}</p>}
                           {item.size && <p className="text-sm text-gray-500">Size: {item.size}</p>}
                         </div>
                         <div className="text-right">
-                          <p className="font-medium text-gray-900">UGX {item.price.toLocaleString()}</p>
+                          <p className="font-medium text-gray-900 text-sm lg:text-base">UGX {item.price.toLocaleString()}</p>
                         </div>
                       </div>
                     ))}
@@ -635,20 +766,20 @@ export default function OrdersPage() {
 
                 {/* Order Information */}
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-4">Order Information</h4>
-                  <div className="space-y-4">
-                    <div className="p-4 border border-gray-200 rounded-lg">
+                  <h4 className="font-medium text-gray-900 mb-3 lg:mb-4">Order Information</h4>
+                  <div className="space-y-3 lg:space-y-4">
+                    <div className="p-3 lg:p-4 border border-gray-200 rounded-lg">
                       <h5 className="font-medium text-gray-900 mb-2">Shipping Address</h5>
                       <p className="text-sm text-gray-600">{selectedOrder.shippingAddress}</p>
                     </div>
                     
-                    <div className="p-4 border border-gray-200 rounded-lg">
+                    <div className="p-3 lg:p-4 border border-gray-200 rounded-lg">
                       <h5 className="font-medium text-gray-900 mb-2">Payment Method</h5>
                       <p className="text-sm text-gray-600">{selectedOrder.paymentMethod}</p>
                     </div>
                     
                     {selectedOrder.trackingNumber && (
-                      <div className="p-4 border border-gray-200 rounded-lg">
+                      <div className="p-3 lg:p-4 border border-gray-200 rounded-lg">
                         <h5 className="font-medium text-gray-900 mb-2">Tracking Information</h5>
                         <p className="text-sm text-gray-600">Tracking Number: {selectedOrder.trackingNumber}</p>
                         {selectedOrder.estimatedDelivery && (
@@ -659,7 +790,7 @@ export default function OrdersPage() {
                       </div>
                     )}
                     
-                    <div className="p-4 border border-gray-200 rounded-lg">
+                    <div className="p-3 lg:p-4 border border-gray-200 rounded-lg">
                       <h5 className="font-medium text-gray-900 mb-2">Order Summary</h5>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
@@ -681,17 +812,17 @@ export default function OrdersPage() {
               </div>
 
               {/* Modal Actions */}
-              <div className="mt-6 flex justify-end space-x-3">
+              <div className="mt-4 lg:mt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
                 <button
                   onClick={() => setShowOrderDetails(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                  className="px-4 py-3 lg:py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 touch-manipulation min-h-[48px] w-full sm:w-auto"
                 >
                   Close
                 </button>
                 {selectedOrder.status === 'pending' && (
                   <button
                     onClick={() => handleCancelOrder(selectedOrder.id)}
-                    className="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-300 rounded-md hover:bg-red-50"
+                    className="px-4 py-3 lg:py-2 text-sm font-medium text-red-600 bg-white border border-red-300 rounded-md hover:bg-red-50 touch-manipulation min-h-[48px] w-full sm:w-auto"
                   >
                     Cancel Order
                   </button>
@@ -699,7 +830,7 @@ export default function OrdersPage() {
                 {selectedOrder.status === 'delivered' && (
                   <button
                     onClick={() => handleReturnOrder(selectedOrder.id)}
-                    className="px-4 py-2 text-sm font-medium text-purple-600 bg-white border border-purple-300 rounded-md hover:bg-purple-50"
+                    className="px-4 py-3 lg:py-2 text-sm font-medium text-purple-600 bg-white border border-purple-300 rounded-md hover:bg-purple-50 touch-manipulation min-h-[48px] w-full sm:w-auto"
                   >
                     Return Item
                   </button>
@@ -713,9 +844,17 @@ export default function OrdersPage() {
       {/* Refund Request Modal */}
       {showRefundModal && selectedOrder && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-4 lg:top-20 mx-auto p-4 lg:p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white">
             <div className="mt-3">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Request Refund</h3>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-base lg:text-lg font-medium text-gray-900">Request Refund</h3>
+                <button
+                  onClick={() => setShowRefundModal(false)}
+                  className="text-gray-400 hover:text-gray-600 touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
+                >
+                  <XCircleIcon className="h-6 w-6" />
+                </button>
+              </div>
               
               <div className="mb-4 p-3 bg-gray-50 rounded-md">
                 <p className="text-sm text-gray-600">Order #{selectedOrder.orderNumber}</p>
@@ -731,7 +870,7 @@ export default function OrdersPage() {
                   <select
                     value={refundForm.type}
                     onChange={(e) => setRefundForm({...refundForm, type: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation min-h-[48px]"
                     required
                   >
                     <option value="FULL">Full Refund</option>
@@ -747,7 +886,7 @@ export default function OrdersPage() {
                     type="number"
                     value={refundForm.amount}
                     onChange={(e) => setRefundForm({...refundForm, amount: parseFloat(e.target.value)})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation min-h-[48px]"
                     placeholder="Enter refund amount"
                     min="0"
                     max={selectedOrder.total}
@@ -762,7 +901,7 @@ export default function OrdersPage() {
                   <select
                     value={refundForm.reason}
                     onChange={(e) => setRefundForm({...refundForm, reason: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation min-h-[48px]"
                     required
                   >
                     <option value="">Select a reason</option>
@@ -782,23 +921,23 @@ export default function OrdersPage() {
                   <textarea
                     value={refundForm.description}
                     onChange={(e) => setRefundForm({...refundForm, description: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation min-h-[120px]"
                     rows={3}
                     placeholder="Please provide additional details about your refund request..."
                   />
                 </div>
                 
-                <div className="flex justify-end space-x-3 pt-4">
+                <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-4">
                   <button
                     type="button"
                     onClick={() => setShowRefundModal(false)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                    className="px-4 py-3 lg:py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 touch-manipulation min-h-[48px] w-full sm:w-auto"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 text-sm font-medium text-white bg-purple-600 border border-transparent rounded-md hover:bg-purple-700"
+                    className="px-4 py-3 lg:py-2 text-sm font-medium text-white bg-purple-600 border border-transparent rounded-md hover:bg-purple-700 touch-manipulation min-h-[48px] w-full sm:w-auto"
                   >
                     Submit Request
                   </button>

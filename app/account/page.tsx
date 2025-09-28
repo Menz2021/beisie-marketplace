@@ -29,7 +29,9 @@ import {
   PencilIcon,
   BanknotesIcon,
   DevicePhoneMobileIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  Bars3Icon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
 
@@ -83,6 +85,7 @@ export default function AccountPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showRefundModal, setShowRefundModal] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [refundForm, setRefundForm] = useState({
     reason: '',
     type: 'FULL',
@@ -664,8 +667,90 @@ export default function AccountPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      {/* Mobile Header */}
+      <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => setShowMobileMenu(true)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
+              >
+                <Bars3Icon className="h-5 w-5" />
+              </button>
+              <h1 className="text-lg font-semibold text-gray-900">My Account</h1>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md touch-manipulation min-h-[40px]"
+            >
+              <ArrowRightOnRectangleIcon className="h-4 w-4 mr-1" />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      {showMobileMenu && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">
+          <div className="absolute left-0 top-0 h-full w-80 bg-white shadow-xl overflow-y-auto">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Account Menu</h3>
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-4">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <UserIcon className="h-8 w-8 text-purple-600" />
+                </div>
+                <h2 className="text-base font-semibold text-gray-900">{user.name}</h2>
+                <p className="text-xs text-gray-600">{user.email}</p>
+                <div className="mt-2">
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    user.isVerified 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {user.isVerified ? 'Verified' : 'Unverified'}
+                  </span>
+                </div>
+              </div>
+
+              <nav className="space-y-1">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => {
+                      setActiveTab(tab.id)
+                      setShowMobileMenu(false)
+                    }}
+                    className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-lg touch-manipulation min-h-[48px] ${
+                      activeTab === tab.id 
+                        ? 'bg-purple-100 text-purple-700' 
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                  >
+                    <tab.icon className="mr-3 h-5 w-5" />
+                    {tab.name}
+                  </button>
+                ))}
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Header */}
+      <div className="hidden lg:block bg-white shadow-sm border-b border-gray-200">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <h1 className="text-2xl font-semibold text-gray-900">My Account</h1>
@@ -680,10 +765,10 @@ export default function AccountPage() {
         </div>
       </div>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-8">
+          {/* Desktop Sidebar */}
+          <div className="hidden lg:block lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <div className="text-center mb-6">
                 <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -725,10 +810,10 @@ export default function AccountPage() {
           <div className="lg:col-span-3">
             {/* Profile Tab */}
             {activeTab === 'profile' && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">Profile Information</h3>
-                <form onSubmit={handleProfileUpdate} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 lg:mb-6">Profile Information</h3>
+                <form onSubmit={handleProfileUpdate} className="space-y-4 lg:space-y-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Full Name
@@ -737,7 +822,7 @@ export default function AccountPage() {
                         type="text"
                         value={profileForm.name}
                         onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation"
                       />
                     </div>
                     <div>
@@ -748,7 +833,7 @@ export default function AccountPage() {
                         type="email"
                         value={profileForm.email}
                         onChange={(e) => setProfileForm({...profileForm, email: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation"
                       />
                     </div>
                     <div>
@@ -759,7 +844,7 @@ export default function AccountPage() {
                         type="tel"
                         value={profileForm.phone}
                         onChange={(e) => setProfileForm({...profileForm, phone: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation"
                         placeholder="+256 700 000 000"
                       />
                     </div>
@@ -771,14 +856,14 @@ export default function AccountPage() {
                         type="text"
                         value={user.role}
                         disabled
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
+                        className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500 text-base lg:text-sm"
                       />
                     </div>
                   </div>
                   <div className="flex justify-end">
                     <button
                       type="submit"
-                      className="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      className="px-6 py-3 lg:py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 touch-manipulation min-h-[48px] w-full lg:w-auto"
                     >
                       Update Profile
                     </button>
@@ -789,13 +874,13 @@ export default function AccountPage() {
 
             {/* Orders Tab */}
             {activeTab === 'orders' && (
-              <div className="space-y-6">
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  <div className="flex justify-between items-center mb-6">
+              <div className="space-y-4 lg:space-y-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 lg:mb-6 gap-3">
                     <h3 className="text-lg font-semibold text-gray-900">Order History</h3>
                     <Link
                       href="/orders"
-                      className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm font-medium"
+                      className="px-4 py-3 lg:py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm font-medium touch-manipulation min-h-[48px] w-full sm:w-auto text-center"
                     >
                       View All Orders
                     </Link>
@@ -815,13 +900,13 @@ export default function AccountPage() {
                     ) : (
                       orders.slice(0, 3).map((order) => (
                       <div key={order.id} className="border border-gray-200 rounded-lg p-4">
-                        <div className="flex justify-between items-start">
-                          <div>
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                          <div className="flex-1">
                             <h4 className="font-medium text-gray-900">Order #{order.orderNumber}</h4>
                             <p className="text-sm text-gray-500">Placed on {order.date}</p>
                             <p className="text-sm text-gray-500">{order.items} item(s)</p>
                           </div>
-                          <div className="text-right">
+                          <div className="text-left sm:text-right">
                             <p className="font-medium text-gray-900">UGX {order.total.toLocaleString()}</p>
                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
                               {getStatusIcon(order.status)}
@@ -829,23 +914,23 @@ export default function AccountPage() {
                             </span>
                           </div>
                         </div>
-                        <div className="mt-4 flex space-x-4">
+                        <div className="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-4">
                           <Link
                             href="/orders"
-                            className="text-sm text-purple-600 hover:text-purple-700"
+                            className="text-sm text-purple-600 hover:text-purple-700 touch-manipulation min-h-[44px] flex items-center justify-center sm:justify-start"
                           >
                             View Details
                           </Link>
                           {order.status === 'delivered' && (
                             <button 
                               onClick={() => handleReturnItem(order)}
-                              className="text-sm text-purple-600 hover:text-purple-700"
+                              className="text-sm text-purple-600 hover:text-purple-700 touch-manipulation min-h-[44px] flex items-center justify-center sm:justify-start"
                             >
                               Return Item
                             </button>
                           )}
                           {order.status === 'pending' && (
-                            <button className="text-sm text-red-600 hover:text-red-700">
+                            <button className="text-sm text-red-600 hover:text-red-700 touch-manipulation min-h-[44px] flex items-center justify-center sm:justify-start">
                               Cancel Order
                             </button>
                           )}
@@ -857,7 +942,7 @@ export default function AccountPage() {
                       <div className="text-center pt-4">
                         <Link
                           href="/orders"
-                          className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+                          className="text-sm text-purple-600 hover:text-purple-700 font-medium touch-manipulation min-h-[44px] flex items-center justify-center"
                         >
                           View {orders.length - 3} more orders →
                         </Link>
@@ -867,25 +952,25 @@ export default function AccountPage() {
                 </div>
 
                 {/* Quick Return Actions */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Return Actions</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 lg:mb-6">Quick Return Actions</h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {orders.filter(order => order.status === 'delivered').map((order) => (
                       <div key={order.id} className="border border-gray-200 rounded-lg p-4">
-                        <div className="flex justify-between items-start">
-                          <div>
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                          <div className="flex-1">
                             <h4 className="font-medium text-gray-900">Order #{order.orderNumber}</h4>
                             <p className="text-sm text-gray-500">Delivered on {order.date}</p>
                             <p className="text-sm text-gray-500">{order.items} item(s)</p>
                           </div>
-                          <div className="text-right">
+                          <div className="text-left sm:text-right">
                             <p className="font-medium text-gray-900">{formatCurrency(order.total)}</p>
                           </div>
                         </div>
                         <div className="mt-4">
                           <button
                             onClick={() => openRefundModal(order)}
-                            className="w-full px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium"
+                            className="w-full px-4 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium touch-manipulation min-h-[48px]"
                           >
                             Request Refund
                           </button>
@@ -1819,13 +1904,13 @@ export default function AccountPage() {
       {/* Refund Request Modal */}
       {showRefundModal && selectedOrder && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+          <div className="relative top-4 lg:top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
             <div className="mt-3">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-medium text-gray-900">Request Refund</h3>
                 <button
                   onClick={() => setShowRefundModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
                 >
                   <XCircleIcon className="h-6 w-6" />
                 </button>
@@ -1846,7 +1931,7 @@ export default function AccountPage() {
                   <select
                     value={refundForm.type}
                     onChange={(e) => setRefundForm({...refundForm, type: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation"
                     required
                   >
                     <option value="FULL">Full Refund</option>
@@ -1865,7 +1950,7 @@ export default function AccountPage() {
                     max={selectedOrder.total}
                     min="0"
                     step="0.01"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation"
                     required
                   />
                   <p className="text-xs text-gray-500 mt-1">
@@ -1880,7 +1965,7 @@ export default function AccountPage() {
                   <select
                     value={refundForm.reason}
                     onChange={(e) => setRefundForm({...refundForm, reason: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation"
                     required
                   >
                     <option value="">Select a reason</option>
@@ -1902,22 +1987,22 @@ export default function AccountPage() {
                     value={refundForm.description}
                     onChange={(e) => setRefundForm({...refundForm, description: e.target.value})}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-3 lg:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-base lg:text-sm touch-manipulation"
                     placeholder="Please provide additional details about your refund request..."
                   />
                 </div>
                 
-                <div className="flex justify-end space-x-3 mt-6">
+                <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 mt-6">
                   <button
                     type="button"
                     onClick={() => setShowRefundModal(false)}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                    className="px-4 py-3 lg:py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 touch-manipulation min-h-[48px] w-full sm:w-auto"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+                    className="px-4 py-3 lg:py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 touch-manipulation min-h-[48px] w-full sm:w-auto"
                   >
                     Submit Refund Request
                   </button>
@@ -1931,7 +2016,7 @@ export default function AccountPage() {
       {/* Delete Account Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-4 lg:top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white">
             <div className="mt-3 text-center">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
                 <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
@@ -1942,16 +2027,16 @@ export default function AccountPage() {
                   Are you sure you want to delete your account? This action cannot be undone and will permanently remove all your data.
                 </p>
               </div>
-              <div className="items-center px-4 py-3">
+              <div className="items-center px-4 py-3 space-y-3">
                 <button
                   onClick={handleAccountDelete}
-                  className="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 mr-2"
+                  className="px-4 py-3 bg-red-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 touch-manipulation min-h-[48px]"
                 >
                   Yes, Delete Account
                 </button>
                 <button
                   onClick={() => setShowDeleteModal(false)}
-                  className="mt-3 px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  className="px-4 py-3 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 touch-manipulation min-h-[48px]"
                 >
                   Cancel
                 </button>

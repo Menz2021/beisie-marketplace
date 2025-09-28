@@ -62,12 +62,12 @@ export function ProductFilters({
   const [isExpanded, setIsExpanded] = useState(true)
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="lg:hidden text-gray-500 hover:text-gray-700"
+          className="lg:hidden text-gray-500 hover:text-gray-700 touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
         >
           {isExpanded ? '−' : '+'}
         </button>
@@ -81,7 +81,7 @@ export function ProductFilters({
             <select
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value)}
-              className="w-full input"
+              className="w-full input text-base py-3 touch-manipulation"
             >
               {sortOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -94,9 +94,9 @@ export function ProductFilters({
           {/* Category */}
           <div>
             <h4 className="text-sm font-medium text-gray-900 mb-3">Category</h4>
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-60 overflow-y-auto">
               {categories.map((category) => (
-                <label key={category.value} className="flex items-center">
+                <label key={category.value} className="flex items-center py-2 touch-manipulation min-h-[44px]">
                   <input
                     type="radio"
                     name="category"
@@ -105,7 +105,7 @@ export function ProductFilters({
                     onChange={(e) => onCategoryChange(e.target.value)}
                     className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
                   />
-                  <span className="ml-2 text-sm text-gray-700">
+                  <span className="ml-3 text-sm text-gray-700 leading-relaxed">
                     {category.label}
                   </span>
                 </label>
@@ -118,28 +118,58 @@ export function ProductFilters({
             <h4 className="text-sm font-medium text-gray-900 mb-3">
               Price Range: Ush {priceRange[0].toLocaleString()} - Ush {priceRange[1].toLocaleString()}
             </h4>
-            <div className="space-y-3">
-              <input
-                type="range"
-                min="0"
-                max="1000"
-                step="10"
-                value={priceRange[0]}
-                onChange={(e) => onPriceRangeChange([parseInt(e.target.value), priceRange[1]])}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-              />
-              <input
-                type="range"
-                min="0"
-                max="1000"
-                step="10"
-                value={priceRange[1]}
-                onChange={(e) => onPriceRangeChange([priceRange[0], parseInt(e.target.value)])}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-              />
-              <div className="flex justify-between text-xs text-gray-500">
-                <span>Ush 0</span>
-                <span>Ush 1,000</span>
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <input
+                  type="range"
+                  min="0"
+                  max="10000000"
+                  step="100000"
+                  value={priceRange[0]}
+                  onChange={(e) => onPriceRangeChange([parseInt(e.target.value), priceRange[1]])}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider touch-manipulation"
+                />
+                <input
+                  type="range"
+                  min="0"
+                  max="10000000"
+                  step="100000"
+                  value={priceRange[1]}
+                  onChange={(e) => onPriceRangeChange([priceRange[0], parseInt(e.target.value)])}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider touch-manipulation"
+                />
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>Ush 0</span>
+                  <span>Ush 10M</span>
+                </div>
+              </div>
+              
+              {/* Quick Price Filters */}
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => onPriceRangeChange([0, 100000])}
+                  className="px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors touch-manipulation min-h-[40px]"
+                >
+                  Under Ush 100K
+                </button>
+                <button
+                  onClick={() => onPriceRangeChange([100000, 500000])}
+                  className="px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors touch-manipulation min-h-[40px]"
+                >
+                  Ush 100K - 500K
+                </button>
+                <button
+                  onClick={() => onPriceRangeChange([500000, 1000000])}
+                  className="px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors touch-manipulation min-h-[40px]"
+                >
+                  Ush 500K - 1M
+                </button>
+                <button
+                  onClick={() => onPriceRangeChange([1000000, 10000000])}
+                  className="px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors touch-manipulation min-h-[40px]"
+                >
+                  Above Ush 1M
+                </button>
               </div>
             </div>
           </div>
@@ -148,10 +178,10 @@ export function ProductFilters({
           <button
             onClick={() => {
               onCategoryChange('all')
-              onPriceRangeChange([0, 1000])
+              onPriceRangeChange([0, 10000000])
               onSortChange('featured')
             }}
-            className="w-full btn-outline btn-sm"
+            className="w-full btn-outline btn-sm touch-manipulation min-h-[48px]"
           >
             Clear All Filters
           </button>

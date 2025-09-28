@@ -109,7 +109,7 @@ export function ProductCard({ product }: ProductCardProps) {
     <Link href={`/products/${product.slug}`} className="group block">
       <div className="card overflow-hidden hover:shadow-lg transition-shadow duration-300">
         <div className="relative">
-          <div className="relative bg-gray-100" style={{ height: '256px' }}>
+          <div className="relative bg-gray-100" style={{ height: '200px' }}>
             <img
               src={mainImage}
               alt={product.name}
@@ -122,7 +122,7 @@ export function ProductCard({ product }: ProductCardProps) {
             />
             
             {/* Badges */}
-            <div className="absolute top-3 left-3 flex flex-col gap-2">
+            <div className="absolute top-2 left-2 flex flex-col gap-1">
               {product.daysSinceAdded <= 7 && (
                 <span className="bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">
                   New
@@ -143,24 +143,24 @@ export function ProductCard({ product }: ProductCardProps) {
                 toggleFavorite(product.id)
               }}
               disabled={isTogglingWishlist}
-              className="absolute top-3 right-3 p-2 bg-white/80 hover:bg-white rounded-full transition-colors disabled:opacity-50 touch-manipulation"
+              className="absolute top-2 right-2 p-2 bg-white/80 hover:bg-white rounded-full transition-colors disabled:opacity-50 touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
             >
               {isInWishlist(product.id) ? (
-                <HeartIcon className="h-5 w-5 text-red-500" />
+                <HeartIcon className="h-4 w-4 text-red-500" />
               ) : (
-                <HeartOutlineIcon className="h-5 w-5 text-gray-600" />
+                <HeartOutlineIcon className="h-4 w-4 text-gray-600" />
               )}
             </button>
           </div>
 
-          <div className="card-content">
+          <div className="card-content p-3 lg:p-4">
             {product.totalReviews > 0 && (
               <div className="flex items-center gap-1 mb-2">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <StarIcon
                       key={i}
-                      className={`h-4 w-4 ${
+                      className={`h-3 w-3 lg:h-4 lg:w-4 ${
                         i < Math.floor(product.averageRating)
                           ? 'text-yellow-400'
                           : 'text-gray-300'
@@ -168,28 +168,28 @@ export function ProductCard({ product }: ProductCardProps) {
                     />
                   ))}
                 </div>
-                <span className="text-sm text-gray-600">
+                <span className="text-xs lg:text-sm text-gray-600">
                   {product.averageRating} ({product.totalReviews})
                 </span>
               </div>
             )}
 
-            <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+            <h3 className="text-sm lg:text-lg font-semibold text-gray-900 mb-2 line-clamp-2 leading-tight">
               {product.name}
             </h3>
 
             {product.brand && (
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-xs lg:text-sm text-gray-600 mb-2 lg:mb-3">
                 {product.brand}
               </p>
             )}
 
-            <div className="mb-4">
-              <span className="text-2xl font-bold text-gray-900">
+            <div className="mb-3 lg:mb-4">
+              <span className="text-lg lg:text-2xl font-bold text-gray-900">
                 Ush {product.price.toLocaleString()}
               </span>
               {product.originalPrice && (
-                <div className="text-lg text-gray-500 line-through mt-1">
+                <div className="text-sm lg:text-lg text-gray-500 line-through mt-1">
                   Ush {product.originalPrice.toLocaleString()}
                 </div>
               )}
@@ -198,7 +198,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className="w-full btn-primary btn-md disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full btn-primary btn-sm lg:btn-md disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[40px] lg:min-h-[44px]"
             >
               {isAddingToCart ? 'Adding...' : 'Add to Cart'}
             </button>

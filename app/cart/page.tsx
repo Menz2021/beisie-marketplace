@@ -164,13 +164,6 @@ export default function CartPage() {
 
             {/* Wishlist Reminder */}
             <WishlistReminder className="mt-4 sm:mt-6" />
-            
-            {/* Debug Test - Remove after testing */}
-            <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-lg">
-              <h3 className="text-lg font-bold text-red-800">DEBUG: WishlistReminder Test</h3>
-              <p className="text-red-700">If you can see this red box, the cart page is loading correctly.</p>
-              <p className="text-red-700">The WishlistReminder component should appear above this box.</p>
-            </div>
           </div>
 
           {/* Order Summary - Mobile optimized */}

@@ -127,12 +127,12 @@ export function WishlistReminder({ className = '' }: WishlistReminderProps) {
           <div key={item.id} className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-white rounded-lg border border-gray-200">
             {/* Product Image */}
             <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
-              <Image
+              <img
                 src={item.image}
                 alt={item.name}
-                fill
-                className="object-cover rounded-lg"
+                className="w-full h-full object-cover rounded-lg"
                 onError={(e) => {
+                  console.log('WishlistReminder image error:', item.image)
                   e.currentTarget.src = '/api/placeholder/64/64/Error'
                 }}
               />

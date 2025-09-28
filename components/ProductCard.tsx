@@ -64,26 +64,42 @@ export function ProductCard({ product }: ProductCardProps) {
     }
   }
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     
-    let productImages = []
-    try {
-      productImages = product.images ? JSON.parse(product.images) : []
-    } catch (error) {
-      console.error('Error parsing product images:', error)
-      productImages = []
-    }
+    if (isAddingToCart) return
     
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: productImages.length > 0 ? productImages[0] : '/api/placeholder/200/200',
-      vendorId: product.vendor || 'unknown'
-    })
-    toast.success('Added to cart!')
+    setIsAddingToCart(true)
+    
+    try {
+      let productImages = []
+      try {
+        productImages = product.images ? JSON.parse(product.images) : []
+      } catch (error) {
+        console.error('Error parsing product images:', error)
+        productImages = []
+      }
+      
+      const success = await addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: productImages.length > 0 ? productImages[0] : '/api/placeholder/200/200',
+        vendorId: product.vendor || 'unknown'
+      })
+      
+      if (success) {
+        toast.success('Added to cart!')
+      } else {
+        toast.error('Failed to add to cart')
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error)
+      toast.error('Failed to add to cart')
+    } finally {
+      setIsAddingToCart(false)
+    }
   }
 
   const productImages = product.images ? JSON.parse(product.images) : []
@@ -181,9 +197,10 @@ export function ProductCard({ product }: ProductCardProps) {
 
             <button
               onClick={handleAddToCart}
-              className="w-full btn-primary btn-md"
+              disabled={isAddingToCart}
+              className="w-full btn-primary btn-md disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Add to Cart
+              {isAddingToCart ? 'Adding...' : 'Add to Cart'}
             </button>
           </div>
         </div>

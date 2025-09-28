@@ -14,7 +14,7 @@ interface MobileCartDrawerProps {
 }
 
 export function MobileCartDrawer({ isOpen, onClose }: MobileCartDrawerProps) {
-  const { items, updateQuantity, removeItem, getTotalPrice } = useCartStore()
+  const { items, updateQuantity, removeItem, getTotalPrice, isLoading } = useCartStore()
   const router = useRouter()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
 
@@ -137,7 +137,8 @@ export function MobileCartDrawer({ isOpen, onClose }: MobileCartDrawerProps) {
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="p-1 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[32px] min-w-[32px] flex items-center justify-center"
+                          disabled={isLoading}
+                          className="p-1 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[32px] min-w-[32px] flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <MinusIcon className="h-4 w-4" />
                         </button>
@@ -146,7 +147,8 @@ export function MobileCartDrawer({ isOpen, onClose }: MobileCartDrawerProps) {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="p-1 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[32px] min-w-[32px] flex items-center justify-center"
+                          disabled={isLoading}
+                          className="p-1 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[32px] min-w-[32px] flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <PlusIcon className="h-4 w-4" />
                         </button>

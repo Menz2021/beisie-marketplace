@@ -19,9 +19,44 @@ export function WishlistReminder({ className = '' }: WishlistReminderProps) {
   const [isVisible, setIsVisible] = useState(true)
   const [isAddingToCart, setIsAddingToCart] = useState<string | null>(null)
 
-  // Don't show if wishlist is empty or user dismissed it
-  if (!isVisible || wishlistItems.length === 0) {
+  // Don't show if user dismissed it (but show even if empty for testing)
+  if (!isVisible) {
     return null
+  }
+
+  // Show empty state if no items
+  if (wishlistItems.length === 0) {
+    return (
+      <div className={`bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-3 sm:p-6 ${className}`}>
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <div className="flex items-center space-x-2">
+            <HeartSolidIcon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+              Your Wishlist (0)
+            </h3>
+          </div>
+          <button
+            onClick={() => setIsVisible(false)}
+            className="p-1 hover:bg-gray-200 rounded-full transition-colors touch-manipulation"
+          >
+            <XMarkIcon className="h-4 w-4 text-gray-500" />
+          </button>
+        </div>
+        
+        <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
+          You haven't saved any items yet. Browse products and click the heart icon to add them to your wishlist!
+        </p>
+        
+        <div className="text-center">
+          <Link
+            href="/products"
+            className="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors touch-manipulation"
+          >
+            Browse Products
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   const handleAddToCart = async (product: any) => {

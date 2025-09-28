@@ -2223,102 +2223,102 @@ export default function SellerDashboard() {
               
               {/* Desktop Table View */}
               <div className="hidden lg:block bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-[calc(100vh-10rem)]">
-                <div className="overflow-auto h-full">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50 sticky top-0">
-                      <tr>
-                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
-                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Share</th>
-                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                        {ordersLoading ? (
-                          <tr>
-                            <td colSpan={7} className="px-4 py-3 text-center">
-                              <div className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
-                                <span className="ml-2 text-sm text-gray-600">Loading...</span>
-                              </div>
-                            </td>
-                          </tr>
-                        ) : orders.length === 0 ? (
-                          <tr>
-                            <td colSpan={7} className="px-4 py-3 text-center text-sm text-gray-500">
-                              No orders found
-                            </td>
-                          </tr>
-                        ) : (
-                          orders.map((order) => (
-                        <tr key={order.id}>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                              #{order.orderNumber}
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                            {order.customer}
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                            {formatCurrency(order.total)}
-                          </td>
-                            <td className="px-4 py-3 whitespace-nowrap text-sm text-green-600 font-medium">
-                              {formatCurrency(order.total * 0.90)}
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap">
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
-                              {order.status}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                            {order.date}
-                          </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
-                            <div className="flex space-x-1">
-                              <button 
-                                className="text-purple-600 hover:text-purple-900 p-1"
-                                onClick={() => handleViewOrder(order)}
-                                title="View Order"
-                              >
-                                <EyeIcon className="h-3 w-3" />
-                              </button>
-                              {order.status === 'pending' || order.status === 'processing' ? (
-                                <>
-                                  <button
-                                    onClick={() => handleUpdateOrderStatus(order.id, 'READY_TO_SHIP')}
-                                    disabled={updatingStatus === order.id}
-                                    className="text-green-600 hover:text-green-900 text-xs px-1 py-1 border border-green-300 rounded hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    title="Ready to Ship"
-                                  >
-                                    {updatingStatus === order.id ? '...' : 'Ship'}
-                                  </button>
-                                  <button
-                                    onClick={() => handleUpdateOrderStatus(order.id, 'CANCELLED')}
-                                    disabled={updatingStatus === order.id}
-                                    className="text-red-600 hover:text-red-900 text-xs px-1 py-1 border border-red-300 rounded hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    title="Cancel Order"
-                                  >
-                                    {updatingStatus === order.id ? '...' : 'Cancel'}
-                                  </button>
-                                </>
-                              ) : (
-                                <span className="text-xs text-gray-500">
-                                  {order.status === 'ready_to_ship' ? 'Ready to Ship' : 
-                                   order.status === 'cancelled' ? 'Cancelled' : 
-                                   order.status}
-                                </span>
-                              )}
+              <div className="overflow-auto h-full">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50 sticky top-0">
+                    <tr>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Share</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                      {ordersLoading ? (
+                        <tr>
+                          <td colSpan={7} className="px-4 py-3 text-center">
+                            <div className="flex items-center justify-center">
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
+                              <span className="ml-2 text-sm text-gray-600">Loading...</span>
                             </div>
                           </td>
                         </tr>
-                          ))
-                        )}
-                    </tbody>
-                  </table>
-                </div>
+                      ) : orders.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="px-4 py-3 text-center text-sm text-gray-500">
+                            No orders found
+                          </td>
+                        </tr>
+                      ) : (
+                        orders.map((order) => (
+                      <tr key={order.id}>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                            #{order.orderNumber}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                          {order.customer}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                          {formatCurrency(order.total)}
+                        </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-green-600 font-medium">
+                            {formatCurrency(order.total * 0.90)}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                          {order.date}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
+                          <div className="flex space-x-1">
+                            <button 
+                              className="text-purple-600 hover:text-purple-900 p-1"
+                              onClick={() => handleViewOrder(order)}
+                              title="View Order"
+                            >
+                              <EyeIcon className="h-3 w-3" />
+                            </button>
+                            {order.status === 'pending' || order.status === 'processing' ? (
+                              <>
+                                <button
+                                  onClick={() => handleUpdateOrderStatus(order.id, 'READY_TO_SHIP')}
+                                  disabled={updatingStatus === order.id}
+                                  className="text-green-600 hover:text-green-900 text-xs px-1 py-1 border border-green-300 rounded hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  title="Ready to Ship"
+                                >
+                                  {updatingStatus === order.id ? '...' : 'Ship'}
+                                </button>
+                                <button
+                                  onClick={() => handleUpdateOrderStatus(order.id, 'CANCELLED')}
+                                  disabled={updatingStatus === order.id}
+                                  className="text-red-600 hover:text-red-900 text-xs px-1 py-1 border border-red-300 rounded hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  title="Cancel Order"
+                                >
+                                  {updatingStatus === order.id ? '...' : 'Cancel'}
+                                </button>
+                              </>
+                            ) : (
+                              <span className="text-xs text-gray-500">
+                                {order.status === 'ready_to_ship' ? 'Ready to Ship' : 
+                                 order.status === 'cancelled' ? 'Cancelled' : 
+                                 order.status}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                        ))
+                      )}
+                  </tbody>
+                </table>
               </div>
+            </div>
 
               {/* Mobile Card View */}
               <div className="lg:hidden bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-[calc(100vh-10rem)]">
@@ -2424,7 +2424,7 @@ export default function SellerDashboard() {
                   )}
                 </div>
               </div>
-            </div>
+          </div>
         )}
 
           {/* Refunds Management Tab */}
@@ -2617,8 +2617,51 @@ export default function SellerDashboard() {
 
           {/* Account Statements Tab */}
           {activeTab === 'statements' && (
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
+            <div className="space-y-4 lg:space-y-6">
+              {/* Mobile Header */}
+              <div className="lg:hidden">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Account Statements</h2>
+                <div className="space-y-3">
+                  <select 
+                    value={selectedPeriod}
+                    onChange={(e) => setSelectedPeriod(e.target.value)}
+                    className="w-full px-3 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 touch-manipulation min-h-[48px]"
+                  >
+                    <option value="all">All Time</option>
+                    <option value="month">This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">This Year</option>
+                  </select>
+                  <button 
+                    onClick={() => {
+                      // Generate and download statement
+                      const statementData = {
+                        seller: seller?.name || 'Unknown Seller',
+                        period: selectedPeriod === 'all' ? 'All Time' : selectedPeriod,
+                        stats: statementsData?.periodStats || financialData?.financialStats,
+                        transactions: statementsData?.transactions || financialData?.transactions || [],
+                        summary: statementsData?.summaryByType,
+                        generatedAt: new Date().toISOString()
+                      }
+                      const dataStr = JSON.stringify(statementData, null, 2)
+                      const dataBlob = new Blob([dataStr], {type: 'application/json'})
+                      const url = URL.createObjectURL(dataBlob)
+                      const link = document.createElement('a')
+                      link.href = url
+                      link.download = `statement-${new Date().toISOString().split('T')[0]}.json`
+                      link.click()
+                      URL.revokeObjectURL(url)
+                    }}
+                    className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 touch-manipulation min-h-[48px]"
+                  >
+                    <DocumentTextIcon className="h-5 w-5 mr-2" />
+                    Download Statement
+                  </button>
+                </div>
+              </div>
+
+              {/* Desktop Header */}
+              <div className="hidden lg:flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-900">Account Statements</h2>
                 <div className="flex space-x-2">
                   <select 
@@ -2660,15 +2703,15 @@ export default function SellerDashboard() {
               </div>
 
               {/* Financial Summary Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <CurrencyDollarIcon className="h-8 w-8 text-green-600" />
+                      <CurrencyDollarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-green-600" />
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Total Earnings</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                    <div className="ml-3 lg:ml-4">
+                      <p className="text-xs lg:text-sm font-medium text-gray-500">Total Earnings</p>
+                      <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                         {statementsLoading ? '...' : formatCurrency(statementsData?.periodStats?.totalEarnings || financialData?.financialStats?.totalEarnings || 0)}
                       </p>
                       <p className="text-xs text-gray-400 mt-1">All time</p>
@@ -2676,14 +2719,14 @@ export default function SellerDashboard() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <BanknotesIcon className="h-8 w-8 text-blue-600" />
+                      <BanknotesIcon className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Total Payouts</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                    <div className="ml-3 lg:ml-4">
+                      <p className="text-xs lg:text-sm font-medium text-gray-500">Total Payouts</p>
+                      <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                         {statementsLoading ? '...' : formatCurrency(statementsData?.periodStats?.totalPayouts || financialData?.financialStats?.totalPayouts || 0)}
                       </p>
                       <p className="text-xs text-gray-400 mt-1">Received</p>
@@ -2691,14 +2734,14 @@ export default function SellerDashboard() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <CurrencyDollarIcon className="h-8 w-8 text-yellow-600" />
+                      <CurrencyDollarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-yellow-600" />
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Pending Payout</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                    <div className="ml-3 lg:ml-4">
+                      <p className="text-xs lg:text-sm font-medium text-gray-500">Pending Payout</p>
+                      <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                         {statementsLoading ? '...' : formatCurrency(statementsData?.periodStats?.pendingPayout || financialData?.financialStats?.pendingPayout || 0)}
                       </p>
                       <p className="text-xs text-gray-400 mt-1">
@@ -2708,14 +2751,14 @@ export default function SellerDashboard() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <ChartBarIcon className="h-8 w-8 text-red-600" />
+                      <ChartBarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-red-600" />
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Commission Paid</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                    <div className="ml-3 lg:ml-4">
+                      <p className="text-xs lg:text-sm font-medium text-gray-500">Commission Paid</p>
+                      <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                         {statementsLoading ? '...' : formatCurrency(statementsData?.periodStats?.totalCommission || financialData?.financialStats?.commissionPaid || 0)}
                       </p>
                       <p className="text-xs text-gray-400 mt-1">10% platform fee</p>
@@ -2724,8 +2767,8 @@ export default function SellerDashboard() {
                 </div>
               </div>
 
-              {/* Transaction History */}
-              <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+              {/* Desktop Transaction History Table */}
+              <div className="hidden lg:block bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-200">
                   <h3 className="text-lg font-semibold text-gray-900">Transaction History</h3>
                   <p className="text-sm text-gray-500 mt-1">All your financial transactions and payouts</p>
@@ -2802,17 +2845,86 @@ export default function SellerDashboard() {
                 </div>
               </div>
 
+              {/* Mobile Transaction History Cards */}
+              <div className="lg:hidden bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900">Transaction History</h3>
+                  <p className="text-xs text-gray-500 mt-1">All your financial transactions and payouts</p>
+                </div>
+                
+                <div className="p-4">
+                  {statementsLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                      <span className="ml-2 text-sm text-gray-600">Loading transactions...</span>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {(statementsData?.transactions || financialData?.transactions || []).map((transaction: any) => (
+                        <div key={transaction.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                          {/* Transaction Header */}
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="flex items-center">
+                              <div className={`p-2 rounded-full ${getTransactionTypeColor(transaction.type)}`}>
+                                {getTransactionIcon(transaction.type)}
+                              </div>
+                              <div className="ml-3">
+                                <h4 className="text-sm font-semibold text-gray-900 capitalize">{transaction.type}</h4>
+                                <p className="text-xs text-gray-500">{transaction.date}</p>
+                              </div>
+                            </div>
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(transaction.status)}`}>
+                              {transaction.status}
+                            </span>
+                          </div>
+
+                          {/* Transaction Details */}
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Description:</span>
+                              <span className="text-gray-900 font-medium text-right max-w-[60%]">{transaction.description}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Reference:</span>
+                              <span className="text-gray-500">{transaction.orderNumber}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Amount:</span>
+                              <span className={`font-medium ${
+                                transaction.amount >= 0 ? 'text-green-600' : 'text-red-600'
+                              }`}>
+                                {transaction.amount >= 0 ? '+' : ''}{formatCurrency(transaction.amount)}
+                              </span>
+                            </div>
+                            {transaction.commission !== 0 && (
+                              <div className="flex justify-between text-sm">
+                                <span className="text-gray-600">Commission:</span>
+                                <span className={`${
+                                  transaction.commission >= 0 ? 'text-gray-600' : 'text-red-600'
+                                }`}>
+                                  {transaction.commission >= 0 ? '-' : '+'}{formatCurrency(Math.abs(transaction.commission))}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Additional Financial Metrics */}
               {statementsData && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
-                        <ChartBarIcon className="h-8 w-8 text-blue-600" />
+                        <ChartBarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
                       </div>
-                      <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-500">Total Sales</p>
-                        <p className="text-2xl font-semibold text-gray-900">
+                      <div className="ml-3 lg:ml-4">
+                        <p className="text-xs lg:text-sm font-medium text-gray-500">Total Sales</p>
+                        <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                           {formatCurrency(statementsData.periodStats?.totalSales || 0)}
                         </p>
                         <p className="text-xs text-gray-400 mt-1">Gross revenue</p>
@@ -2820,14 +2932,14 @@ export default function SellerDashboard() {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
-                        <ExclamationTriangleIcon className="h-8 w-8 text-red-600" />
+                        <ExclamationTriangleIcon className="h-6 w-6 lg:h-8 lg:w-8 text-red-600" />
                       </div>
-                      <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-500">Total Refunds</p>
-                        <p className="text-2xl font-semibold text-gray-900">
+                      <div className="ml-3 lg:ml-4">
+                        <p className="text-xs lg:text-sm font-medium text-gray-500">Total Refunds</p>
+                        <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                           {formatCurrency(statementsData.periodStats?.totalRefunds || 0)}
                         </p>
                         <p className="text-xs text-gray-400 mt-1">Refunded amount</p>
@@ -2835,14 +2947,14 @@ export default function SellerDashboard() {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6 sm:col-span-2 lg:col-span-1">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
-                        <CurrencyDollarIcon className="h-8 w-8 text-green-600" />
+                        <CurrencyDollarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-green-600" />
                       </div>
-                      <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-500">Net Earnings</p>
-                        <p className="text-2xl font-semibold text-gray-900">
+                      <div className="ml-3 lg:ml-4">
+                        <p className="text-xs lg:text-sm font-medium text-gray-500">Net Earnings</p>
+                        <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                           {formatCurrency(statementsData.periodStats?.netEarnings || 0)}
                         </p>
                         <p className="text-xs text-gray-400 mt-1">After refunds</p>

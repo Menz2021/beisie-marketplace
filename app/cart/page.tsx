@@ -11,6 +11,7 @@ import { couponService } from '@/lib/coupons'
 import { SwipeToDelete } from '@/components/SwipeToDelete'
 import { FloatingCartSummary } from '@/components/FloatingCartSummary'
 import { CartItem } from '@/components/CartItem'
+import { WishlistReminder } from '@/components/WishlistReminder'
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, clearCart, getTotalPrice } = useCartStore()
@@ -160,6 +161,9 @@ export default function CartPage() {
                 </div>
               </div>
             </div>
+
+            {/* Wishlist Reminder */}
+            <WishlistReminder className="mt-4 sm:mt-6" />
           </div>
 
           {/* Order Summary - Mobile optimized */}

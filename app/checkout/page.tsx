@@ -308,7 +308,7 @@ export default function CheckoutPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 order-2 lg:order-1">
             {step === 1 && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 lg:mb-0">
                 <div className="p-4 sm:p-6">
                   <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Shipping Information</h2>
                 </div>
@@ -444,7 +444,7 @@ export default function CheckoutPage() {
             )}
 
             {step === 2 && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 lg:mb-0">
                 <div className="p-4 sm:p-6">
                   <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Payment Method</h2>
                 </div>
@@ -608,7 +608,7 @@ export default function CheckoutPage() {
             )}
 
             {step === 3 && (
-              <div className="card">
+              <div className="card mb-6 lg:mb-0">
                 <div className="card-header">
                   <h2 className="text-xl font-semibold text-gray-900">Review Your Order</h2>
                 </div>

@@ -2221,112 +2221,219 @@ export default function SellerDashboard() {
             <div className="h-[calc(100vh-6rem)] overflow-hidden">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Order Management</h2>
               
-              <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-[calc(100vh-10rem)]">
-              <div className="overflow-auto h-full">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50 sticky top-0">
-                    <tr>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Share</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                      {ordersLoading ? (
-                        <tr>
-                          <td colSpan={7} className="px-4 py-3 text-center">
-                            <div className="flex items-center justify-center">
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
-                              <span className="ml-2 text-sm text-gray-600">Loading...</span>
+              {/* Desktop Table View */}
+              <div className="hidden lg:block bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-[calc(100vh-10rem)]">
+                <div className="overflow-auto h-full">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50 sticky top-0">
+                      <tr>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Your Share</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {ordersLoading ? (
+                          <tr>
+                            <td colSpan={7} className="px-4 py-3 text-center">
+                              <div className="flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
+                                <span className="ml-2 text-sm text-gray-600">Loading...</span>
+                              </div>
+                            </td>
+                          </tr>
+                        ) : orders.length === 0 ? (
+                          <tr>
+                            <td colSpan={7} className="px-4 py-3 text-center text-sm text-gray-500">
+                              No orders found
+                            </td>
+                          </tr>
+                        ) : (
+                          orders.map((order) => (
+                        <tr key={order.id}>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                              #{order.orderNumber}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                            {order.customer}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                            {formatCurrency(order.total)}
+                          </td>
+                            <td className="px-4 py-3 whitespace-nowrap text-sm text-green-600 font-medium">
+                              {formatCurrency(order.total * 0.90)}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
+                              {order.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                            {order.date}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
+                            <div className="flex space-x-1">
+                              <button 
+                                className="text-purple-600 hover:text-purple-900 p-1"
+                                onClick={() => handleViewOrder(order)}
+                                title="View Order"
+                              >
+                                <EyeIcon className="h-3 w-3" />
+                              </button>
+                              {order.status === 'pending' || order.status === 'processing' ? (
+                                <>
+                                  <button
+                                    onClick={() => handleUpdateOrderStatus(order.id, 'READY_TO_SHIP')}
+                                    disabled={updatingStatus === order.id}
+                                    className="text-green-600 hover:text-green-900 text-xs px-1 py-1 border border-green-300 rounded hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    title="Ready to Ship"
+                                  >
+                                    {updatingStatus === order.id ? '...' : 'Ship'}
+                                  </button>
+                                  <button
+                                    onClick={() => handleUpdateOrderStatus(order.id, 'CANCELLED')}
+                                    disabled={updatingStatus === order.id}
+                                    className="text-red-600 hover:text-red-900 text-xs px-1 py-1 border border-red-300 rounded hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    title="Cancel Order"
+                                  >
+                                    {updatingStatus === order.id ? '...' : 'Cancel'}
+                                  </button>
+                                </>
+                              ) : (
+                                <span className="text-xs text-gray-500">
+                                  {order.status === 'ready_to_ship' ? 'Ready to Ship' : 
+                                   order.status === 'cancelled' ? 'Cancelled' : 
+                                   order.status}
+                                </span>
+                              )}
                             </div>
                           </td>
                         </tr>
-                      ) : orders.length === 0 ? (
-                        <tr>
-                          <td colSpan={7} className="px-4 py-3 text-center text-sm text-gray-500">
-                            No orders found
-                          </td>
-                        </tr>
-                      ) : (
-                        orders.map((order) => (
-                      <tr key={order.id}>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                            #{order.orderNumber}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                          {order.customer}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                          {formatCurrency(order.total)}
-                        </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-green-600 font-medium">
-                            {formatCurrency(order.total * 0.90)}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
-                            {order.status}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                          {order.date}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-1">
+                          ))
+                        )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="lg:hidden bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden h-[calc(100vh-10rem)]">
+                <div className="overflow-auto h-full p-4">
+                  {ordersLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                      <span className="ml-2 text-sm text-gray-600">Loading orders...</span>
+                    </div>
+                  ) : orders.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-sm text-gray-500">No orders found</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {orders.map((order) => (
+                        <div key={order.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                          {/* Order Header */}
+                          <div className="flex justify-between items-start mb-3">
+                            <div>
+                              <h3 className="text-sm font-semibold text-gray-900">#{order.orderNumber}</h3>
+                              <p className="text-xs text-gray-500 mt-1">{order.date}</p>
+                            </div>
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
+                              {order.status}
+                            </span>
+                          </div>
+
+                          {/* Order Details */}
+                          <div className="space-y-2 mb-4">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Customer:</span>
+                              <span className="text-gray-900 font-medium">{order.customer}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Total:</span>
+                              <span className="text-gray-900 font-medium">{formatCurrency(order.total)}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Your Share:</span>
+                              <span className="text-green-600 font-medium">{formatCurrency(order.total * 0.90)}</span>
+                            </div>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex flex-col space-y-2">
                             <button 
-                              className="text-purple-600 hover:text-purple-900 p-1"
+                              className="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-purple-600 border border-purple-300 rounded-md hover:bg-purple-50 touch-manipulation min-h-[40px]"
                               onClick={() => handleViewOrder(order)}
-                              title="View Order"
                             >
-                              <EyeIcon className="h-3 w-3" />
+                              <EyeIcon className="h-4 w-4 mr-2" />
+                              View Order Details
                             </button>
+                            
                             {order.status === 'pending' || order.status === 'processing' ? (
-                              <>
+                              <div className="flex space-x-2">
                                 <button
                                   onClick={() => handleUpdateOrderStatus(order.id, 'READY_TO_SHIP')}
                                   disabled={updatingStatus === order.id}
-                                  className="text-green-600 hover:text-green-900 text-xs px-1 py-1 border border-green-300 rounded hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                  title="Ready to Ship"
+                                  className="flex-1 flex items-center justify-center px-3 py-2 text-sm font-medium text-green-600 border border-green-300 rounded-md hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[40px]"
                                 >
-                                  {updatingStatus === order.id ? '...' : 'Ship'}
+                                  {updatingStatus === order.id ? (
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
+                                  ) : (
+                                    <>
+                                      <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                      </svg>
+                                      Ready to Ship
+                                    </>
+                                  )}
                                 </button>
                                 <button
                                   onClick={() => handleUpdateOrderStatus(order.id, 'CANCELLED')}
                                   disabled={updatingStatus === order.id}
-                                  className="text-red-600 hover:text-red-900 text-xs px-1 py-1 border border-red-300 rounded hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                  title="Cancel Order"
+                                  className="flex-1 flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 border border-red-300 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[40px]"
                                 >
-                                  {updatingStatus === order.id ? '...' : 'Cancel'}
+                                  {updatingStatus === order.id ? (
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                                  ) : (
+                                    <>
+                                      <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                      </svg>
+                                      Cancel Order
+                                    </>
+                                  )}
                                 </button>
-                              </>
+                              </div>
                             ) : (
-                              <span className="text-xs text-gray-500">
-                                {order.status === 'ready_to_ship' ? 'Ready to Ship' : 
-                                 order.status === 'cancelled' ? 'Cancelled' : 
-                                 order.status}
-                              </span>
+                              <div className="text-center py-2">
+                                <span className="text-xs text-gray-500">
+                                  {order.status === 'ready_to_ship' ? 'Ready to Ship' : 
+                                   order.status === 'cancelled' ? 'Cancelled' : 
+                                   order.status}
+                                </span>
+                              </div>
                             )}
                           </div>
-                        </td>
-                      </tr>
-                        ))
-                      )}
-                  </tbody>
-                </table>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
         )}
 
           {/* Refunds Management Tab */}
           {activeTab === 'refunds' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">Refund Management</h2>
+            <div className="space-y-4 lg:space-y-6">
+              <h2 className="text-xl lg:text-2xl font-bold text-gray-900">Refund Management</h2>
               
-              <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+              {/* Desktop Table View */}
+              <div className="hidden lg:block bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-200">
                   <h3 className="text-lg font-semibold text-gray-900">Refund Requests</h3>
                   <p className="text-sm text-gray-500 mt-1">Refund requests for your products</p>
@@ -2399,44 +2506,106 @@ export default function SellerDashboard() {
                 </div>
               </div>
 
+              {/* Mobile Card View */}
+              <div className="lg:hidden bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900">Refund Requests</h3>
+                  <p className="text-xs text-gray-500 mt-1">Refund requests for your products</p>
+                </div>
+                
+                <div className="p-4">
+                  {refundsLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                      <span className="ml-2 text-sm text-gray-600">Loading refunds...</span>
+                    </div>
+                  ) : refunds.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-sm text-gray-500">No refund requests found</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {refunds.map((refund) => (
+                        <div key={refund.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                          {/* Refund Header */}
+                          <div className="flex justify-between items-start mb-3">
+                            <div>
+                              <h3 className="text-sm font-semibold text-gray-900">#{refund.id.slice(-8)}</h3>
+                              <p className="text-xs text-gray-500 mt-1">{new Date(refund.createdAt).toLocaleDateString()}</p>
+                            </div>
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getRefundStatusColor(refund.status)}`}>
+                              {refund.status}
+                            </span>
+                          </div>
+
+                          {/* Refund Details */}
+                          <div className="space-y-2 mb-4">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Order #:</span>
+                              <span className="text-gray-900 font-medium">#{refund.orderId.slice(-8)}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Customer:</span>
+                              <span className="text-gray-900 font-medium">{refund.order?.customer?.name || 'Unknown Customer'}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Product:</span>
+                              <span className="text-gray-900 font-medium">{refund.order?.orderItems?.[0]?.product?.name || 'Multiple items'}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Amount:</span>
+                              <span className="text-gray-900 font-medium">{formatCurrency(refund.amount)}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Reason:</span>
+                              <span className="text-gray-500 text-right max-w-[60%]">{refund.reason}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Refund Statistics */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mt-4 lg:mt-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <ExclamationTriangleIcon className="h-8 w-8 text-yellow-600" />
+                      <ExclamationTriangleIcon className="h-6 w-6 lg:h-8 lg:w-8 text-yellow-600" />
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Pending Refunds</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                    <div className="ml-3 lg:ml-4">
+                      <p className="text-xs lg:text-sm font-medium text-gray-500">Pending Refunds</p>
+                      <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                         {refunds.filter(r => r.status === 'PENDING').length}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <CurrencyDollarIcon className="h-8 w-8 text-red-600" />
+                      <CurrencyDollarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-red-600" />
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Total Refunded</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                    <div className="ml-3 lg:ml-4">
+                      <p className="text-xs lg:text-sm font-medium text-gray-500">Total Refunded</p>
+                      <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                         {formatCurrency(refunds.filter(r => r.status === 'PROCESSED').reduce((sum, r) => sum + r.amount, 0))}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <ChartBarIcon className="h-8 w-8 text-blue-600" />
+                      <ChartBarIcon className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Refund Rate</p>
-                      <p className="text-2xl font-semibold text-gray-900">
+                    <div className="ml-3 lg:ml-4">
+                      <p className="text-xs lg:text-sm font-medium text-gray-500">Refund Rate</p>
+                      <p className="text-lg lg:text-2xl font-semibold text-gray-900">
                         {orders.length > 0 ? ((refunds.length / orders.length) * 100).toFixed(1) : 0}%
                       </p>
                     </div>

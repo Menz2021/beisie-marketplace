@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { HeartIcon, TrashIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid'
 import { useCartStore } from '@/store/cartStore'
+import { useWishlistStore } from '@/store/wishlistStore'
 import toast from 'react-hot-toast'
 
 interface WishlistItem {
@@ -46,6 +47,7 @@ export default function WishlistPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
   const { addItem } = useCartStore()
+  const { syncWithBackend } = useWishlistStore()
 
   useEffect(() => {
     // Check if user is logged in
@@ -54,10 +56,12 @@ export default function WishlistPage() {
       const parsedUser = JSON.parse(userData)
       setUser(parsedUser)
       fetchWishlist(parsedUser.id)
+      // Sync wishlist store with backend
+      syncWithBackend(parsedUser.id)
     } else {
       setIsLoading(false)
     }
-  }, [])
+  }, [syncWithBackend])
 
   const fetchWishlist = async (userId: string) => {
     try {

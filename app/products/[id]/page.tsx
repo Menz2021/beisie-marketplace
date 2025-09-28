@@ -16,6 +16,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolidIcon, StarIcon as StarSolidIcon } from '@heroicons/react/24/solid'
 import { useCartStore } from '@/store/cartStore'
+import { useWishlistStore } from '@/store/wishlistStore'
 import toast from 'react-hot-toast'
 import { RelatedProducts } from '@/components/RelatedProducts'
 import { ReviewForm } from '@/components/ReviewForm'
@@ -161,10 +162,39 @@ export default function ProductDetailPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
-  const [isFavorite, setIsFavorite] = useState(false)
   const [activeTab, setActiveTab] = useState('description')
   const [reviews, setReviews] = useState<any[]>([])
   const { addItem } = useCartStore()
+  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore()
+
+  const toggleFavorite = async () => {
+    if (!product) return
+    
+    try {
+      if (isInWishlist(product.id)) {
+        await removeFromWishlist(product.id)
+      } else {
+        let productImages = []
+        try {
+          productImages = Array.isArray(product.images) ? product.images : JSON.parse(product.images)
+        } catch (error) {
+          console.error('Error parsing product images:', error)
+          productImages = []
+        }
+        
+        await addToWishlist({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: productImages.length > 0 ? productImages[0] : '/api/placeholder/200/200',
+          slug: product.slug,
+          vendorId: product.vendorId
+        })
+      }
+    } catch (error) {
+      console.error('Error toggling wishlist:', error)
+    }
+  }
 
   useEffect(() => {
     if (productSlug) {
@@ -472,10 +502,10 @@ export default function ProductDetailPage() {
                 )}
               </div>
               <button
-                onClick={() => setIsFavorite(!isFavorite)}
-                className="p-2 hover:bg-gray-100 rounded-full"
+                onClick={toggleFavorite}
+                className="p-2 hover:bg-gray-100 rounded-full touch-manipulation"
               >
-                {isFavorite ? (
+                {isInWishlist(product.id) ? (
                   <HeartSolidIcon className="h-6 w-6 text-red-500" />
                 ) : (
                   <HeartIcon className="h-6 w-6 text-gray-400" />

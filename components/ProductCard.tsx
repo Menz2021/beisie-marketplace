@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { StarIcon, HeartIcon } from '@heroicons/react/24/solid'
 import { HeartIcon as HeartOutlineIcon } from '@heroicons/react/24/outline'
 import { useCartStore } from '@/store/cartStore'
+import { useWishlistStore } from '@/store/wishlistStore'
 import toast from 'react-hot-toast'
 
 interface Product {
@@ -33,15 +34,34 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const [favorites, setFavorites] = useState<string[]>([])
   const { addItem } = useCartStore()
+  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore()
+  const [isAddingToCart, setIsAddingToCart] = useState(false)
+  const [isTogglingWishlist, setIsTogglingWishlist] = useState(false)
 
-  const toggleFavorite = (productId: string) => {
-    setFavorites(prev => 
-      prev.includes(productId) 
-        ? prev.filter(id => id !== productId)
-        : [...prev, productId]
-    )
+  const toggleFavorite = async (productId: string) => {
+    if (isTogglingWishlist) return
+    
+    setIsTogglingWishlist(true)
+    
+    try {
+      if (isInWishlist(productId)) {
+        await removeFromWishlist(productId)
+      } else {
+        await addToWishlist({
+          id: productId,
+          name: product.name,
+          price: product.price,
+          image: product.images,
+          slug: product.slug,
+          vendorId: product.vendor || ''
+        })
+      }
+    } catch (error) {
+      console.error('Error toggling wishlist:', error)
+    } finally {
+      setIsTogglingWishlist(false)
+    }
   }
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -106,9 +126,10 @@ export function ProductCard({ product }: ProductCardProps) {
                 e.stopPropagation()
                 toggleFavorite(product.id)
               }}
-              className="absolute top-3 right-3 p-2 bg-white/80 hover:bg-white rounded-full transition-colors"
+              disabled={isTogglingWishlist}
+              className="absolute top-3 right-3 p-2 bg-white/80 hover:bg-white rounded-full transition-colors disabled:opacity-50 touch-manipulation"
             >
-              {favorites.includes(product.id) ? (
+              {isInWishlist(product.id) ? (
                 <HeartIcon className="h-5 w-5 text-red-500" />
               ) : (
                 <HeartOutlineIcon className="h-5 w-5 text-gray-600" />

@@ -53,28 +53,30 @@ export function FlashDeals() {
     }
   }
 
-  const toggleFavorite = (product: FlashDeal) => {
-    if (isInWishlist(product.id)) {
-      removeFromWishlist(product.id)
-      toast.success('Removed from wishlist')
-    } else {
-      let productImages = []
-      try {
-        productImages = product.images ? JSON.parse(product.images) : []
-      } catch (error) {
-        console.error('Error parsing product images:', error)
-        productImages = []
+  const toggleFavorite = async (product: FlashDeal) => {
+    try {
+      if (isInWishlist(product.id)) {
+        await removeFromWishlist(product.id)
+      } else {
+        let productImages = []
+        try {
+          productImages = product.images ? JSON.parse(product.images) : []
+        } catch (error) {
+          console.error('Error parsing product images:', error)
+          productImages = []
+        }
+        
+        await addToWishlist({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: productImages.length > 0 ? productImages[0] : '/api/placeholder/200/200',
+          slug: product.slug,
+          vendorId: product.vendor || ''
+        })
       }
-      
-      addToWishlist({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: productImages.length > 0 ? productImages[0] : '/api/placeholder/200/200',
-        slug: product.slug,
-        vendorId: product.vendor || ''
-      })
-      toast.success('Added to wishlist')
+    } catch (error) {
+      console.error('Error toggling wishlist:', error)
     }
   }
 

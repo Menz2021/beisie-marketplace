@@ -451,180 +451,183 @@ export default function CheckoutPage() {
                 <div className="p-4 sm:p-6 pt-0">
                   <div className="space-y-3 mb-6">
                     {paymentMethods.map((method) => (
-                      <label key={method.id} className={`flex items-center p-4 sm:p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 touch-manipulation min-h-[72px] sm:min-h-[80px] ${
-                        formData.paymentMethod === method.id 
-                          ? 'border-purple-500 bg-purple-50 shadow-md' 
-                          : 'border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100 active:border-gray-400'
-                      }`}>
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value={method.id}
-                          checked={formData.paymentMethod === method.id}
-                          onChange={handleInputChange}
-                          className="h-6 w-6 sm:h-5 sm:w-5 text-purple-600 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 border-gray-300 touch-manipulation"
-                        />
-                        <div className={`p-2 rounded-lg ml-4 ${method.id === 'MTN_MOBILE_MONEY' ? 'bg-yellow-100' : method.id === 'AIRTEL_MONEY' ? 'bg-red-100' : 'bg-blue-100'}`}>
-                          <method.icon className={`h-6 w-6 sm:h-7 sm:w-7 ${method.color}`} />
-                        </div>
-                        <div className="ml-4 flex-1">
-                          <div className="text-base sm:text-sm font-semibold text-gray-900">{method.name}</div>
-                          <div className="text-sm sm:text-xs text-gray-600 mt-1">{method.description}</div>
-                          {method.id === 'MTN_MOBILE_MONEY' || method.id === 'AIRTEL_MONEY' ? (
-                            <div className="text-xs text-green-600 mt-2 flex items-center">
-                              <ShieldCheckIcon className="h-3 w-3 mr-1" />
-                              <span className="font-medium">Instant & Secure</span>
-                            </div>
-                          ) : (
-                            <div className="text-xs text-blue-600 mt-2 flex items-center">
-                              <ShieldCheckIcon className="h-3 w-3 mr-1" />
-                              <span className="font-medium">PCI DSS Compliant</span>
+                      <div key={method.id} className="space-y-3">
+                        <label className={`flex items-center p-4 sm:p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 touch-manipulation min-h-[72px] sm:min-h-[80px] ${
+                          formData.paymentMethod === method.id 
+                            ? 'border-purple-500 bg-purple-50 shadow-md' 
+                            : 'border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:bg-gray-100 active:border-gray-400'
+                        }`}>
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value={method.id}
+                            checked={formData.paymentMethod === method.id}
+                            onChange={handleInputChange}
+                            className="h-6 w-6 sm:h-5 sm:w-5 text-purple-600 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 border-gray-300 touch-manipulation"
+                          />
+                          <div className={`p-2 rounded-lg ml-4 ${method.id === 'MTN_MOBILE_MONEY' ? 'bg-yellow-100' : method.id === 'AIRTEL_MONEY' ? 'bg-red-100' : 'bg-blue-100'}`}>
+                            <method.icon className={`h-6 w-6 sm:h-7 sm:w-7 ${method.color}`} />
+                          </div>
+                          <div className="ml-4 flex-1">
+                            <div className="text-base sm:text-sm font-semibold text-gray-900">{method.name}</div>
+                            <div className="text-sm sm:text-xs text-gray-600 mt-1">{method.description}</div>
+                            {method.id === 'MTN_MOBILE_MONEY' || method.id === 'AIRTEL_MONEY' ? (
+                              <div className="text-xs text-green-600 mt-2 flex items-center">
+                                <ShieldCheckIcon className="h-3 w-3 mr-1" />
+                                <span className="font-medium">Instant & Secure</span>
+                              </div>
+                            ) : (
+                              <div className="text-xs text-blue-600 mt-2 flex items-center">
+                                <ShieldCheckIcon className="h-3 w-3 mr-1" />
+                                <span className="font-medium">PCI DSS Compliant</span>
+                              </div>
+                            )}
+                          </div>
+                          {formData.paymentMethod === method.id && (
+                            <div className="ml-3">
+                              <CheckCircleIcon className="h-6 w-6 sm:h-5 sm:w-5 text-purple-600" />
                             </div>
                           )}
-                        </div>
-                        {formData.paymentMethod === method.id && (
-                          <div className="ml-3">
-                            <CheckCircleIcon className="h-6 w-6 sm:h-5 sm:w-5 text-purple-600" />
-                          </div>
-                        )}
-                      </label>
-                    ))}
-                  </div>
-
-                  {(formData.paymentMethod === 'MTN_MOBILE_MONEY' || formData.paymentMethod === 'AIRTEL_MONEY') && (
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-5 sm:p-6">
-                      <div className="flex items-start mb-4">
-                        <div className="p-2 bg-green-100 rounded-lg mr-4">
-                          <ShieldCheckIcon className="h-6 w-6 text-green-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-base sm:text-sm font-semibold text-green-900 mb-2">
-                            {formData.paymentMethod === 'MTN_MOBILE_MONEY' ? 'MTN' : 'Airtel'} Mobile Money Payment
-                          </h4>
-                          <p className="text-sm sm:text-xs text-green-700 leading-relaxed">
-                            Your payment is processed securely through {formData.paymentMethod === 'MTN_MOBILE_MONEY' ? 'MTN' : 'Airtel'} Mobile Money. 
-                            You'll receive a payment request on your phone to complete the transaction.
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-white rounded-lg p-4 border border-green-200">
-                        <label className="block text-sm font-semibold text-gray-800 mb-3">
-                          Mobile Money Phone Number *
                         </label>
-                        <input
-                          type="tel"
-                          name="phoneNumber"
-                          value={formData.phoneNumber}
-                          onChange={handleInputChange}
-                          placeholder="+256 700 000 000"
-                          className="w-full px-4 py-4 sm:py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-base sm:text-sm touch-manipulation min-h-[52px] transition-all duration-200"
-                          required
-                        />
-                        <div className="mt-3 flex items-start">
-                          <div className="p-1 bg-blue-100 rounded mr-2 mt-0.5">
-                            <DevicePhoneMobileIcon className="h-4 w-4 text-blue-600" />
-                          </div>
-                          <p className="text-sm text-gray-600 leading-relaxed">
-                            Enter the phone number linked to your {formData.paymentMethod === 'MTN_MOBILE_MONEY' ? 'MTN' : 'Airtel'} Mobile Money account
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
 
-                  {(formData.paymentMethod === 'VISA' || formData.paymentMethod === 'MASTERCARD') && (
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5 sm:p-6">
-                      <div className="flex items-start mb-5">
-                        <div className="p-2 bg-blue-100 rounded-lg mr-4">
-                          <ShieldCheckIcon className="h-6 w-6 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-base sm:text-sm font-semibold text-blue-900 mb-2">
-                            Secure Card Payment
-                          </h4>
-                          <p className="text-sm sm:text-xs text-blue-700 leading-relaxed">
-                            Your card information is encrypted and processed securely. We never store your card details.
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-white rounded-lg p-4 sm:p-5 border border-blue-200">
-                        <div className="grid grid-cols-1 gap-4 sm:gap-5">
-                          <div>
-                            <label className="block text-sm font-semibold text-gray-800 mb-3">
-                              Card Number *
-                            </label>
-                            <input
-                              type="text"
-                              name="cardNumber"
-                              value={formData.cardNumber}
-                              onChange={handleInputChange}
-                              placeholder="1234 5678 9012 3456"
-                              className="w-full px-4 py-4 sm:py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base sm:text-sm touch-manipulation min-h-[52px] transition-all duration-200"
-                              required
-                            />
-                          </div>
-                          
-                          <div>
-                            <label className="block text-sm font-semibold text-gray-800 mb-3">
-                              Cardholder Name *
-                            </label>
-                            <input
-                              type="text"
-                              name="cardName"
-                              value={formData.cardName}
-                              onChange={handleInputChange}
-                              placeholder="John Doe"
-                              className="w-full px-4 py-4 sm:py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base sm:text-sm touch-manipulation min-h-[52px] transition-all duration-200"
-                              required
-                            />
-                          </div>
-                          
-                          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                            <div>
-                              <label className="block text-sm font-semibold text-gray-800 mb-3">
-                                Expiry Date *
-                              </label>
-                              <input
-                                type="text"
-                                name="expiryDate"
-                                value={formData.expiryDate}
-                                onChange={handleInputChange}
-                                placeholder="MM/YY"
-                                className="w-full px-4 py-4 sm:py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base sm:text-sm touch-manipulation min-h-[52px] transition-all duration-200"
-                                required
-                              />
+                        {/* Inline Payment Form - Mobile Money */}
+                        {formData.paymentMethod === method.id && (method.id === 'MTN_MOBILE_MONEY' || method.id === 'AIRTEL_MONEY') && (
+                          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 sm:p-5 ml-6 sm:ml-8">
+                            <div className="flex items-start mb-3">
+                              <div className="p-1.5 bg-green-100 rounded-lg mr-3">
+                                <ShieldCheckIcon className="h-5 w-5 text-green-600" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-semibold text-green-900 mb-1">
+                                  {method.id === 'MTN_MOBILE_MONEY' ? 'MTN' : 'Airtel'} Mobile Money
+                                </h4>
+                                <p className="text-xs text-green-700 leading-relaxed">
+                                  You'll receive a payment request on your phone to complete the transaction.
+                                </p>
+                              </div>
                             </div>
                             
-                            <div>
-                              <label className="block text-sm font-semibold text-gray-800 mb-3">
-                                CVV *
+                            <div className="bg-white rounded-lg p-3 border border-green-200">
+                              <label className="block text-sm font-semibold text-gray-800 mb-2">
+                                Mobile Money Phone Number *
                               </label>
                               <input
-                                type="text"
-                                name="cvv"
-                                value={formData.cvv}
+                                type="tel"
+                                name="phoneNumber"
+                                value={formData.phoneNumber}
                                 onChange={handleInputChange}
-                                placeholder="123"
-                                className="w-full px-4 py-4 sm:py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base sm:text-sm touch-manipulation min-h-[52px] transition-all duration-200"
+                                placeholder="+256 700 000 000"
+                                className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm touch-manipulation min-h-[48px] transition-all duration-200"
                                 required
                               />
+                              <div className="mt-2 flex items-start">
+                                <div className="p-1 bg-blue-100 rounded mr-2 mt-0.5">
+                                  <DevicePhoneMobileIcon className="h-3 w-3 text-blue-600" />
+                                </div>
+                                <p className="text-xs text-gray-600 leading-relaxed">
+                                  Enter the phone number linked to your {method.id === 'MTN_MOBILE_MONEY' ? 'MTN' : 'Airtel'} Mobile Money account
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        
-                        <div className="mt-5 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                          <div className="flex items-center text-sm text-gray-600">
-                            <div className="p-1 bg-green-100 rounded mr-3">
-                              <ShieldCheckIcon className="h-4 w-4 text-green-600" />
+                        )}
+
+                        {/* Inline Payment Form - Card Payment */}
+                        {formData.paymentMethod === method.id && (method.id === 'VISA' || method.id === 'MASTERCARD') && (
+                          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 sm:p-5 ml-6 sm:ml-8">
+                            <div className="flex items-start mb-3">
+                              <div className="p-1.5 bg-blue-100 rounded-lg mr-3">
+                                <ShieldCheckIcon className="h-5 w-5 text-blue-600" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-semibold text-blue-900 mb-1">
+                                  Secure Card Payment
+                                </h4>
+                                <p className="text-xs text-blue-700 leading-relaxed">
+                                  Your card information is encrypted and processed securely.
+                                </p>
+                              </div>
                             </div>
-                            <span className="font-medium">Protected by SSL encryption and PCI DSS compliance</span>
+                            
+                            <div className="bg-white rounded-lg p-3 border border-blue-200">
+                              <div className="space-y-3">
+                                <div>
+                                  <label className="block text-sm font-semibold text-gray-800 mb-2">
+                                    Card Number *
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="cardNumber"
+                                    value={formData.cardNumber}
+                                    onChange={handleInputChange}
+                                    placeholder="1234 5678 9012 3456"
+                                    className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm touch-manipulation min-h-[48px] transition-all duration-200"
+                                    required
+                                  />
+                                </div>
+                                
+                                <div>
+                                  <label className="block text-sm font-semibold text-gray-800 mb-2">
+                                    Cardholder Name *
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="cardName"
+                                    value={formData.cardName}
+                                    onChange={handleInputChange}
+                                    placeholder="John Doe"
+                                    className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm touch-manipulation min-h-[48px] transition-all duration-200"
+                                    required
+                                  />
+                                </div>
+                                
+                                <div className="grid grid-cols-2 gap-2">
+                                  <div>
+                                    <label className="block text-sm font-semibold text-gray-800 mb-2">
+                                      Expiry Date *
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="expiryDate"
+                                      value={formData.expiryDate}
+                                      onChange={handleInputChange}
+                                      placeholder="MM/YY"
+                                      className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm touch-manipulation min-h-[48px] transition-all duration-200"
+                                      required
+                                    />
+                                  </div>
+                                  
+                                  <div>
+                                    <label className="block text-sm font-semibold text-gray-800 mb-2">
+                                      CVV *
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="cvv"
+                                      value={formData.cvv}
+                                      onChange={handleInputChange}
+                                      placeholder="123"
+                                      className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm touch-manipulation min-h-[48px] transition-all duration-200"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="mt-3 p-2 bg-gray-50 rounded-lg border border-gray-200">
+                                <div className="flex items-center text-xs text-gray-600">
+                                  <div className="p-1 bg-green-100 rounded mr-2">
+                                    <ShieldCheckIcon className="h-3 w-3 text-green-600" />
+                                  </div>
+                                  <span className="font-medium">Protected by SSL encryption and PCI DSS compliance</span>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    ))}
+                  </div>
                 </div>
               </div>
             )}

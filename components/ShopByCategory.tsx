@@ -65,17 +65,17 @@ export function ShopByCategory() {
 
   if (isLoading) {
     return (
-      <section className="py-12 bg-white">
+      <section className="py-8 lg:py-12 bg-white">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">Shop by Category</h2>
-            <p className="mt-2 text-gray-600">Discover products by category</p>
+          <div className="text-center mb-6 lg:mb-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">Shop by Category</h2>
+            <p className="mt-2 text-sm lg:text-base text-gray-600">Discover products by category</p>
           </div>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-4">
+        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 gap-2 sm:gap-3 lg:gap-4">
           {[...Array(12)].map((_, index) => (
             <div key={index} className="text-center animate-pulse">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded-full mx-auto mb-2"></div>
-              <div className="h-3 sm:h-4 bg-gray-200 rounded w-16 sm:w-20 mx-auto"></div>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 bg-gray-200 rounded-full mx-auto mb-2"></div>
+              <div className="h-2 sm:h-3 lg:h-4 bg-gray-200 rounded w-12 sm:w-16 lg:w-20 mx-auto"></div>
             </div>
           ))}
           </div>
@@ -159,11 +159,11 @@ export function ShopByCategory() {
   ]
 
   return (
-    <section className="py-12 bg-white">
+    <section className="py-8 lg:py-12 bg-white">
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Shop by Category</h2>
-          <p className="mt-2 text-gray-600">Discover products by category</p>
+        <div className="text-center mb-6 lg:mb-8">
+          <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">Shop by Category</h2>
+          <p className="mt-2 text-sm lg:text-base text-gray-600">Discover products by category</p>
         </div>
         
         {categories.length === 0 ? (
@@ -172,23 +172,24 @@ export function ShopByCategory() {
             <p className="text-sm text-gray-400 mt-2">Check console for debug information</p>
           </div>
         ) : (
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-4">
+          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-8 gap-2 sm:gap-3 lg:gap-4">
             {categories.map((category, index) => (
               <Link
                 key={category.id}
                 href={`/categories/${category.slug}`}
-                className="group text-center hover:scale-105 transition-transform duration-200"
+                className="group text-center hover:scale-105 transition-transform duration-200 touch-manipulation"
               >
-                <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-2 flex items-center justify-center ${categoryColors[index % categoryColors.length]} group-hover:shadow-lg transition-shadow`}>
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full mx-auto mb-2 flex items-center justify-center ${categoryColors[index % categoryColors.length]} group-hover:shadow-lg transition-shadow touch-manipulation min-h-[40px] min-w-[40px]`}>
                   <Image
                     src={getCategoryImage(category.name)}
                     alt={category.name}
                     width={32}
                     height={32}
-                    className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover"
+                    className="w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 rounded-full object-cover"
+                    loading="lazy"
                   />
                 </div>
-                <p className="text-xs sm:text-sm font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
+                <p className="text-xs sm:text-sm font-medium text-gray-900 group-hover:text-purple-600 transition-colors leading-tight">
                   {category.name}
                 </p>
               </Link>

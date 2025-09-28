@@ -1295,6 +1295,18 @@ export default function SellerDashboard() {
               </button>
               
               <button
+                onClick={() => setActiveTab('refunds')}
+                className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                  activeTab === 'refunds' 
+                    ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 shadow-md' 
+                    : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
+                }`}
+              >
+                <ExclamationTriangleIcon className="mr-3 h-5 w-5" />
+                Refunds
+              </button>
+              
+              <button
                 onClick={() => setActiveTab('financials')}
                 className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
                   activeTab === 'financials' 

@@ -35,9 +35,7 @@ export function WishlistReminder({ className = '' }: WishlistReminderProps) {
         name: product.name,
         price: product.price,
         image: product.image,
-        slug: product.slug,
-        vendorId: product.vendorId,
-        quantity: 1
+        vendorId: product.vendorId
       })
       
       toast.success(`${product.name} added to cart!`)

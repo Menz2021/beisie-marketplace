@@ -198,51 +198,50 @@ export default function RefundManagementPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="w-full py-4 sm:py-6 px-3 sm:px-6 lg:px-8">
-        {/* Mobile-Optimized Header */}
-        <div className="py-3 sm:py-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-            <div className="flex items-center space-x-3 sm:space-x-4">
+      <div className="w-full py-6 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="px-4 py-6 sm:px-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
               <button
                 onClick={() => router.push('/admin/dashboard')}
-                className="text-gray-600 hover:text-gray-900 transition-colors touch-manipulation"
+                className="text-gray-600 hover:text-gray-900"
               >
-                <ArrowLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                <ArrowLeftIcon className="h-6 w-6" />
               </button>
               <div>
-                <h1 className="text-xl sm:text-3xl font-bold text-gray-900">Refund Management</h1>
-                <p className="text-sm sm:text-base text-gray-600">Manage customer refund requests and disputes</p>
+                <h1 className="text-3xl font-bold text-gray-900">Refund Management</h1>
+                <p className="text-gray-600">Manage customer refund requests and disputes</p>
               </div>
             </div>
-            <div className="flex justify-end">
-              <button className="px-3 sm:px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors touch-manipulation min-h-[36px] text-sm sm:text-base">
+            <div className="flex space-x-4">
+              <button className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
                 Export Report
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile-Optimized Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
-          <div className="space-y-4">
-            <div>
+        {/* Filters */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
               <div className="relative">
-                <MagnifyingGlassIcon className="h-4 w-4 sm:h-5 sm:w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search by order ID, customer name, or reason..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[44px]"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
               </div>
             </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            <div className="flex gap-2">
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[44px]"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 <option value="all">All Status</option>
                 <option value="PENDING">Pending</option>
@@ -254,7 +253,7 @@ export default function RefundManagementPage() {
               <select
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[44px]"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 <option value="all">All Dates</option>
                 <option value="today">Today</option>
@@ -266,16 +265,14 @@ export default function RefundManagementPage() {
               <select
                 value={sellerFilter}
                 onChange={(e) => setSellerFilter(e.target.value)}
-                className="px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[44px]"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 <option value="all">All Sellers</option>
                 {sellers.map(seller => (
                   <option key={seller.id} value={seller.name}>{seller.name}</option>
                 ))}
               </select>
-            </div>
               
-            <div>
               <button 
                 onClick={() => {
                   setStatusFilter('all')
@@ -284,7 +281,7 @@ export default function RefundManagementPage() {
                   setSearchTerm('')
                   setCurrentPage(1)
                 }}
-                className="w-full px-4 py-3 sm:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors touch-manipulation min-h-[44px] text-sm"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
               >
                 Clear Filters
               </button>

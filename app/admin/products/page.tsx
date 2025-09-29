@@ -583,45 +583,46 @@ export default function AdminProductsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
+      {/* Mobile-Optimized Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div className="w-full px-3 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 sm:py-0 sm:h-16 space-y-3 sm:space-y-0">
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
               <button
                 onClick={() => router.back()}
-                className="flex items-center text-gray-600 hover:text-gray-900 mr-4"
+                className="flex items-center text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors touch-manipulation"
               >
-                <ArrowLeftIcon className="h-5 w-5 mr-2" />
+                <ArrowLeftIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                 Back
               </button>
-              <h1 className="text-2xl font-semibold text-gray-900">Product Management</h1>
+              <h1 className="text-lg sm:text-2xl font-semibold text-gray-900">Product Management</h1>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-between sm:justify-end space-x-3">
               <button
                 onClick={handleLogout}
-                className="flex items-center px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
+                className="flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors touch-manipulation min-h-[36px]"
                 title="Logout"
               >
                 <ArrowRightOnRectangleIcon className="h-4 w-4 mr-1" />
-                Logout
+                <span className="hidden sm:inline">Logout</span>
               </button>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="flex items-center px-3 sm:px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 touch-manipulation min-h-[36px] text-sm sm:text-base"
               >
-                <PlusIcon className="h-5 w-5 mr-2" />
-                Add Product
+                <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Add Product</span>
+                <span className="sm:hidden">Add</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+        {/* Mobile-Optimized Filters */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+          <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Search Products
@@ -632,9 +633,9 @@ export default function AdminProductsPage() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search by name, brand, or description..."
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  className="w-full pl-10 pr-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                 />
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
+                <MagnifyingGlassIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>
             </div>
             
@@ -645,7 +646,7 @@ export default function AdminProductsPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
               >
                 <option value="">All Products</option>
                 <option value="active">Active</option>
@@ -658,13 +659,13 @@ export default function AdminProductsPage() {
               </select>
             </div>
             
-            <div className="flex items-end">
+            <div>
               <button
                 onClick={() => {
                   setSearchTerm('')
                   setStatusFilter('')
                 }}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors touch-manipulation min-h-[44px] text-sm"
               >
                 Clear Filters
               </button>
@@ -672,8 +673,8 @@ export default function AdminProductsPage() {
           </div>
         </div>
 
-        {/* Products Table */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        {/* Products Display - Desktop Table View */}
+        <div className="hidden lg:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -852,6 +853,167 @@ export default function AdminProductsPage() {
           </div>
         </div>
 
+        {/* Mobile Card View */}
+        <div className="lg:hidden space-y-3">
+          {products.map((product) => (
+            <div key={product.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+              <div className="flex items-start space-x-3">
+                <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                  {product.images && product.images !== '[]' ? (
+                    <img
+                      src={JSON.parse(product.images)[0] || '/api/placeholder/64/64'}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-xs text-gray-500">IMG</span>
+                  )}
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-gray-900 truncate">
+                        {product.name}
+                      </h3>
+                      {product.brand && (
+                        <p className="text-xs text-gray-500 truncate">{product.brand}</p>
+                      )}
+                      {product.sku && (
+                        <p className="text-xs text-gray-400">SKU: {product.sku}</p>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center space-x-1 ml-2">
+                      <button 
+                        onClick={() => setPreviewProduct(product)}
+                        className="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                        title="View Product Details"
+                      >
+                        <EyeIcon className="h-4 w-4" />
+                      </button>
+                      <button 
+                        onClick={() => handleEditProduct(product)}
+                        className="p-2 text-indigo-600 hover:text-indigo-900 hover:bg-indigo-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                        title="Edit Product"
+                      >
+                        <PencilIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <div>
+                      <p className="text-xs text-gray-500">Category</p>
+                      <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                        {product.category?.name || 'Uncategorized'}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Price</p>
+                      <p className="text-sm font-semibold text-gray-900">{formatCurrency(product.price)}</p>
+                      {product.originalPrice && product.originalPrice > product.price && (
+                        <p className="text-xs text-gray-500 line-through">
+                          {formatCurrency(product.originalPrice)}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Stock</p>
+                      <p className={`text-sm font-semibold ${
+                        product.stock < 10 ? 'text-red-600' : 
+                        product.stock < 50 ? 'text-yellow-600' : 'text-green-600'
+                      }`}>
+                        {product.stock}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Vendor</p>
+                      <p className="text-xs text-gray-900 truncate">
+                        {product.vendor?.businessName || (product.vendor?.role === 'ADMIN' ? 'Beisie' : product.vendor?.name) || 'Unknown'}
+                      </p>
+                      <span className={`inline-flex px-1 py-0.5 text-xs font-semibold rounded-full ${
+                        product.vendor?.role === 'ADMIN' ? 'bg-red-100 text-red-800' :
+                        product.vendor?.role === 'SELLER' ? 'bg-blue-100 text-blue-800' :
+                        'bg-green-100 text-green-800'
+                      }`}>
+                        {product.vendor?.role || 'CUSTOMER'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
+                      product.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      {product.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                    {product.isFeatured && (
+                      <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                        Featured
+                      </span>
+                    )}
+                    <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
+                      product.approvalStatus === 'APPROVED' ? 'bg-green-100 text-green-800' :
+                      product.approvalStatus === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {product.approvalStatus}
+                    </span>
+                  </div>
+                  
+                  {product.rejectionReason && (
+                    <div className="mb-3">
+                      <p className="text-xs text-gray-500">Rejection Reason</p>
+                      <p className="text-xs text-red-600 break-words">
+                        {product.rejectionReason.length > 50 ? 
+                          product.rejectionReason.substring(0, 50) + '...' : 
+                          product.rejectionReason
+                        }
+                      </p>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-gray-400">
+                      Created {new Date(product.createdAt).toLocaleDateString()}
+                    </p>
+                    
+                    <div className="flex items-center space-x-1">
+                      {product.approvalStatus === 'PENDING' && (
+                        <>
+                          <button 
+                            onClick={() => handleProductApproval(product.id, 'approve')}
+                            className="p-2 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                            title="Approve Product"
+                          >
+                            ✓
+                          </button>
+                          <button 
+                            onClick={() => handleProductApproval(product.id, 'reject')}
+                            className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                            title="Reject Product"
+                          >
+                            ✗
+                          </button>
+                        </>
+                      )}
+                      
+                      <button 
+                        onClick={() => handleDelete(product.id)}
+                        className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                        title="Delete Product"
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {products.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-500">
@@ -863,13 +1025,13 @@ export default function AdminProductsPage() {
         )}
       </div>
 
-      {/* Add Product Modal */}
+      {/* Mobile-Optimized Add Product Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-4 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
+          <div className="relative top-2 sm:top-4 mx-auto p-4 sm:p-5 border w-11/12 max-w-2xl shadow-lg rounded-xl bg-white">
             <div className="mt-3">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">
+              <div className="flex justify-between items-center mb-4 sm:mb-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                   {editingProduct ? 'Edit Product' : 'Add New Product'}
                 </h3>
                 <button
@@ -877,21 +1039,21 @@ export default function AdminProductsPage() {
                     setShowAddModal(false)
                     resetForm()
                   }}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-100 transition-colors touch-manipulation min-h-[32px] min-w-[32px] flex items-center justify-center"
                 >
-                  ×
+                  <XMarkIcon className="h-5 w-5" />
                 </button>
               </div>
 
-              <form onSubmit={editingProduct ? handleUpdateProduct : handleSubmit} className="space-y-6">
-                {/* Product Images */}
+              <form onSubmit={editingProduct ? handleUpdateProduct : handleSubmit} className="space-y-4 sm:space-y-6">
+                {/* Mobile-Optimized Product Images */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Product Images * (Max 5 images, 5MB each)
                   </label>
-                  <div className="space-y-4">
-                    {/* Image Upload Area */}
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                  <div className="space-y-3 sm:space-y-4">
+                    {/* Mobile-Optimized Image Upload Area */}
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 text-center hover:border-gray-400 transition-colors">
                       <input
                         type="file"
                         multiple
@@ -900,9 +1062,9 @@ export default function AdminProductsPage() {
                         className="hidden"
                         id="image-upload"
                       />
-                      <label htmlFor="image-upload" className="cursor-pointer">
-                        <PhotoIcon className="mx-auto h-12 w-12 text-gray-400" />
-                        <p className="mt-2 text-sm text-gray-600">
+                      <label htmlFor="image-upload" className="cursor-pointer touch-manipulation">
+                        <PhotoIcon className="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-gray-400" />
+                        <p className="mt-2 text-xs sm:text-sm text-gray-600">
                           Click to upload images or drag and drop
                         </p>
                         <p className="text-xs text-gray-500">
@@ -911,22 +1073,22 @@ export default function AdminProductsPage() {
                       </label>
                     </div>
                     
-                    {/* Image Previews */}
+                    {/* Mobile-Optimized Image Previews */}
                     {imagePreviews.length > 0 && (
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
                         {imagePreviews.map((preview, index) => (
                           <div key={index} className="relative group">
                             <img
                               src={preview}
                               alt={`Preview ${index + 1}`}
-                              className="w-full h-24 object-cover rounded-lg border border-gray-200"
+                              className="w-full h-20 sm:h-24 object-cover rounded-lg border border-gray-200"
                             />
                             <button
                               type="button"
                               onClick={() => removeImage(index)}
-                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity touch-manipulation min-h-[24px] min-w-[24px] flex items-center justify-center"
                             >
-                              <XMarkIcon className="h-4 w-4" />
+                              <XMarkIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                             </button>
                           </div>
                         ))}
@@ -935,8 +1097,8 @@ export default function AdminProductsPage() {
                   </div>
                 </div>
 
-                {/* Basic Information */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Mobile-Optimized Basic Information */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Product Name *
@@ -946,7 +1108,7 @@ export default function AdminProductsPage() {
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                     />
                   </div>
                   
@@ -958,7 +1120,7 @@ export default function AdminProductsPage() {
                       required
                       value={formData.categoryId}
                       onChange={(e) => setFormData({...formData, categoryId: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                     >
                       <option value="">Select a category</option>
                       {categories.map((category) => (
@@ -977,7 +1139,7 @@ export default function AdminProductsPage() {
                       type="text"
                       value={formData.brand}
                       onChange={(e) => setFormData({...formData, brand: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                     />
                   </div>
                   
@@ -989,7 +1151,7 @@ export default function AdminProductsPage() {
                       type="text"
                       value={formData.sku}
                       onChange={(e) => setFormData({...formData, sku: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                     />
                   </div>
                   
@@ -1004,7 +1166,7 @@ export default function AdminProductsPage() {
                       step="0.01"
                       value={formData.originalPrice}
                       onChange={(e) => setFormData({...formData, originalPrice: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                       placeholder="Enter original price"
                     />
                     <p className="text-xs text-gray-500 mt-1">The original price before any discounts</p>
@@ -1020,7 +1182,7 @@ export default function AdminProductsPage() {
                       step="0.01"
                       value={formData.discountedPrice}
                       onChange={(e) => setFormData({...formData, discountedPrice: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                       placeholder="Enter discounted price (optional)"
                     />
                     <p className="text-xs text-gray-500 mt-1">The discounted price customers will pay (optional)</p>
@@ -1037,7 +1199,7 @@ export default function AdminProductsPage() {
                       step="0.01"
                       value={formData.price}
                       onChange={(e) => setFormData({...formData, price: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                       placeholder="Enter current selling price"
                     />
                     <p className="text-xs text-gray-500 mt-1">The price customers will actually pay (usually the discounted price if available)</p>
@@ -1053,7 +1215,7 @@ export default function AdminProductsPage() {
                       min="0"
                       value={formData.stock}
                       onChange={(e) => setFormData({...formData, stock: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                     />
                   </div>
                   
@@ -1067,25 +1229,25 @@ export default function AdminProductsPage() {
                       step="0.01"
                       value={formData.weight}
                       onChange={(e) => setFormData({...formData, weight: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                     />
                   </div>
                 </div>
 
-                {/* Delivery Time Selection */}
+                {/* Mobile-Optimized Delivery Time Selection */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Delivery Time (Days from Order Confirmation) *
                   </label>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
                     Select how many days after an order is confirmed the product will be delivered. 
                     This is calculated from the order confirmation date, not from when the product is listed.
                   </p>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {getDeliveryTimeOptions().map((option) => (
                       <label 
                         key={option.value} 
-                        className={`flex items-start space-x-3 p-3 border rounded-lg cursor-pointer transition-colors ${
+                        className={`flex items-start space-x-2 sm:space-x-3 p-2 sm:p-3 border rounded-lg cursor-pointer transition-colors touch-manipulation ${
                           option.available 
                             ? 'border-gray-200 hover:bg-gray-50' 
                             : 'border-gray-100 bg-gray-50 opacity-60 cursor-not-allowed'
@@ -1098,18 +1260,18 @@ export default function AdminProductsPage() {
                           checked={formData.deliveryTimeDays === option.value}
                           onChange={(e) => setFormData({...formData, deliveryTimeDays: parseInt(e.target.value)})}
                           disabled={!option.available}
-                          className="mt-1 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
+                          className="mt-1 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 touch-manipulation"
                         />
                         <div className="flex-1">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-sm font-medium text-gray-900">{option.label}</span>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+                            <span className="text-xs sm:text-sm font-medium text-gray-900">{option.label}</span>
                             {option.value >= 0 && (
-                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                              <span className="inline-flex items-center px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 mt-1 sm:mt-0">
                                 {option.value} day{option.value !== 1 ? 's' : ''}
                               </span>
                             )}
                           </div>
-                          <div className="text-sm text-gray-500">{option.description}</div>
+                          <div className="text-xs sm:text-sm text-gray-500 mt-1">{option.description}</div>
                           {!option.available && (
                             <div className="text-xs text-red-500 mt-1">Requires stock &gt; 0</div>
                           )}
@@ -1118,11 +1280,11 @@ export default function AdminProductsPage() {
                     ))}
                   </div>
                   
-                  {/* Custom delivery time input */}
+                  {/* Mobile-Optimized Custom delivery time input */}
                   {formData.deliveryTimeDays === -1 && (
-                    <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
                       <h4 className="text-sm font-medium text-gray-900 mb-3">Custom Delivery Time</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
                             Number of Days from Order Confirmation
@@ -1140,7 +1302,7 @@ export default function AdminProductsPage() {
                             }}
                             min="0"
                             max="30"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                            className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                             placeholder="e.g., 4"
                           />
                           <p className="text-xs text-gray-500 mt-1">
@@ -1156,7 +1318,7 @@ export default function AdminProductsPage() {
                             name="deliveryTimeText"
                             value={formData.deliveryTimeText}
                             onChange={(e) => setFormData({...formData, deliveryTimeText: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                            className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                             placeholder="e.g., 4-6 business days"
                           />
                           <p className="text-xs text-gray-500 mt-1">
@@ -1167,7 +1329,7 @@ export default function AdminProductsPage() {
                     </div>
                   )}
                   
-                  <p className="text-sm text-gray-500 mt-2">
+                  <p className="text-xs sm:text-sm text-gray-500 mt-2">
                     <strong>Important:</strong> Delivery time is calculated from the order confirmation date, not from when the product is listed. 
                     Make sure you can fulfill orders within the selected timeframe.
                   </p>
@@ -1182,47 +1344,47 @@ export default function AdminProductsPage() {
                     rows={4}
                     value={formData.description}
                     onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                    className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation"
                     placeholder="Describe your product in detail..."
                   />
                 </div>
                 
-                <div className="flex items-center space-x-6">
-                  <label className="flex items-center">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-3 sm:space-y-0">
+                  <label className="flex items-center touch-manipulation">
                     <input
                       type="checkbox"
                       checked={formData.isActive}
                       onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
-                      className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded touch-manipulation"
                     />
                     <span className="ml-2 text-sm text-gray-700">Active Product</span>
                   </label>
                   
-                  <label className="flex items-center">
+                  <label className="flex items-center touch-manipulation">
                     <input
                       type="checkbox"
                       checked={formData.isFeatured}
                       onChange={(e) => setFormData({...formData, isFeatured: e.target.checked})}
-                      className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded touch-manipulation"
                     />
                     <span className="ml-2 text-sm text-gray-700">Featured Product</span>
                   </label>
                 </div>
                 
-                <div className="flex justify-end space-x-3 pt-4">
+                <div className="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-4">
                   <button
                     type="button"
                     onClick={() => {
                       setShowAddModal(false)
                       resetForm()
                     }}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                    className="w-full sm:w-auto px-4 py-3 sm:py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 touch-manipulation min-h-[44px]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="w-full sm:w-auto px-4 py-3 sm:py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 touch-manipulation min-h-[44px]"
                   >
                     {editingProduct ? 'Update Product' : 'Create Product'}
                   </button>
@@ -1233,26 +1395,26 @@ export default function AdminProductsPage() {
         </div>
       )}
 
-      {/* Product Preview Modal */}
+      {/* Mobile-Optimized Product Preview Modal */}
       {previewProduct && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
+          <div className="relative top-2 sm:top-20 mx-auto p-4 sm:p-5 border w-11/12 max-w-4xl shadow-lg rounded-xl bg-white">
             <div className="mt-3">
-              {/* Modal Header */}
-              <div className="flex items-center justify-between pb-4 border-b">
-                <h3 className="text-lg font-medium text-gray-900">Product Preview</h3>
+              {/* Mobile-Optimized Modal Header */}
+              <div className="flex items-center justify-between pb-3 sm:pb-4 border-b">
+                <h3 className="text-base sm:text-lg font-medium text-gray-900">Product Preview</h3>
                 <button
                   onClick={() => setPreviewProduct(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-100 transition-colors touch-manipulation min-h-[32px] min-w-[32px] flex items-center justify-center"
                 >
-                  <XMarkIcon className="h-6 w-6" />
+                  <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </button>
               </div>
 
-              {/* Modal Content */}
-              <div className="mt-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Product Images */}
+              {/* Mobile-Optimized Modal Content */}
+              <div className="mt-3 sm:mt-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                  {/* Mobile-Optimized Product Images */}
                   <div>
                     <h4 className="text-sm font-medium text-gray-900 mb-2">Product Images</h4>
                     <div className="space-y-2">
@@ -1271,109 +1433,115 @@ export default function AdminProductsPage() {
                             key={index}
                             src={image}
                             alt={`${previewProduct.name} ${index + 1}`}
-                            className="w-full h-48 object-cover rounded-lg border"
+                            className="w-full h-32 sm:h-48 object-cover rounded-lg border"
                           />
                         ))
                       ) : (
-                        <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <PhotoIcon className="h-12 w-12 text-gray-400" />
-                          <span className="ml-2 text-gray-500">No images</span>
+                        <div className="w-full h-32 sm:h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                          <PhotoIcon className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400" />
+                          <span className="ml-2 text-sm text-gray-500">No images</span>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  {/* Product Details */}
-                  <div className="space-y-4">
+                  {/* Mobile-Optimized Product Details */}
+                  <div className="space-y-3 sm:space-y-4">
                     <div>
                       <h4 className="text-sm font-medium text-gray-900 mb-2">Product Information</h4>
                       <div className="space-y-2">
-                        <div>
-                          <span className="font-medium">Name:</span>
-                          <span className="ml-2">{previewProduct.name}</span>
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Name:</span>
+                          <p className="text-sm text-gray-900 break-words">{previewProduct.name}</p>
                         </div>
-                        <div>
-                          <span className="font-medium">Description:</span>
-                          <p className="mt-1 text-sm text-gray-600">{previewProduct.description}</p>
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Description:</span>
+                          <p className="mt-1 text-xs sm:text-sm text-gray-600 break-words">{previewProduct.description}</p>
                         </div>
-                        <div>
-                          <span className="font-medium">Price:</span>
-                          <span className="ml-2">${previewProduct.price.toLocaleString()}</span>
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Price:</span>
+                          <p className="text-sm text-gray-900">{formatCurrency(previewProduct.price)}</p>
                         </div>
                         {previewProduct.originalPrice && (
-                          <div>
-                            <span className="font-medium">Original Price:</span>
-                            <span className="ml-2">${previewProduct.originalPrice.toLocaleString()}</span>
+                          <div className="bg-gray-50 p-2 rounded-lg">
+                            <span className="text-xs font-medium text-gray-500">Original Price:</span>
+                            <p className="text-sm text-gray-900">{formatCurrency(previewProduct.originalPrice)}</p>
                           </div>
                         )}
-                        <div>
-                          <span className="font-medium">Stock:</span>
-                          <span className="ml-2">{previewProduct.stock}</span>
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Stock:</span>
+                          <p className="text-sm text-gray-900">{previewProduct.stock}</p>
                         </div>
                         {previewProduct.sku && (
-                          <div>
-                            <span className="font-medium">SKU:</span>
-                            <span className="ml-2">{previewProduct.sku}</span>
+                          <div className="bg-gray-50 p-2 rounded-lg">
+                            <span className="text-xs font-medium text-gray-500">SKU:</span>
+                            <p className="text-sm text-gray-900 break-all">{previewProduct.sku}</p>
                           </div>
                         )}
                         {previewProduct.brand && (
-                          <div>
-                            <span className="font-medium">Brand:</span>
-                            <span className="ml-2">{previewProduct.brand}</span>
+                          <div className="bg-gray-50 p-2 rounded-lg">
+                            <span className="text-xs font-medium text-gray-500">Brand:</span>
+                            <p className="text-sm text-gray-900 break-words">{previewProduct.brand}</p>
                           </div>
                         )}
-                        <div>
-                          <span className="font-medium">Category:</span>
-                          <span className="ml-2">{previewProduct.category?.name || 'N/A'}</span>
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Category:</span>
+                          <p className="text-sm text-gray-900">{previewProduct.category?.name || 'N/A'}</p>
                         </div>
-                        <div>
-                          <span className="font-medium">Vendor:</span>
-                          <span className="ml-2">{previewProduct.vendor?.name || 'N/A'}</span>
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Vendor:</span>
+                          <p className="text-sm text-gray-900 break-words">{previewProduct.vendor?.name || 'N/A'}</p>
                         </div>
-                        <div>
-                          <span className="font-medium">Delivery Time:</span>
-                          <span className="ml-2">
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Delivery Time:</span>
+                          <p className="text-sm text-gray-900">
                             {previewProduct.deliveryTimeDays} days
                             {previewProduct.deliveryTimeText && ` (${previewProduct.deliveryTimeText})`}
-                          </span>
+                          </p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Status Information */}
+                    {/* Mobile-Optimized Status Information */}
                     <div>
                       <h4 className="text-sm font-medium text-gray-900 mb-2">Status Information</h4>
                       <div className="space-y-2">
-                        <div>
-                          <span className="font-medium">Approval Status:</span>
-                          <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
-                            previewProduct.approvalStatus === 'APPROVED' ? 'bg-green-100 text-green-800' :
-                            previewProduct.approvalStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {previewProduct.approvalStatus}
-                          </span>
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Approval Status:</span>
+                          <div className="mt-1">
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              previewProduct.approvalStatus === 'APPROVED' ? 'bg-green-100 text-green-800' :
+                              previewProduct.approvalStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {previewProduct.approvalStatus}
+                            </span>
+                          </div>
                         </div>
-                        <div>
-                          <span className="font-medium">Active:</span>
-                          <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
-                            previewProduct.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                          }`}>
-                            {previewProduct.isActive ? 'Yes' : 'No'}
-                          </span>
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Active:</span>
+                          <div className="mt-1">
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              previewProduct.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            }`}>
+                              {previewProduct.isActive ? 'Yes' : 'No'}
+                            </span>
+                          </div>
                         </div>
-                        <div>
-                          <span className="font-medium">Featured:</span>
-                          <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
-                            previewProduct.isFeatured ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {previewProduct.isFeatured ? 'Yes' : 'No'}
-                          </span>
+                        <div className="bg-gray-50 p-2 rounded-lg">
+                          <span className="text-xs font-medium text-gray-500">Featured:</span>
+                          <div className="mt-1">
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              previewProduct.isFeatured ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {previewProduct.isFeatured ? 'Yes' : 'No'}
+                            </span>
+                          </div>
                         </div>
                         {previewProduct.rejectionReason && (
-                          <div>
-                            <span className="font-medium">Rejection Reason:</span>
-                            <p className="mt-1 text-sm text-red-600">{previewProduct.rejectionReason}</p>
+                          <div className="bg-gray-50 p-2 rounded-lg">
+                            <span className="text-xs font-medium text-gray-500">Rejection Reason:</span>
+                            <p className="mt-1 text-xs sm:text-sm text-red-600 break-words">{previewProduct.rejectionReason}</p>
                           </div>
                         )}
                       </div>
@@ -1381,11 +1549,11 @@ export default function AdminProductsPage() {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="mt-6 flex justify-end space-x-3">
+                {/* Mobile-Optimized Action Buttons */}
+                <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-3">
                   <button
                     onClick={() => setPreviewProduct(null)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    className="w-full sm:w-auto px-4 py-3 sm:py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 touch-manipulation min-h-[44px]"
                   >
                     Close
                   </button>
@@ -1396,7 +1564,7 @@ export default function AdminProductsPage() {
                           handleProductApproval(previewProduct.id, 'reject')
                           setPreviewProduct(null)
                         }}
-                        className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        className="w-full sm:w-auto px-4 py-3 sm:py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 touch-manipulation min-h-[44px]"
                       >
                         Reject
                       </button>
@@ -1405,7 +1573,7 @@ export default function AdminProductsPage() {
                           handleProductApproval(previewProduct.id, 'approve')
                           setPreviewProduct(null)
                         }}
-                        className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full sm:w-auto px-4 py-3 sm:py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 touch-manipulation min-h-[44px]"
                       >
                         Approve
                       </button>

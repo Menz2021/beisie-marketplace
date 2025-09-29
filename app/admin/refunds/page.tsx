@@ -198,50 +198,51 @@ export default function RefundManagementPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="w-full py-6 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="px-4 py-6 sm:px-0">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+      <div className="w-full py-4 sm:py-6 px-3 sm:px-6 lg:px-8">
+        {/* Mobile-Optimized Header */}
+        <div className="py-3 sm:py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+            <div className="flex items-center space-x-3 sm:space-x-4">
               <button
                 onClick={() => router.push('/admin/dashboard')}
-                className="text-gray-600 hover:text-gray-900"
+                className="text-gray-600 hover:text-gray-900 transition-colors touch-manipulation"
               >
-                <ArrowLeftIcon className="h-6 w-6" />
+                <ArrowLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
               </button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Refund Management</h1>
-                <p className="text-gray-600">Manage customer refund requests and disputes</p>
+                <h1 className="text-xl sm:text-3xl font-bold text-gray-900">Refund Management</h1>
+                <p className="text-sm sm:text-base text-gray-600">Manage customer refund requests and disputes</p>
               </div>
             </div>
-            <div className="flex space-x-4">
-              <button className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+            <div className="flex justify-end">
+              <button className="px-3 sm:px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors touch-manipulation min-h-[36px] text-sm sm:text-base">
                 Export Report
               </button>
             </div>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
+        {/* Mobile-Optimized Filters */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+          <div className="space-y-4">
+            <div>
               <div className="relative">
-                <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <MagnifyingGlassIcon className="h-4 w-4 sm:h-5 sm:w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search by order ID, customer name, or reason..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="w-full pl-10 pr-4 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[44px]"
                 />
               </div>
             </div>
-            <div className="flex gap-2">
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[44px]"
               >
                 <option value="all">All Status</option>
                 <option value="PENDING">Pending</option>
@@ -253,7 +254,7 @@ export default function RefundManagementPage() {
               <select
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[44px]"
               >
                 <option value="all">All Dates</option>
                 <option value="today">Today</option>
@@ -265,14 +266,16 @@ export default function RefundManagementPage() {
               <select
                 value={sellerFilter}
                 onChange={(e) => setSellerFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[44px]"
               >
                 <option value="all">All Sellers</option>
                 {sellers.map(seller => (
                   <option key={seller.id} value={seller.name}>{seller.name}</option>
                 ))}
               </select>
+            </div>
               
+            <div>
               <button 
                 onClick={() => {
                   setStatusFilter('all')
@@ -281,7 +284,7 @@ export default function RefundManagementPage() {
                   setSearchTerm('')
                   setCurrentPage(1)
                 }}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                className="w-full px-4 py-3 sm:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors touch-manipulation min-h-[44px] text-sm"
               >
                 Clear Filters
               </button>
@@ -289,8 +292,8 @@ export default function RefundManagementPage() {
           </div>
         </div>
 
-        {/* Refunds Table */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        {/* Refunds Display - Desktop Table View */}
+        <div className="hidden lg:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -388,6 +391,93 @@ export default function RefundManagementPage() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="lg:hidden space-y-3">
+          {filteredRefunds.map((refund) => (
+            <div key={refund.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <h3 className="text-sm font-semibold text-gray-900">
+                      {refund.orderId}
+                    </h3>
+                    <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${getStatusColor(refund.status)}`}>
+                      {refund.status}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 truncate">{refund.order.orderItems[0]?.product.name}</p>
+                </div>
+                
+                <div className="flex items-center space-x-1 ml-2">
+                  <button
+                    onClick={() => {
+                      setSelectedRefund(refund)
+                      setShowModal(true)
+                    }}
+                    className="p-2 text-indigo-600 hover:text-indigo-900 hover:bg-indigo-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                    title="View Details"
+                  >
+                    <EyeIcon className="h-4 w-4" />
+                  </button>
+                  {refund.status === 'PENDING' && (
+                    <>
+                      <button
+                        onClick={() => handleStatusUpdate(refund.id, 'APPROVED')}
+                        className="p-2 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                        title="Approve Refund"
+                      >
+                        <CheckCircleIcon className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleStatusUpdate(refund.id, 'REJECTED')}
+                        className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                        title="Reject Refund"
+                      >
+                        <XCircleIcon className="h-4 w-4" />
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <p className="text-xs text-gray-500">Customer</p>
+                  <p className="text-sm font-semibold text-gray-900 truncate">
+                    {refund.customer.name}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">{refund.customer.email}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Amount</p>
+                  <p className="text-sm font-semibold text-gray-900">{formatCurrency(refund.amount)}</p>
+                  <p className="text-xs text-gray-500">{refund.type} refund</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Date</p>
+                  <p className="text-sm font-semibold text-gray-900">
+                    {new Date(refund.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Status</p>
+                  <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${getStatusColor(refund.status)}`}>
+                    {refund.status}
+                  </span>
+                </div>
+              </div>
+              
+              <div>
+                <p className="text-xs text-gray-500">Reason</p>
+                <p className="text-sm text-gray-900 break-words mt-1">
+                  {refund.reason}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
           
           {/* Pagination */}
           {totalPages > 1 && (
@@ -459,59 +549,60 @@ export default function RefundManagementPage() {
           )}
         </div>
 
-        {/* Refund Details Modal */}
+        {/* Mobile-Optimized Refund Details Modal */}
         {showModal && selectedRefund && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div className="relative top-2 sm:top-20 mx-auto p-4 sm:p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-xl bg-white">
               <div className="mt-3">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Refund Details</h3>
+                <div className="flex justify-between items-center mb-4 sm:mb-6">
+                  <h3 className="text-base sm:text-lg font-medium text-gray-900">Refund Details</h3>
                   <button
                     onClick={() => setShowModal(false)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-100 transition-colors touch-manipulation min-h-[32px] min-w-[32px] flex items-center justify-center"
                   >
-                    <XCircleIcon className="h-6 w-6" />
+                    <XCircleIcon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </button>
                 </div>
                 
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Order ID</label>
-                      <p className="text-sm text-gray-900">{selectedRefund.orderId}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Order ID</label>
+                      <p className="text-sm font-medium text-gray-900 break-all">{selectedRefund.orderId}</p>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Refund Amount</label>
-                      <p className="text-sm text-gray-900">{formatCurrency(selectedRefund.amount)}</p>
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Refund Amount</label>
+                      <p className="text-sm font-medium text-gray-900">{formatCurrency(selectedRefund.amount)}</p>
                     </div>
                   </div>
                   
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Customer</label>
-                    <p className="text-sm text-gray-900">{selectedRefund.customer.name} ({selectedRefund.customer.email})</p>
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Customer</label>
+                    <p className="text-sm font-medium text-gray-900 break-words">{selectedRefund.customer.name}</p>
+                    <p className="text-sm text-gray-600 break-all">{selectedRefund.customer.email}</p>
+                  </div>
+                  
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Reason</label>
+                    <p className="text-sm text-gray-900 break-words">{selectedRefund.reason}</p>
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Reason</label>
-                    <p className="text-sm text-gray-900">{selectedRefund.reason}</p>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Admin Notes</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Admin Notes</label>
                     <textarea
                       value={adminNotes}
                       onChange={(e) => setAdminNotes(e.target.value)}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                      className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[80px]"
                       placeholder="Add notes about this refund decision..."
                     />
                   </div>
                 </div>
                 
-                <div className="flex justify-end space-x-3 mt-6">
+                <div className="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-3 mt-4 sm:mt-6">
                   <button
                     onClick={() => setShowModal(false)}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+                    className="w-full sm:w-auto px-4 py-3 sm:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors touch-manipulation min-h-[44px] text-sm"
                   >
                     Cancel
                   </button>
@@ -519,13 +610,13 @@ export default function RefundManagementPage() {
                     <>
                       <button
                         onClick={() => handleStatusUpdate(selectedRefund.id, 'APPROVED')}
-                        className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                        className="w-full sm:w-auto px-4 py-3 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors touch-manipulation min-h-[44px] text-sm"
                       >
                         Approve Refund
                       </button>
                       <button
                         onClick={() => handleStatusUpdate(selectedRefund.id, 'REJECTED')}
-                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                        className="w-full sm:w-auto px-4 py-3 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors touch-manipulation min-h-[44px] text-sm"
                       >
                         Reject Refund
                       </button>

@@ -176,23 +176,23 @@ export default function SellerFinancialsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-8">
-              <Link href="/admin/dashboard" className="text-gray-600 hover:text-gray-900">
+      {/* Mobile-Optimized Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div className="px-3 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 sm:py-0 sm:h-16 space-y-3 sm:space-y-0">
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-8">
+              <Link href="/admin/dashboard" className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors touch-manipulation">
                 ← Back to Dashboard
               </Link>
-              <h1 className="text-xl font-bold text-gray-900">Seller Financial Statements</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">Seller Financial Statements</h1>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-between sm:justify-end space-x-4">
               <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-red-700 rounded-full flex items-center justify-center shadow-md">
                 <span className="text-white text-sm font-medium">{admin?.name?.charAt(0).toUpperCase() || 'A'}</span>
               </div>
               <button
                 onClick={handleLogout}
-                className="text-gray-600 hover:text-gray-900"
+                className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors touch-manipulation min-h-[36px] px-2 py-1 rounded-md hover:bg-gray-100"
               >
                 Logout
               </button>
@@ -202,7 +202,7 @@ export default function SellerFinancialsPage() {
       </div>
 
       {/* Main Content */}
-      <div className="p-6">
+      <div className="p-3 sm:p-6">
         {dataLoading ? (
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
@@ -211,210 +211,325 @@ export default function SellerFinancialsPage() {
             </div>
           </div>
         ) : (
-          <div className="space-y-8">
-            {/* Platform Overview */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Platform Financial Overview</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-2">
-                    <CurrencyDollarIcon className="h-6 w-6 text-blue-600" />
+          <div className="space-y-6 sm:space-y-8">
+            {/* Mobile-Optimized Platform Overview */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Platform Financial Overview</h2>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+                <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
+                  <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl mx-auto mb-2">
+                    <CurrencyDollarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                   </div>
-                  <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-                  <p className="text-xl font-semibold text-gray-900">
+                  <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Total Revenue</p>
+                  <p className="text-sm sm:text-xl font-bold text-gray-900 break-words">
                     {formatCurrency(financialData?.totalPlatformRevenue || 0)}
                   </p>
                 </div>
                 
-                <div className="text-center">
-                  <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mx-auto mb-2">
-                    <BanknotesIcon className="h-6 w-6 text-green-600" />
+                <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
+                  <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-xl mx-auto mb-2">
+                    <BanknotesIcon className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                   </div>
-                  <p className="text-sm font-medium text-gray-500">Platform Commission</p>
-                  <p className="text-xl font-semibold text-gray-900">
+                  <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Platform Commission</p>
+                  <p className="text-sm sm:text-xl font-bold text-gray-900 break-words">
                     {formatCurrency(financialData?.totalPlatformCommission || 0)}
                   </p>
                 </div>
                 
-                <div className="text-center">
-                  <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-2">
-                    <DocumentTextIcon className="h-6 w-6 text-purple-600" />
+                <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
+                  <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-xl mx-auto mb-2">
+                    <DocumentTextIcon className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
                   </div>
-                  <p className="text-sm font-medium text-gray-500">Total Orders</p>
-                  <p className="text-xl font-semibold text-gray-900">
+                  <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Total Orders</p>
+                  <p className="text-sm sm:text-xl font-bold text-gray-900">
                     {(financialData?.totalOrders || 0).toLocaleString()}
                   </p>
                 </div>
                 
-                <div className="text-center">
-                  <div className="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-lg mx-auto mb-2">
-                    <ShoppingBagIcon className="h-6 w-6 text-orange-600" />
+                <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl">
+                  <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-xl mx-auto mb-2">
+                    <ShoppingBagIcon className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
                   </div>
-                  <p className="text-sm font-medium text-gray-500">Total Products</p>
-                  <p className="text-xl font-semibold text-gray-900">
+                  <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Total Products</p>
+                  <p className="text-sm sm:text-xl font-bold text-gray-900">
                     {(financialData?.totalProducts || 0).toLocaleString()}
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Sellers Financial Table */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Seller Financial Statements</h2>
-                <p className="text-sm text-gray-600 mt-1">Detailed financial breakdown for each seller</p>
+            {/* Mobile-Optimized Sellers Financial Display */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+              <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-900">Seller Financial Statements</h2>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">Detailed financial breakdown for each seller</p>
               </div>
               
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Seller
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Revenue
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Commission
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Payout
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Orders
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Products
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {financialData?.sellers?.map((seller) => (
-                      <tr key={seller.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10">
-                              <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                                <span className="text-white text-sm font-medium">
-                                  {seller.name.charAt(0).toUpperCase()}
+              <div className="space-y-0">
+                {/* Desktop Table View */}
+                <div className="hidden lg:block">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Seller
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Revenue
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Commission
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Payout
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Orders
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Products
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {financialData?.sellers?.map((seller) => (
+                          <tr key={seller.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <div className="flex-shrink-0 h-10 w-10">
+                                  <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                                    <span className="text-white text-sm font-medium">
+                                      {seller.name.charAt(0).toUpperCase()}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="ml-4">
+                                  <div className="text-sm font-medium text-gray-900">{seller.name}</div>
+                                  <div className="text-sm text-gray-500">{seller.email}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center space-x-2">
+                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                  seller.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                }`}>
+                                  {seller.isActive ? 'Active' : 'Inactive'}
                                 </span>
+                                {seller.isVerified && (
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    Verified
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                              {formatCurrency(seller.totalRevenue)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                              {formatCurrency(seller.totalCommission)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                              {formatCurrency(seller.totalPayout)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                              {seller.orderCount.toLocaleString()}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                              <div>
+                                <div>{seller.activeProductCount.toLocaleString()} active</div>
+                                <div className="text-xs text-gray-500">{seller.productCount.toLocaleString()} total</div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                              <button
+                                onClick={() => setSelectedSeller(selectedSeller === seller.id ? null : seller.id)}
+                                className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-50 transition-colors"
+                              >
+                                {selectedSeller === seller.id ? 'Hide Details' : 'View Details'}
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="lg:hidden">
+                  <div className="divide-y divide-gray-200">
+                    {financialData?.sellers?.map((seller) => (
+                      <div key={seller.id} className="p-4 hover:bg-gray-50 transition-colors">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-start space-x-3 flex-1 min-w-0">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                              <span className="text-white text-sm font-medium">
+                                {seller.name.charAt(0).toUpperCase()}
+                              </span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <h3 className="text-sm font-semibold text-gray-900 truncate">
+                                  {seller.name}
+                                </h3>
+                                <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
+                                  seller.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                }`}>
+                                  {seller.isActive ? 'Active' : 'Inactive'}
+                                </span>
+                                {seller.isVerified && (
+                                  <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    Verified
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-500 truncate">{seller.email}</p>
+                              <div className="grid grid-cols-2 gap-2 mt-2">
+                                <div>
+                                  <p className="text-xs text-gray-500">Revenue</p>
+                                  <p className="text-sm font-semibold text-gray-900">{formatCurrency(seller.totalRevenue)}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-500">Commission</p>
+                                  <p className="text-sm font-semibold text-gray-900">{formatCurrency(seller.totalCommission)}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-500">Payout</p>
+                                  <p className="text-sm font-semibold text-gray-900">{formatCurrency(seller.totalPayout)}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-500">Orders</p>
+                                  <p className="text-sm font-semibold text-gray-900">{seller.orderCount.toLocaleString()}</p>
+                                </div>
+                              </div>
+                              <div className="mt-2">
+                                <p className="text-xs text-gray-500">Products</p>
+                                <p className="text-sm font-semibold text-gray-900">
+                                  {seller.activeProductCount.toLocaleString()} active / {seller.productCount.toLocaleString()} total
+                                </p>
                               </div>
                             </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{seller.name}</div>
-                              <div className="text-sm text-gray-500">{seller.email}</div>
-                            </div>
                           </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center space-x-2">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              seller.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                            }`}>
-                              {seller.isActive ? 'Active' : 'Inactive'}
-                            </span>
-                            {seller.isVerified && (
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                Verified
-                              </span>
-                            )}
+                          
+                          <div className="ml-3">
+                            <button
+                              onClick={() => setSelectedSeller(selectedSeller === seller.id ? null : seller.id)}
+                              className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                            >
+                              <EyeIcon className="h-4 w-4" />
+                            </button>
                           </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {formatCurrency(seller.totalRevenue)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {formatCurrency(seller.totalCommission)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {formatCurrency(seller.totalPayout)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {seller.orderCount.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          <div>
-                            <div>{seller.activeProductCount.toLocaleString()} active</div>
-                            <div className="text-xs text-gray-500">{seller.productCount.toLocaleString()} total</div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <button
-                            onClick={() => setSelectedSeller(selectedSeller === seller.id ? null : seller.id)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            {selectedSeller === seller.id ? 'Hide Details' : 'View Details'}
-                          </button>
-                        </td>
-                      </tr>
+                        </div>
+                      </div>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Recent Transactions */}
+            {/* Mobile-Optimized Recent Transactions */}
             {financialData?.recentTransactions && financialData.recentTransactions.length > 0 && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Platform Transactions</h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Date
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Type
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Seller
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Amount
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Commission
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Status
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Recent Platform Transactions</h3>
+                
+                <div className="space-y-0">
+                  {/* Desktop Table View */}
+                  <div className="hidden lg:block">
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Date
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Type
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Seller
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Amount
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Commission
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Status
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {financialData.recentTransactions.slice(0, 10).map((transaction) => (
+                            <tr key={transaction.id}>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {formatDate(transaction.date)}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {transaction.type}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {transaction.seller}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {formatCurrency(transaction.amount)}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {formatCurrency(transaction.commission)}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(transaction.status)}`}>
+                                  {transaction.status}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Mobile Card View */}
+                  <div className="lg:hidden">
+                    <div className="space-y-3">
                       {financialData.recentTransactions.slice(0, 10).map((transaction) => (
-                        <tr key={transaction.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {formatDate(transaction.date)}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {transaction.type}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {transaction.seller}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {formatCurrency(transaction.amount)}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {formatCurrency(transaction.commission)}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(transaction.status)}`}>
-                              {transaction.status}
-                            </span>
-                          </td>
-                        </tr>
+                        <div key={transaction.id} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <h4 className="text-sm font-semibold text-gray-900 truncate">
+                                  {transaction.type}
+                                </h4>
+                                <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${getStatusColor(transaction.status)}`}>
+                                  {transaction.status}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-500 truncate">{transaction.seller}</p>
+                              <p className="text-xs text-gray-400">{formatDate(transaction.date)}</p>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <p className="text-xs text-gray-500">Amount</p>
+                              <p className="text-sm font-semibold text-gray-900">{formatCurrency(transaction.amount)}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500">Commission</p>
+                              <p className="text-sm font-semibold text-gray-900">{formatCurrency(transaction.commission)}</p>
+                            </div>
+                          </div>
+                        </div>
                       ))}
-                    </tbody>
-                  </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

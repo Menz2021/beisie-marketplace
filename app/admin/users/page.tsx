@@ -156,86 +156,86 @@ export default function AdminUsersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      {/* Mobile-Optimized Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div className="w-full px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             <div className="flex items-center">
               <button
                 onClick={() => router.back()}
-                className="flex items-center text-gray-600 hover:text-gray-900 mr-4"
+                className="flex items-center text-gray-600 hover:text-gray-900 mr-3 sm:mr-4 touch-manipulation min-h-[36px] px-2 py-1 rounded-md hover:bg-gray-100 transition-colors"
               >
-                <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                Back
+                <ArrowLeftIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+                <span className="text-sm sm:text-base">Back</span>
               </button>
-              <h1 className="text-2xl font-semibold text-gray-900">User Management</h1>
+              <h1 className="text-lg sm:text-2xl font-semibold text-gray-900">User Management</h1>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <button
                 onClick={handleLogout}
-                className="flex items-center px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
+                className="flex items-center px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors touch-manipulation min-h-[32px] sm:min-h-[36px]"
                 title="Logout"
               >
-                <ArrowRightOnRectangleIcon className="h-4 w-4 mr-1" />
-                Logout
+                <ArrowRightOnRectangleIcon className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                <span className="hidden sm:inline">Logout</span>
               </button>
-            </div>
             </div>
           </div>
         </div>
+      </div>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
+      <div className="w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+        {/* Mobile-Optimized Filters */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+          <div className="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-4">
+            <div className="sm:col-span-2 lg:col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Search Users
               </label>
               <div className="relative">
-              <input
-                type="text"
+                <input
+                  type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search by name, email, or phone..."
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  className="w-full pl-10 pr-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
                 />
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
+                <MagnifyingGlassIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 absolute left-3 top-3 sm:top-2.5" />
+              </div>
             </div>
-          </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Filter by Role
-                  </label>
-                  <select
+              </label>
+              <select
                 value={roleFilter}
                 onChange={(e) => setRoleFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
               >
                 <option value="">All Roles</option>
                 <option value="CUSTOMER">Customers</option>
                 <option value="SELLER">Sellers</option>
                 <option value="ADMIN">Admins</option>
-                  </select>
-                </div>
+              </select>
+            </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Filter by Status
-                  </label>
-                  <select
+              </label>
+              <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
               >
                 <option value="">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
                 <option value="verified">Verified</option>
                 <option value="unverified">Unverified</option>
-                  </select>
-                </div>
+              </select>
+            </div>
             
             <div className="flex items-end">
               <button
@@ -244,135 +244,228 @@ export default function AdminUsersPage() {
                   setRoleFilter('')
                   setStatusFilter('')
                 }}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full px-4 py-3 sm:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm touch-manipulation min-h-[44px] transition-colors"
               >
                 Clear Filters
               </button>
-              </div>
             </div>
+          </div>
         </div>
 
-        {/* Users Table */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    User
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Role
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Products
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Orders
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Joined
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mr-4">
-                          <span className="text-sm font-medium text-gray-600">
-                            {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
-                          </span>
+        {/* Mobile-Optimized Users Display */}
+        <div className="space-y-3 sm:space-y-0">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      User
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Role
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Products
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Orders
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Joined
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {users.map((user) => (
+                    <tr key={user.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mr-4">
+                            <span className="text-sm font-medium text-gray-600">
+                              {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                            </span>
                           </div>
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">
-                            {user.name || 'No Name'}
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {user.name || 'No Name'}
+                            </div>
+                            <div className="text-sm text-gray-500">{user.email}</div>
+                            {user.phone && (
+                              <div className="text-xs text-gray-400">{user.phone}</div>
+                            )}
                           </div>
-                          <div className="text-sm text-gray-500">{user.email}</div>
-                          {user.phone && (
-                            <div className="text-xs text-gray-400">{user.phone}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.isActive, user.isVerified)}`}>
+                          {getStatusText(user.isActive, user.isVerified)}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {user._count.products}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {user._count.orders}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(user.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex items-center justify-end space-x-2">
+                          <button
+                            onClick={() => {
+                              setSelectedUser(user)
+                              setShowUserModal(true)
+                            }}
+                            className="text-blue-600 hover:text-blue-900 p-1 rounded-md hover:bg-blue-50 transition-colors"
+                            title="View Details"
+                          >
+                            <EyeIcon className="h-4 w-4" />
+                          </button>
+                          
+                          {user.role !== 'ADMIN' && (
+                            <>
+                              {user.isActive ? (
+                                <button 
+                                  onClick={() => handleUserAction(user.id, 'deactivate')}
+                                  className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-50 transition-colors"
+                                  title="Deactivate User"
+                                >
+                                  <XCircleIcon className="h-4 w-4" />
+                                </button>
+                              ) : (
+                                <button 
+                                  onClick={() => handleUserAction(user.id, 'activate')}
+                                  className="text-green-600 hover:text-green-900 p-1 rounded-md hover:bg-green-50 transition-colors"
+                                  title="Activate User"
+                                >
+                                  <CheckCircleIcon className="h-4 w-4" />
+                                </button>
+                              )}
+                              
+                              {!user.isVerified && (
+                                <button
+                                  onClick={() => handleUserAction(user.id, 'verify')}
+                                  className="text-blue-600 hover:text-blue-900 p-1 rounded-md hover:bg-blue-50 transition-colors"
+                                  title="Verify User"
+                                >
+                                  <ShieldCheckIcon className="h-4 w-4" />
+                                </button>
+                              )}
+                            </>
                           )}
                         </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden space-y-3">
+            {users.map((user) => (
+              <div key={user.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center space-x-3 flex-1 min-w-0">
+                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm font-medium text-gray-600">
+                        {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <h3 className="text-sm font-semibold text-gray-900 truncate">
+                          {user.name || 'No Name'}
+                        </h3>
+                        <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
+                          {user.role}
+                        </span>
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.isActive, user.isVerified)}`}>
-                        {getStatusText(user.isActive, user.isVerified)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {user._count.products}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {user._count.orders}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(user.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center justify-end space-x-2">
-                        <button
-                          onClick={() => {
-                            setSelectedUser(user)
-                            setShowUserModal(true)
-                          }}
-                          className="text-blue-600 hover:text-blue-900"
-                          title="View Details"
-                        >
-                          <EyeIcon className="h-4 w-4" />
-                        </button>
-                        
-                        {user.role !== 'ADMIN' && (
-                          <>
-                            {user.isActive ? (
-                              <button 
-                                onClick={() => handleUserAction(user.id, 'deactivate')}
-                                className="text-red-600 hover:text-red-900"
-                                title="Deactivate User"
-                              >
-                                <XCircleIcon className="h-4 w-4" />
-                              </button>
-                            ) : (
-                              <button 
-                                onClick={() => handleUserAction(user.id, 'activate')}
-                                className="text-green-600 hover:text-green-900"
-                                title="Activate User"
-                              >
-                                <CheckCircleIcon className="h-4 w-4" />
-                              </button>
-                            )}
-                            
-                            {!user.isVerified && (
-                        <button
-                                onClick={() => handleUserAction(user.id, 'verify')}
-                                className="text-blue-600 hover:text-blue-900"
-                                title="Verify User"
-                              >
-                                <ShieldCheckIcon className="h-4 w-4" />
-                        </button>
-                            )}
-                          </>
+                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                      {user.phone && (
+                        <p className="text-xs text-gray-400 truncate">{user.phone}</p>
+                      )}
+                      <div className="flex items-center space-x-3 mt-2">
+                        <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${getStatusColor(user.isActive, user.isVerified)}`}>
+                          {getStatusText(user.isActive, user.isVerified)}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {user._count.products} products
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {user._count.orders} orders
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1">
+                        Joined {new Date(user.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-1 ml-3">
+                    <button
+                      onClick={() => {
+                        setSelectedUser(user)
+                        setShowUserModal(true)
+                      }}
+                      className="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                      title="View Details"
+                    >
+                      <EyeIcon className="h-4 w-4" />
+                    </button>
+                    
+                    {user.role !== 'ADMIN' && (
+                      <>
+                        {user.isActive ? (
+                          <button 
+                            onClick={() => handleUserAction(user.id, 'deactivate')}
+                            className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                            title="Deactivate User"
+                          >
+                            <XCircleIcon className="h-4 w-4" />
+                          </button>
+                        ) : (
+                          <button 
+                            onClick={() => handleUserAction(user.id, 'activate')}
+                            className="p-2 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                            title="Activate User"
+                          >
+                            <CheckCircleIcon className="h-4 w-4" />
+                          </button>
                         )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                        
+                        {!user.isVerified && (
+                          <button
+                            onClick={() => handleUserAction(user.id, 'verify')}
+                            className="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
+                            title="Verify User"
+                          >
+                            <ShieldCheckIcon className="h-4 w-4" />
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-          </div>
+        </div>
 
         {users.length === 0 && (
             <div className="text-center py-12">
@@ -385,74 +478,78 @@ export default function AdminUsersPage() {
           )}
       </div>
 
-      {/* User Details Modal */}
+      {/* Mobile-Optimized User Details Modal */}
       {showUserModal && selectedUser && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-4 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
+          <div className="relative top-2 sm:top-4 mx-auto p-4 sm:p-5 border w-11/12 max-w-2xl shadow-lg rounded-xl bg-white">
             <div className="mt-3">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">User Details</h3>
+              <div className="flex justify-between items-center mb-4 sm:mb-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">User Details</h3>
                 <button
                   onClick={() => setShowUserModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-100 transition-colors touch-manipulation min-h-[32px] min-w-[32px] flex items-center justify-center"
                 >
-                  ×
+                  <span className="text-xl">×</span>
                 </button>
               </div>
               
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Name</label>
-                    <p className="text-sm text-gray-900">{selectedUser.name || 'Not provided'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Email</label>
-                  <p className="text-sm text-gray-900">{selectedUser.email}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Phone</label>
-                    <p className="text-sm text-gray-900">{selectedUser.phone || 'Not provided'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Role</label>
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(selectedUser.role)}`}>
-                    {selectedUser.role}
-                  </span>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Status</label>
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedUser.isActive, selectedUser.isVerified)}`}>
-                      {getStatusText(selectedUser.isActive, selectedUser.isVerified)}
-                  </span>
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Language</label>
-                    <p className="text-sm text-gray-900">{selectedUser.language}</p>
+              <div className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                    <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded-lg">{selectedUser.name || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Products</label>
-                    <p className="text-sm text-gray-900">{selectedUser._count.products}</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded-lg break-all">{selectedUser.email}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Orders</label>
-                    <p className="text-sm text-gray-900">{selectedUser._count.orders}</p>
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Joined</label>
-                    <p className="text-sm text-gray-900">{new Date(selectedUser.createdAt).toLocaleDateString()}</p>
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Last Updated</label>
-                    <p className="text-sm text-gray-900">{new Date(selectedUser.updatedAt).toLocaleDateString()}</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded-lg">{selectedUser.phone || 'Not provided'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                    <div className="mt-1">
+                      <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getRoleColor(selectedUser.role)}`}>
+                        {selectedUser.role}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <div className="mt-1">
+                      <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedUser.isActive, selectedUser.isVerified)}`}>
+                        {getStatusText(selectedUser.isActive, selectedUser.isVerified)}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Language</label>
+                    <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded-lg">{selectedUser.language}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Products</label>
+                    <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded-lg">{selectedUser._count.products}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Orders</label>
+                    <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded-lg">{selectedUser._count.orders}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Joined</label>
+                    <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded-lg">{new Date(selectedUser.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Last Updated</label>
+                    <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded-lg">{new Date(selectedUser.updatedAt).toLocaleDateString()}</p>
                   </div>
                 </div>
               </div>
               
-              <div className="flex justify-end space-x-3 pt-6">
+              <div className="flex justify-end space-x-3 pt-4 sm:pt-6">
                 <button
                   onClick={() => setShowUserModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors touch-manipulation min-h-[40px]"
                 >
                   Close
                 </button>

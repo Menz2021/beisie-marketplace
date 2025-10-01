@@ -1459,26 +1459,26 @@ export default function SellerDashboard() {
                       View All
               </button>
         </div>
-                  <div className="space-y-2 overflow-y-auto h-80">
+                  <div className="space-y-3 overflow-y-auto h-80">
                     {orders.slice(0, 5).map((order) => (
-                      <div key={order.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                      <div className="flex items-center">
-                          <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-3">
-                            <span className="text-xs font-medium text-gray-600">#{order.orderNumber}</span>
-              </div>
-                      <div>
-                          <p className="text-sm font-medium text-gray-900">{order.customer}</p>
-                          <p className="text-xs text-gray-500">{order.date}</p>
+                      <div key={order.id} className="flex items-start justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div className="flex items-start space-x-3 flex-1 min-w-0">
+                          <div className="w-10 h-10 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-xs font-semibold text-purple-700">#{order.orderNumber}</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-gray-900 truncate">{order.customer}</p>
+                            <p className="text-xs text-gray-500 mt-1">{order.date}</p>
+                          </div>
+                        </div>
+                        <div className="text-right flex-shrink-0 ml-3">
+                          <p className="text-sm font-semibold text-gray-900">{formatCurrency(order.total)}</p>
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full mt-1 ${getStatusColor(order.status)}`}>
+                            {order.status}
+                          </span>
                         </div>
                       </div>
-                      <div className="text-right">
-                          <p className="text-sm font-semibold text-gray-900">{formatCurrency(order.total)}</p>
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
-                          {order.status}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
               </div>
             </div>
 

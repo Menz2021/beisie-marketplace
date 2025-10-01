@@ -62,11 +62,13 @@ export async function GET(request: NextRequest) {
     
     for (const order of allOrders) {
       const sellerItems = order.orderItems
-      const sellerTotal = sellerItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-      const commission = sellerTotal * 0.1 // 10% commission
-      const sellerAmount = sellerTotal * 0.9 // 90% to seller
+      // Calculate price before VAT (VAT is 18%, so price with VAT = price * 1.18)
+      // Therefore, price before VAT = price / 1.18
+      const sellerTotalBeforeVAT = sellerItems.reduce((sum, item) => sum + ((item.price / 1.18) * item.quantity), 0)
+      const commission = sellerTotalBeforeVAT * 0.1 // 10% commission
+      const sellerAmount = sellerTotalBeforeVAT * 0.9 // 90% to seller
       
-      totalEarnings += sellerTotal
+      totalEarnings += sellerTotalBeforeVAT
       commissionPaid += commission
 
       // Determine transaction status based on order status
@@ -88,7 +90,7 @@ export async function GET(request: NextRequest) {
         status: transactionStatus,
         date: order.createdAt.toISOString().split('T')[0],
         description: `${sellerItems.map(item => item.product.name).join(', ')} sale`,
-        orderTotal: sellerTotal,
+        orderTotal: sellerTotalBeforeVAT,
         customer: order.customer?.name || order.customer?.email || 'Unknown Customer'
       })
     }

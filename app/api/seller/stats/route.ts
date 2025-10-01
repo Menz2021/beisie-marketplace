@@ -66,8 +66,10 @@ export async function GET(request: NextRequest) {
 
     const weeklyRevenue = weeklyOrdersData.reduce((total, order) => {
       const sellerItems = order.orderItems
-      const sellerTotal = sellerItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-      return total + sellerTotal
+      // Calculate price before VAT (VAT is 18%, so price with VAT = price * 1.18)
+      // Therefore, price before VAT = price / 1.18
+      const sellerTotalBeforeVAT = sellerItems.reduce((sum, item) => sum + ((item.price / 1.18) * item.quantity), 0)
+      return total + sellerTotalBeforeVAT
     }, 0)
 
     // Calculate amount to be paid (90% after 10% commission)

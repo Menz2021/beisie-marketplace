@@ -156,24 +156,28 @@ export async function GET(request: NextRequest) {
 
       for (const order of sellerOrders) {
         const sellerItems = order.orderItems.filter((item: any) => item.product.vendorId === seller.id)
-        const sellerOrderTotal = sellerItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0)
+        // Calculate price before VAT (VAT is 18%, so price with VAT = price * 1.18)
+        // Therefore, price before VAT = price / 1.18
+        const sellerOrderTotalBeforeVAT = sellerItems.reduce((sum: number, item: any) => sum + ((item.price / 1.18) * item.quantity), 0)
         
-        sellerRevenue += sellerOrderTotal
-        sellerCommission += sellerOrderTotal * 0.1
-        sellerPayout += sellerOrderTotal * 0.9
+        sellerRevenue += sellerOrderTotalBeforeVAT
+        sellerCommission += sellerOrderTotalBeforeVAT * 0.1
+        sellerPayout += sellerOrderTotalBeforeVAT * 0.9
         orderCount++
       }
 
       // Get recent transactions for this seller
       const recentTransactions = sellerOrders.slice(0, 5).map((order: any) => {
         const sellerItems = order.orderItems.filter((item: any) => item.product.vendorId === seller.id)
-        const sellerOrderTotal = sellerItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0)
+        // Calculate price before VAT (VAT is 18%, so price with VAT = price * 1.18)
+        // Therefore, price before VAT = price / 1.18
+        const sellerOrderTotalBeforeVAT = sellerItems.reduce((sum: number, item: any) => sum + ((item.price / 1.18) * item.quantity), 0)
         
         return {
           id: order.id,
           type: 'sale',
-          amount: sellerOrderTotal * 0.9,
-          commission: sellerOrderTotal * 0.1,
+          amount: sellerOrderTotalBeforeVAT * 0.9,
+          commission: sellerOrderTotalBeforeVAT * 0.1,
           date: order.createdAt.toISOString().split('T')[0],
           status: 'paid'
         }

@@ -42,22 +42,57 @@ interface SellerFinancial {
 }
 
 interface FinancialData {
+  platformMetrics: {
+    totalOrders: number
+    totalRevenue: number
+    totalRevenueBeforeVAT: number
+    totalCommission: number
+    sellerPayouts: number
+    netPlatformRevenue: number
+    totalSellers: number
+    activeSellers: number
+    totalProducts: number
+    activeProducts: number
+    pendingOrders: number
+    totalCustomers: number
+    totalRefunds: number
+    refundAmount: number
+    averageOrderValue: number
+    averageOrderValueBeforeVAT: number
+    averageSellerRevenue: number
+    commissionRate: number
+    vatRate: number
+    sellerPayoutRate: number
+  }
+  monthlySales: Array<{
+    month: string
+    revenue: number
+    revenueBeforeVAT: number
+    orders: number
+    commission: number
+    sellerPayouts: number
+    vatAmount: number
+  }>
   sellers: SellerFinancial[]
-  totalPlatformRevenue: number
-  totalPlatformCommission: number
-  totalPlatformPayout: number
-  totalOrders: number
-  totalProducts: number
   recentTransactions: Array<{
     id: string
     type: string
-    amount: number
+    customer: string
+    totalAmount: number
+    totalAmountBeforeVAT: number
     commission: number
+    sellerPayout: number
+    vatAmount: number
     date: string
     status: string
-    seller: string
-    orderNumber: string
+    items: Array<{
+      productName: string
+      quantity: number
+      price: number
+      priceBeforeVAT: number
+    }>
   }>
+  topSellers: SellerFinancial[]
 }
 
 export default function SellerFinancialsPage() {
@@ -212,17 +247,27 @@ export default function SellerFinancialsPage() {
           </div>
         ) : (
           <div className="space-y-6 sm:space-y-8">
-            {/* Mobile-Optimized Platform Overview */}
+            {/* Enhanced Platform Financial Overview */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Platform Financial Overview</h2>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-900">Platform Financial Overview</h2>
+                <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                  Real-time Data
+                </div>
+              </div>
+              
+              {/* Key Metrics Grid */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
                 <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
                   <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl mx-auto mb-2">
                     <CurrencyDollarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                   </div>
                   <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Total Revenue</p>
                   <p className="text-sm sm:text-xl font-bold text-gray-900 break-words">
-                    {formatCurrency(financialData?.totalPlatformRevenue || 0)}
+                    {formatCurrency(financialData?.platformMetrics?.totalRevenue || 0)}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    (Inc. VAT: {formatCurrency(financialData?.platformMetrics?.totalRevenue || 0)})
                   </p>
                 </div>
                 
@@ -232,7 +277,10 @@ export default function SellerFinancialsPage() {
                   </div>
                   <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Platform Commission</p>
                   <p className="text-sm sm:text-xl font-bold text-gray-900 break-words">
-                    {formatCurrency(financialData?.totalPlatformCommission || 0)}
+                    {formatCurrency(financialData?.platformMetrics?.totalCommission || 0)}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    ({((financialData?.platformMetrics?.commissionRate || 0) * 100).toFixed(1)}% rate)
                   </p>
                 </div>
                 
@@ -242,7 +290,10 @@ export default function SellerFinancialsPage() {
                   </div>
                   <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Total Orders</p>
                   <p className="text-sm sm:text-xl font-bold text-gray-900">
-                    {(financialData?.totalOrders || 0).toLocaleString()}
+                    {(financialData?.platformMetrics?.totalOrders || 0).toLocaleString()}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Avg: {formatCurrency(financialData?.platformMetrics?.averageOrderValue || 0)}
                   </p>
                 </div>
                 
@@ -252,7 +303,47 @@ export default function SellerFinancialsPage() {
                   </div>
                   <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1">Total Products</p>
                   <p className="text-sm sm:text-xl font-bold text-gray-900">
-                    {(financialData?.totalProducts || 0).toLocaleString()}
+                    {(financialData?.platformMetrics?.totalProducts || 0).toLocaleString()}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {(financialData?.platformMetrics?.activeProducts || 0).toLocaleString()} active
+                  </p>
+                </div>
+              </div>
+
+              {/* Additional Metrics */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="text-center p-3 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg">
+                  <p className="text-xs font-medium text-gray-500 mb-1">Active Sellers</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {(financialData?.platformMetrics?.activeSellers || 0).toLocaleString()}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    / {(financialData?.platformMetrics?.totalSellers || 0).toLocaleString()} total
+                  </p>
+                </div>
+                
+                <div className="text-center p-3 bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg">
+                  <p className="text-xs font-medium text-gray-500 mb-1">Customers</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {(financialData?.platformMetrics?.totalCustomers || 0).toLocaleString()}
+                  </p>
+                </div>
+                
+                <div className="text-center p-3 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
+                  <p className="text-xs font-medium text-gray-500 mb-1">Pending Orders</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {(financialData?.platformMetrics?.pendingOrders || 0).toLocaleString()}
+                  </p>
+                </div>
+                
+                <div className="text-center p-3 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg">
+                  <p className="text-xs font-medium text-gray-500 mb-1">Refunds</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {formatCurrency(financialData?.platformMetrics?.refundAmount || 0)}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {(financialData?.platformMetrics?.totalRefunds || 0)} processed
                   </p>
                 </div>
               </div>
@@ -435,10 +526,15 @@ export default function SellerFinancialsPage() {
               </div>
             </div>
 
-            {/* Mobile-Optimized Recent Transactions */}
+            {/* Enhanced Recent Transactions */}
             {financialData?.recentTransactions && financialData.recentTransactions.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Recent Platform Transactions</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">Recent Platform Transactions</h3>
+                  <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                    Last 20 orders
+                  </div>
+                </div>
                 
                 <div className="space-y-0">
                   {/* Desktop Table View */}
@@ -451,16 +547,22 @@ export default function SellerFinancialsPage() {
                               Date
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Type
+                              Customer
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Seller
+                              Total Amount
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Amount
+                              Before VAT
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                               Commission
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Seller Payout
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              VAT
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                               Status
@@ -469,21 +571,27 @@ export default function SellerFinancialsPage() {
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                           {financialData.recentTransactions.slice(0, 10).map((transaction) => (
-                            <tr key={transaction.id}>
+                            <tr key={transaction.id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {formatDate(transaction.date)}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {transaction.type}
+                                {transaction.customer}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                                {formatCurrency(transaction.totalAmount)}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {transaction.seller}
+                                {formatCurrency(transaction.totalAmountBeforeVAT)}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {formatCurrency(transaction.amount)}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
                                 {formatCurrency(transaction.commission)}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">
+                                {formatCurrency(transaction.sellerPayout)}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                {formatCurrency(transaction.vatAmount)}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(transaction.status)}`}>
@@ -502,29 +610,41 @@ export default function SellerFinancialsPage() {
                     <div className="space-y-3">
                       {financialData.recentTransactions.slice(0, 10).map((transaction) => (
                         <div key={transaction.id} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                          <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-start justify-between mb-3">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center space-x-2 mb-1">
                                 <h4 className="text-sm font-semibold text-gray-900 truncate">
-                                  {transaction.type}
+                                  Order #{transaction.id.slice(-8)}
                                 </h4>
                                 <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${getStatusColor(transaction.status)}`}>
                                   {transaction.status}
                                 </span>
                               </div>
-                              <p className="text-xs text-gray-500 truncate">{transaction.seller}</p>
+                              <p className="text-xs text-gray-500 truncate">{transaction.customer}</p>
                               <p className="text-xs text-gray-400">{formatDate(transaction.date)}</p>
                             </div>
                           </div>
-                          <div className="grid grid-cols-2 gap-2">
+                          <div className="grid grid-cols-2 gap-2 mb-2">
                             <div>
-                              <p className="text-xs text-gray-500">Amount</p>
-                              <p className="text-sm font-semibold text-gray-900">{formatCurrency(transaction.amount)}</p>
+                              <p className="text-xs text-gray-500">Total Amount</p>
+                              <p className="text-sm font-semibold text-gray-900">{formatCurrency(transaction.totalAmount)}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500">Before VAT</p>
+                              <p className="text-sm font-semibold text-gray-900">{formatCurrency(transaction.totalAmountBeforeVAT)}</p>
                             </div>
                             <div>
                               <p className="text-xs text-gray-500">Commission</p>
-                              <p className="text-sm font-semibold text-gray-900">{formatCurrency(transaction.commission)}</p>
+                              <p className="text-sm font-semibold text-green-600">{formatCurrency(transaction.commission)}</p>
                             </div>
+                            <div>
+                              <p className="text-xs text-gray-500">Seller Payout</p>
+                              <p className="text-sm font-semibold text-blue-600">{formatCurrency(transaction.sellerPayout)}</p>
+                            </div>
+                          </div>
+                          <div className="pt-2 border-t border-gray-200">
+                            <p className="text-xs text-gray-500">VAT Amount</p>
+                            <p className="text-sm font-semibold text-gray-600">{formatCurrency(transaction.vatAmount)}</p>
                           </div>
                         </div>
                       ))}

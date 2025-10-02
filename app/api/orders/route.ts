@@ -129,52 +129,86 @@ export async function POST(request: NextRequest) {
 
     const total = subtotal + shippingCost + tax - discount
 
-    // Create order
-    const order = await prisma.order.create({
-      data: {
-        orderNumber,
-        customerId,
-        subtotal,
-        shippingCost,
-        tax,
-        discount,
-        total,
-        shippingAddress: JSON.stringify(shippingAddress),
-        paymentMethod,
-        status: 'PENDING',
-        paymentStatus: 'PENDING',
-        orderItems: {
-          create: orderItems.map((item: any) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            price: item.price
-          }))
-        }
-      },
-      include: {
-        orderItems: {
-          include: {
-            product: {
-              include: {
-                vendor: {
-                  select: {
-                    id: true,
-                    name: true,
-                    email: true
+    // Validate stock availability and update stock
+    for (const item of orderItems) {
+      const product = await prisma.product.findUnique({
+        where: { id: item.productId }
+      })
+      
+      if (!product) {
+        return NextResponse.json({ error: `Product not found: ${item.productId}` }, { status: 400 })
+      }
+      
+      if (product.stock < item.quantity) {
+        return NextResponse.json({ 
+          error: `Insufficient stock for ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}` 
+        }, { status: 400 })
+      }
+    }
+
+    // Create order and update stock in a transaction
+    const order = await prisma.$transaction(async (tx) => {
+      // Create the order
+      const newOrder = await tx.order.create({
+        data: {
+          orderNumber,
+          customerId,
+          subtotal,
+          shippingCost,
+          tax,
+          discount,
+          total,
+          shippingAddress: JSON.stringify(shippingAddress),
+          paymentMethod,
+          status: 'PENDING',
+          paymentStatus: 'PENDING',
+          orderItems: {
+            create: orderItems.map((item: any) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+              price: item.price
+            }))
+          }
+        },
+        include: {
+          orderItems: {
+            include: {
+              product: {
+                include: {
+                  vendor: {
+                    select: {
+                      id: true,
+                      name: true,
+                      email: true
+                    }
                   }
                 }
               }
             }
-          }
-        },
-        customer: {
-          select: {
-            id: true,
-            name: true,
-            email: true
+          },
+          customer: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
           }
         }
+      })
+
+      // Update product stock for each item
+      for (const item of orderItems) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: {
+              decrement: item.quantity
+            }
+          }
+        })
       }
+
+      return newOrder
     })
 
     // Clear user's cart after successful order

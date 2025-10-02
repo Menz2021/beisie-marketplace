@@ -317,10 +317,6 @@ export async function GET(request: NextRequest) {
         orderItems: {
           include: {
             product: {
-              select: {
-                name: true,
-                vendorId: true
-              },
               include: {
                 vendor: {
                   select: {

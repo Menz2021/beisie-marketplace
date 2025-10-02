@@ -251,6 +251,14 @@ export async function GET(request: NextRequest) {
               select: {
                 name: true,
                 vendorId: true
+              },
+              include: {
+                vendor: {
+                  select: {
+                    name: true,
+                    businessName: true
+                  }
+                }
               }
             }
           }
@@ -288,7 +296,9 @@ export async function GET(request: NextRequest) {
           productName: item.product.name,
           quantity: item.quantity,
           price: item.price,
-          priceBeforeVAT: item.price / 1.18
+          priceBeforeVAT: item.price / 1.18,
+          sellerName: item.product.vendor?.name || 'Unknown Seller',
+          sellerBusinessName: item.product.vendor?.businessName || item.product.vendor?.name || 'Unknown Business'
         }))
       }
     })

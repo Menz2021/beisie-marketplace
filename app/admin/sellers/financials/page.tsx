@@ -90,6 +90,8 @@ interface FinancialData {
       quantity: number
       price: number
       priceBeforeVAT: number
+      sellerName: string
+      sellerBusinessName: string
     }>
   }>
   topSellers: SellerFinancial[]
@@ -550,6 +552,9 @@ export default function SellerFinancialsPage() {
                               Customer
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Seller
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                               Total Amount
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -577,6 +582,15 @@ export default function SellerFinancialsPage() {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {transaction.customer}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <div>
+                                  <p className="font-medium">{transaction.items[0]?.sellerBusinessName || 'Unknown Business'}</p>
+                                  <p className="text-xs text-gray-500">{transaction.items[0]?.productName}</p>
+                                  {transaction.items.length > 1 && (
+                                    <p className="text-xs text-gray-400">+{transaction.items.length - 1} more item{transaction.items.length > 2 ? 's' : ''}</p>
+                                  )}
+                                </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
                                 {formatCurrency(transaction.totalAmount)}
@@ -621,6 +635,18 @@ export default function SellerFinancialsPage() {
                                 </span>
                               </div>
                               <p className="text-xs text-gray-500 truncate">{transaction.customer}</p>
+                              {transaction.items.length > 0 && (
+                                <div className="mt-1">
+                                  <p className="text-xs text-gray-600 font-medium">
+                                    Seller: {transaction.items[0].sellerBusinessName}
+                                  </p>
+                                  {transaction.items.length > 1 && (
+                                    <p className="text-xs text-gray-500">
+                                      +{transaction.items.length - 1} more seller{transaction.items.length > 2 ? 's' : ''}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
                               <p className="text-xs text-gray-400">{formatDate(transaction.date)}</p>
                             </div>
                           </div>

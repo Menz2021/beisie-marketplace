@@ -42,20 +42,26 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Get comprehensive platform statistics
-    const [
-      totalOrders,
-      totalRevenue,
-      totalCommission,
-      totalSellers,
-      activeSellers,
-      totalProducts,
-      activeProducts,
-      pendingOrders,
-      totalCustomers,
-      totalRefunds,
-      refundAmount
-    ] = await Promise.all([
+    console.log('Admin financials - Starting platform statistics fetch...')
+    
+    // Get comprehensive platform statistics with error handling
+    let totalOrders = 0, totalRevenue = 0, totalCommission = 0, totalSellers = 0
+    let activeSellers = 0, totalProducts = 0, activeProducts = 0, pendingOrders = 0
+    let totalCustomers = 0, totalRefunds = 0, refundAmount = 0
+    
+    try {
+      const [
+        ordersCount,
+        revenueResult,
+        sellersCount,
+        activeSellersCount,
+        productsCount,
+        activeProductsCount,
+        pendingOrdersCount,
+        customersCount,
+        refundsCount,
+        refundAmountResult
+      ] = await Promise.all([
       prisma.order.count({
         where: { 
           status: 'DELIVERED',
@@ -111,7 +117,28 @@ export async function GET(request: NextRequest) {
         },
         _sum: { amount: true }
       }).then((result: any) => result._sum.amount || 0)
-    ])
+      ])
+      
+      // Assign the results
+      totalOrders = ordersCount
+      totalRevenue = revenueResult
+      totalCommission = totalRevenue * 0.1
+      totalSellers = sellersCount
+      activeSellers = activeSellersCount
+      totalProducts = productsCount
+      activeProducts = activeProductsCount
+      pendingOrders = pendingOrdersCount
+      totalCustomers = customersCount
+      totalRefunds = refundsCount
+      refundAmount = refundAmountResult
+      
+      console.log('Admin financials - Platform stats loaded successfully')
+      console.log(`Orders: ${totalOrders}, Revenue: ${totalRevenue}, Sellers: ${totalSellers}`)
+      
+    } catch (error) {
+      console.error('Error fetching platform statistics:', error)
+      // Continue with default values (zeros) already set
+    }
 
     // Calculate platform earnings (commission)
     const platformEarnings = totalCommission
@@ -119,14 +146,17 @@ export async function GET(request: NextRequest) {
     const netPlatformRevenue = platformEarnings - refundAmount
 
     // Get monthly sales data for the last 12 months
+    console.log('Admin financials - Fetching monthly sales data...')
     const monthlySales = []
-    for (let i = 11; i >= 0; i--) {
-      const date = new Date()
-      date.setMonth(date.getMonth() - i)
-      const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
-      const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0)
-      
-      const monthData = await prisma.order.aggregate({
+    
+    try {
+      for (let i = 11; i >= 0; i--) {
+        const date = new Date()
+        date.setMonth(date.getMonth() - i)
+        const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
+        const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+        
+        const monthData = await prisma.order.aggregate({
         where: {
           status: 'DELIVERED',
           createdAt: {
@@ -152,25 +182,39 @@ export async function GET(request: NextRequest) {
         sellerPayouts: monthSellerPayouts,
         vatAmount: (monthData._sum.total || 0) - monthRevenueBeforeVAT
       })
+      }
+      console.log('Admin financials - Monthly sales data loaded successfully')
+    } catch (error) {
+      console.error('Error fetching monthly sales data:', error)
+      // Continue with empty monthlySales array
     }
 
     console.log('Admin financials - Fetching sellers...')
     
-    // Get all sellers with their basic info and products
-    const sellers = await prisma.user.findMany({
-      where: { role: 'SELLER' },
-      include: {
-        products: {
-          select: {
-            id: true,
-            isActive: true
+    let sellers: any[] = []
+    let allOrders: any[] = []
+    
+    try {
+      // Get all sellers with their basic info and products
+      sellers = await prisma.user.findMany({
+        where: { role: 'SELLER' },
+        include: {
+          products: {
+            select: {
+              id: true,
+              isActive: true
+            }
           }
         }
-      }
-    })
+      })
+      console.log(`Admin financials - Found ${sellers.length} sellers`)
+    } catch (error) {
+      console.error('Error fetching sellers:', error)
+    }
     
-    // Get all delivered orders with their items and vendor information
-    const allOrders = await prisma.order.findMany({
+    try {
+      // Get all delivered orders with their items and vendor information
+      allOrders = await prisma.order.findMany({
       where: { 
         status: 'DELIVERED',
         ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter })
@@ -196,9 +240,11 @@ export async function GET(request: NextRequest) {
           }
         }
       }
-    })
-    
-    console.log(`Admin financials - Found ${allOrders.length} delivered orders`)
+      })
+      console.log(`Admin financials - Found ${allOrders.length} delivered orders`)
+    } catch (error) {
+      console.error('Error fetching orders:', error)
+    }
 
     console.log(`Admin financials - Found ${sellers.length} sellers`)
     

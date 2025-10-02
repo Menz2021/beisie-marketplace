@@ -152,24 +152,12 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Get all sellers with their financial data
+    console.log('Admin financials - Fetching sellers...')
+    
+    // Get all sellers with their basic info and products
     const sellers = await prisma.user.findMany({
       where: { role: 'SELLER' },
       include: {
-        orders: {
-          where: { status: 'DELIVERED' },
-          include: {
-            orderItems: {
-              include: {
-                product: {
-                  select: {
-                    vendorId: true
-                  }
-                }
-              }
-            }
-          }
-        },
         products: {
           select: {
             id: true,
@@ -178,48 +166,81 @@ export async function GET(request: NextRequest) {
         }
       }
     })
+    
+    // Get all delivered orders with their items and vendor information
+    const allOrders = await prisma.order.findMany({
+      where: { 
+        status: 'DELIVERED',
+        ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter })
+      },
+      include: {
+        orderItems: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                vendorId: true,
+                name: true,
+                price: true
+              }
+            }
+          }
+        },
+        customer: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      }
+    })
+    
+    console.log(`Admin financials - Found ${allOrders.length} delivered orders`)
 
+    console.log(`Admin financials - Found ${sellers.length} sellers`)
+    
     // Calculate financial data for each seller
     const sellerFinancials = sellers.map((seller: any) => {
-      // Get orders where this seller's products were sold
-      const sellerOrders = seller.orders.filter((order: any) =>
+      // Get orders that contain this seller's products
+      const sellerOrders = allOrders.filter((order: any) =>
         order.orderItems.some((item: any) => item.product.vendorId === seller.id)
       )
+      
+      console.log(`Seller ${seller.name} (${seller.id}): ${sellerOrders.length} orders with their products`)
 
       // Calculate seller's revenue from their products
       let sellerRevenue = 0
       let sellerCommission = 0
       let sellerPayout = 0
-      let orderCount = 0
+      let orderCount = sellerOrders.length
 
       for (const order of sellerOrders) {
         const sellerItems = order.orderItems.filter((item: any) => item.product.vendorId === seller.id)
-        // Calculate price before VAT (VAT is 18%, so price with VAT = price * 1.18)
-        // Therefore, price before VAT = price / 1.18
-        const sellerOrderTotalBeforeVAT = sellerItems.reduce((sum: number, item: any) => sum + ((item.price / 1.18) * item.quantity), 0)
+        // Calculate total for seller's items in this order (with VAT included as per user's requirement)
+        const sellerOrderTotal = sellerItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0)
         
-        sellerRevenue += sellerOrderTotalBeforeVAT
-        sellerCommission += sellerOrderTotalBeforeVAT * 0.1
-        sellerPayout += sellerOrderTotalBeforeVAT * 0.9
-        orderCount++
+        sellerRevenue += sellerOrderTotal
+        sellerCommission += sellerOrderTotal * 0.1
+        sellerPayout += sellerOrderTotal * 0.9
       }
 
       // Get recent transactions for this seller
       const recentTransactions = sellerOrders.slice(0, 5).map((order: any) => {
         const sellerItems = order.orderItems.filter((item: any) => item.product.vendorId === seller.id)
-        // Calculate price before VAT (VAT is 18%, so price with VAT = price * 1.18)
-        // Therefore, price before VAT = price / 1.18
-        const sellerOrderTotalBeforeVAT = sellerItems.reduce((sum: number, item: any) => sum + ((item.price / 1.18) * item.quantity), 0)
+        const sellerOrderTotal = sellerItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0)
         
         return {
           id: order.id,
           type: 'sale',
-          amount: sellerOrderTotalBeforeVAT * 0.9,
-          commission: sellerOrderTotalBeforeVAT * 0.1,
+          amount: sellerOrderTotal * 0.9,
+          commission: sellerOrderTotal * 0.1,
           date: order.createdAt.toISOString().split('T')[0],
           status: 'paid'
         }
       })
+      
+      console.log(`Seller ${seller.name}: Revenue=${sellerRevenue}, Commission=${sellerCommission}, Payout=${sellerPayout}`)
 
       return {
         id: seller.id,
@@ -305,6 +326,9 @@ export async function GET(request: NextRequest) {
 
     // Calculate top performing sellers
     const topSellers = sellerFinancials.slice(0, 10)
+    
+    console.log('Admin financials - Total sellers found:', sellerFinancials.length)
+    console.log('Admin financials - Sample seller data:', sellerFinancials.slice(0, 3))
 
     // Calculate platform metrics
     const totalRevenueBeforeVAT = totalRevenue / 1.18

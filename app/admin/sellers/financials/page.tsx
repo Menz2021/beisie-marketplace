@@ -110,9 +110,12 @@ export default function SellerFinancialsPage() {
       setDataLoading(true)
       const response = await fetch('/api/admin/financials')
       const data = await response.json()
+      console.log('Admin financials API response:', data)
       
       if (data.success) {
         setFinancialData(data.data)
+        console.log('Admin financials data set:', data.data)
+        console.log('Sellers data:', data.data.sellers)
       } else {
         console.error('Failed to fetch financial data:', data.error)
       }

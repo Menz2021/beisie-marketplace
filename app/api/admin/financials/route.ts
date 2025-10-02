@@ -5,6 +5,8 @@ import { getAdminSession } from '@/lib/session'
 // GET - Fetch admin financial overview and seller statements
 export async function GET(request: NextRequest) {
   try {
+    console.log('Admin financials API called')
+    
     // Skip server-side authentication for now since session is client-side only
     // In production, you'd want to use JWT tokens or cookies for server-side auth
 
@@ -245,17 +247,17 @@ export async function GET(request: NextRequest) {
       return {
         id: seller.id,
         name: seller.name || 'Unnamed Business',
-        email: seller.email,
-        isActive: seller.isActive,
-        isVerified: seller.isVerified,
-        joinDate: seller.createdAt.toISOString().split('T')[0],
-        totalRevenue: sellerRevenue,
-        totalCommission: sellerCommission,
-        totalPayout: sellerPayout,
-        orderCount: orderCount,
-        productCount: seller.products.length,
-        activeProductCount: seller.products.filter((p: any) => p.isActive).length,
-        recentTransactions: recentTransactions
+        email: seller.email || '',
+        isActive: seller.isActive || false,
+        isVerified: seller.isVerified || false,
+        joinDate: seller.createdAt ? seller.createdAt.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        totalRevenue: sellerRevenue || 0,
+        totalCommission: sellerCommission || 0,
+        totalPayout: sellerPayout || 0,
+        orderCount: orderCount || 0,
+        productCount: seller.products ? seller.products.length : 0,
+        activeProductCount: seller.products ? seller.products.filter((p: any) => p.isActive).length : 0,
+        recentTransactions: recentTransactions || []
       }
     }).sort((a: any, b: any) => b.totalRevenue - a.totalRevenue) // Sort by revenue
 
@@ -296,17 +298,20 @@ export async function GET(request: NextRequest) {
     })
 
     const recentTransactions = recentPlatformOrders.map((order: any) => {
-      // Calculate amounts before VAT for accurate financial reporting
-      const orderTotalBeforeVAT = order.total / 1.18
-      const totalCommission = orderTotalBeforeVAT * 0.1
-      const sellerPayout = orderTotalBeforeVAT * 0.9
-      const vatAmount = order.total - orderTotalBeforeVAT
+      // Calculate total from order items since we need the actual total
+      const orderTotal = order.orderItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0)
+      
+      // Calculate amounts for accurate financial reporting
+      const totalCommission = orderTotal * 0.1 // 10% commission on full price with VAT
+      const sellerPayout = orderTotal * 0.9 // 90% to seller from full price with VAT
+      const orderTotalBeforeVAT = orderTotal / 1.18
+      const vatAmount = orderTotal - orderTotalBeforeVAT
       
       return {
         id: order.id,
         type: 'order',
         customer: order.customer?.name || order.customer?.email || 'Unknown Customer',
-        totalAmount: order.total,
+        totalAmount: orderTotal,
         totalAmountBeforeVAT: orderTotalBeforeVAT,
         commission: totalCommission,
         sellerPayout: sellerPayout,
@@ -314,12 +319,12 @@ export async function GET(request: NextRequest) {
         date: order.createdAt.toISOString().split('T')[0],
         status: 'completed',
         items: order.orderItems.map((item: any) => ({
-          productName: item.product.name,
-          quantity: item.quantity,
-          price: item.price,
-          priceBeforeVAT: item.price / 1.18,
-          sellerName: item.product.vendor?.name || 'Unknown Seller',
-          sellerBusinessName: item.product.vendor?.businessName || item.product.vendor?.name || 'Unknown Business'
+          productName: item.product?.name || 'Unknown Product',
+          quantity: item.quantity || 0,
+          price: item.price || 0,
+          priceBeforeVAT: (item.price || 0) / 1.18,
+          sellerName: item.product?.vendor?.name || 'Unknown Seller',
+          sellerBusinessName: item.product?.vendor?.businessName || item.product?.vendor?.name || 'Unknown Business'
         }))
       }
     })
@@ -369,8 +374,13 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Error fetching admin financials:', error)
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        success: false,
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }

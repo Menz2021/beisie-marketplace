@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { HeartIcon, TrashIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid'
 import { useCartStore } from '@/store/cartStore'
@@ -43,6 +44,7 @@ interface WishlistItem {
 }
 
 export default function WishlistPage() {
+  const router = useRouter()
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
@@ -54,6 +56,11 @@ export default function WishlistPage() {
     const userData = localStorage.getItem('user_session')
     if (userData) {
       const parsedUser = JSON.parse(userData)
+      // Redirect sellers to seller dashboard
+      if (parsedUser.role === 'SELLER') {
+        router.push('/seller/dashboard')
+        return
+      }
       setUser(parsedUser)
       fetchWishlist(parsedUser.id)
       // Sync wishlist store with backend
@@ -61,7 +68,7 @@ export default function WishlistPage() {
     } else {
       setIsLoading(false)
     }
-  }, [syncWithBackend])
+  }, [syncWithBackend, router])
 
   const fetchWishlist = async (userId: string) => {
     try {

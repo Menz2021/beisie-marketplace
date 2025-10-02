@@ -42,7 +42,11 @@ export function Navbar() {
     // Check if user is logged in
     const userData = localStorage.getItem('user_session')
     if (userData) {
-      setUser(JSON.parse(userData))
+      const parsedUser = JSON.parse(userData)
+      // Only set user if they are not a seller (sellers should use seller dashboard)
+      if (parsedUser.role !== 'SELLER') {
+        setUser(parsedUser)
+      }
     }
   }, [])
 

@@ -152,6 +152,11 @@ export default function AccountPage() {
     const userData = localStorage.getItem('user_session')
     if (userData) {
       const userObj = JSON.parse(userData)
+      // Redirect sellers to seller dashboard
+      if (userObj.role === 'SELLER') {
+        router.push('/seller/dashboard')
+        return
+      }
       setUser(userObj)
       setProfileForm({
         name: userObj.name,

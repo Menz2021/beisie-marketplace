@@ -1462,9 +1462,9 @@ export default function SellerDashboard() {
                   <div className="space-y-3 overflow-y-auto h-80">
                     {orders.slice(0, 5).map((order) => (
                       <div key={order.id} className="flex items-start justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                        <div className="flex items-start space-x-3 flex-1 min-w-0">
-                          <div className="w-10 h-10 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span className="text-xs font-semibold text-purple-700">#{order.orderNumber}</span>
+                        <div className="flex items-start space-x-4 flex-1 min-w-0">
+                          <div className="w-14 h-10 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span className="text-xs font-semibold text-purple-700">#{order.orderNumber.toString().slice(-6)}</span>
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-gray-900 truncate">{order.customer}</p>

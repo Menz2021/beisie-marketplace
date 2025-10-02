@@ -18,6 +18,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    console.log('Fetching statements for seller ID:', sellerId)
+
     // Calculate date range based on period
     let dateFilter: any = {}
     const now = new Date()
@@ -111,6 +113,8 @@ export async function GET(request: NextRequest) {
       },
       orderBy: { createdAt: 'desc' }
     })
+
+    console.log(`Found ${orders.length} orders for seller ${sellerId}`)
 
     // Get refunds for this seller within the date range
     const refunds = await prisma.refund.findMany({

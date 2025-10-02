@@ -694,8 +694,12 @@ export default function SellerDashboard() {
     try {
       const response = await fetch(`/api/seller/statements?sellerId=${vendorId}&period=${period}`)
       const data = await response.json()
+      console.log('Statements API response:', data)
       if (data.success) {
         setStatementsData(data.data)
+        console.log('Statements data set:', data.data)
+      } else {
+        console.error('Statements API error:', data.error)
       }
     } catch (error) {
       console.error('Error fetching statements data:', error)

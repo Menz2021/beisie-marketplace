@@ -2648,7 +2648,7 @@ export default function SellerDashboard() {
                     onClick={() => {
                       // Generate and download statement
                       const statementData = {
-                        seller: seller?.name || 'Unknown Seller',
+                        seller: statementsData?.seller?.businessName || seller?.businessName || seller?.name || 'Unknown Seller',
                         period: selectedPeriod === 'all' ? 'All Time' : selectedPeriod,
                         stats: statementsData?.periodStats || financialData?.financialStats,
                         transactions: statementsData?.transactions || financialData?.transactions || [],
@@ -2690,7 +2690,7 @@ export default function SellerDashboard() {
                     onClick={() => {
                       // Generate and download statement
                       const statementData = {
-                        seller: seller?.name || 'Unknown Seller',
+                        seller: statementsData?.seller?.businessName || seller?.businessName || seller?.name || 'Unknown Seller',
                         period: selectedPeriod === 'all' ? 'All Time' : selectedPeriod,
                         stats: statementsData?.periodStats || financialData?.financialStats,
                         transactions: statementsData?.transactions || financialData?.transactions || [],
@@ -2713,6 +2713,32 @@ export default function SellerDashboard() {
                   </button>
                 </div>
               </div>
+
+              {/* Seller Information Card */}
+              {statementsData?.seller && (
+                <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200 p-4 lg:p-6 mb-4 lg:mb-6">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 lg:w-12 lg:h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <span className="text-purple-600 font-semibold text-lg lg:text-xl">
+                          {statementsData.seller.businessName?.charAt(0).toUpperCase() || statementsData.seller.name?.charAt(0).toUpperCase() || 'S'}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="ml-4">
+                      <h3 className="text-lg lg:text-xl font-semibold text-gray-900">
+                        {statementsData.seller.businessName || statementsData.seller.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {statementsData.seller.name} • {statementsData.seller.email}
+                      </p>
+                      <p className="text-xs text-purple-600 font-medium mt-1">
+                        Financial Statement - {selectedPeriod === 'all' ? 'All Time' : selectedPeriod.charAt(0).toUpperCase() + selectedPeriod.slice(1)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Financial Summary Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">

@@ -54,6 +54,24 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Get seller information including business name
+    const seller = await prisma.user.findUnique({
+      where: { id: sellerId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        businessName: true
+      }
+    })
+
+    if (!seller) {
+      return NextResponse.json(
+        { error: 'Seller not found' },
+        { status: 404 }
+      )
+    }
+
     // Get orders for this seller within the date range
     const orders = await prisma.order.findMany({
       where: {
@@ -270,8 +288,10 @@ export async function GET(request: NextRequest) {
         transactions: transactions.slice(0, 100), // Limit to last 100 transactions
         summaryByType,
         seller: {
-          id: sellerId,
-          // You might want to fetch seller details here
+          id: seller.id,
+          name: seller.name,
+          email: seller.email,
+          businessName: seller.businessName || seller.name
         }
       }
     })

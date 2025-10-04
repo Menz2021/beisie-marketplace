@@ -1108,6 +1108,14 @@ export default function SellerDashboard() {
               <div className="w-7 h-7 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center shadow-md">
                 <span className="text-white text-xs font-medium">{seller.name?.charAt(0).toUpperCase() || 'S'}</span>
               </div>
+              <button 
+                onClick={handleLogout}
+                className="flex items-center px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
+                title="Logout"
+              >
+                <ArrowRightOnRectangleIcon className="h-4 w-4 mr-1" />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1240,16 +1248,6 @@ export default function SellerDashboard() {
             </div>
           </nav>
           
-          <div className="p-4 border-t border-gray-200 flex-shrink-0">
-            <button 
-              onClick={handleLogout}
-              className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md touch-manipulation"
-              style={{ minHeight: '44px' }}
-            >
-              <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5" />
-              Logout
-            </button>
-          </div>
         </div>
       </div>
 
@@ -1360,15 +1358,6 @@ export default function SellerDashboard() {
             </div>
           </nav>
           
-          <div className="p-4 border-t border-gray-200">
-            <button 
-              onClick={handleLogout}
-              className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md"
-            >
-              <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5" />
-              Logout
-            </button>
-          </div>
         </div>
       </div>
 

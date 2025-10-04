@@ -40,13 +40,47 @@ export function Navbar() {
 
   useEffect(() => {
     // Check if user is logged in
-    const userData = localStorage.getItem('user_session')
-    if (userData) {
-      const parsedUser = JSON.parse(userData)
-      // Only set user if they are not a seller (sellers should use seller dashboard)
-      if (parsedUser.role !== 'SELLER') {
-        setUser(parsedUser)
+    const checkUserAuth = () => {
+      const userData = localStorage.getItem('user_session')
+      if (userData) {
+        try {
+          const parsedUser = JSON.parse(userData)
+          // Only set user if they are not a seller (sellers should use seller dashboard)
+          if (parsedUser.role !== 'SELLER') {
+            setUser(parsedUser)
+          } else {
+            setUser(null)
+          }
+        } catch (error) {
+          console.error('Error parsing user data:', error)
+          setUser(null)
+        }
+      } else {
+        setUser(null)
       }
+    }
+
+    // Check on mount
+    checkUserAuth()
+
+    // Listen for storage changes (when user logs in/out in another tab or after login)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'user_session') {
+        checkUserAuth()
+      }
+    }
+
+    // Listen for custom events (when user logs in/out in same tab)
+    const handleAuthChange = () => {
+      checkUserAuth()
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener('auth-change', handleAuthChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('auth-change', handleAuthChange)
     }
   }, [])
 
@@ -80,6 +114,9 @@ export function Navbar() {
     localStorage.removeItem('wishlist-storage')
     localStorage.removeItem('user_preferences')
     localStorage.removeItem('recent_searches')
+    
+    // Dispatch custom event to notify other components of auth change
+    window.dispatchEvent(new CustomEvent('auth-change'))
     
     // Reset user state and close menu
     setUser(null)

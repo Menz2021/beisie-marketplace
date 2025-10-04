@@ -91,6 +91,8 @@ export default function LoginPage() {
         // Store user data in localStorage with error handling for mobile
         try {
           localStorage.setItem('user_session', JSON.stringify(data.user))
+          // Dispatch custom event to notify other components of auth change
+          window.dispatchEvent(new CustomEvent('auth-change'))
         } catch (storageError) {
           console.error('localStorage error:', storageError)
           toast.error('Unable to save login session. Please try again.')

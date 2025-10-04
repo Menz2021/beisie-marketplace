@@ -62,6 +62,12 @@ export default function AdminDashboard() {
   const [statsLoading, setStatsLoading] = useState(true)
   const router = useRouter()
 
+  // Calculate pending orders count (assuming orders with 'pending' status)
+  const pendingOrdersCount = stats?.totalOrders ? Math.floor(stats.totalOrders * 0.1) : 0 // Mock calculation - replace with actual API call
+  
+  // Calculate pending sellers count
+  const pendingSellersCount = stats?.pendingApprovals || 0
+
   const fetchStats = async () => {
     try {
       setStatsLoading(true)
@@ -196,10 +202,24 @@ export default function AdminDashboard() {
               {/* Desktop Navigation */}
               <nav className="hidden md:flex space-x-6">
                 <Link href="/admin/users" className="text-gray-600 hover:text-gray-900 transition-colors">Users</Link>
-                <Link href="/admin/sellers" className="text-gray-600 hover:text-gray-900 transition-colors">Sellers</Link>
+                <Link href="/admin/sellers" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  Sellers
+                  {pendingSellersCount > 0 && (
+                    <span className="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+                      {pendingSellersCount > 99 ? '99+' : pendingSellersCount}
+                    </span>
+                  )}
+                </Link>
                 <Link href="/admin/sellers/financials" className="text-gray-600 hover:text-gray-900 transition-colors">Financials</Link>
                 <Link href="/admin/products" className="text-gray-600 hover:text-gray-900 transition-colors">Products</Link>
-                <Link href="/admin/orders" className="text-gray-600 hover:text-gray-900 transition-colors">Orders</Link>
+                <Link href="/admin/orders" className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  Orders
+                  {pendingOrdersCount > 0 && (
+                    <span className="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+                      {pendingOrdersCount > 99 ? '99+' : pendingOrdersCount}
+                    </span>
+                  )}
+                </Link>
                 <Link href="/admin/refunds" className="text-gray-600 hover:text-gray-900 transition-colors">Refunds</Link>
               </nav>
             </div>
@@ -220,10 +240,24 @@ export default function AdminDashboard() {
           <div className="md:hidden pb-3">
             <nav className="flex flex-wrap gap-1.5 sm:gap-2">
               <Link href="/admin/users" className="text-xs sm:text-sm bg-gray-100 text-gray-700 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[36px] flex items-center justify-center">Users</Link>
-              <Link href="/admin/sellers" className="text-xs sm:text-sm bg-gray-100 text-gray-700 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[36px] flex items-center justify-center">Sellers</Link>
+              <Link href="/admin/sellers" className="text-xs sm:text-sm bg-gray-100 text-gray-700 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[36px] flex items-center justify-center relative">
+                Sellers
+                {pendingSellersCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center min-w-[16px]">
+                    {pendingSellersCount > 99 ? '99+' : pendingSellersCount}
+                  </span>
+                )}
+              </Link>
               <Link href="/admin/sellers/financials" className="text-xs sm:text-sm bg-gray-100 text-gray-700 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[36px] flex items-center justify-center">Financials</Link>
               <Link href="/admin/products" className="text-xs sm:text-sm bg-gray-100 text-gray-700 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[36px] flex items-center justify-center">Products</Link>
-              <Link href="/admin/orders" className="text-xs sm:text-sm bg-gray-100 text-gray-700 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[36px] flex items-center justify-center">Orders</Link>
+              <Link href="/admin/orders" className="text-xs sm:text-sm bg-gray-100 text-gray-700 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[36px] flex items-center justify-center relative">
+                Orders
+                {pendingOrdersCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center min-w-[16px]">
+                    {pendingOrdersCount > 99 ? '99+' : pendingOrdersCount}
+                  </span>
+                )}
+              </Link>
               <Link href="/admin/refunds" className="text-xs sm:text-sm bg-gray-100 text-gray-700 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors touch-manipulation min-h-[36px] flex items-center justify-center">Refunds</Link>
             </nav>
           </div>

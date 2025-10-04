@@ -15,10 +15,37 @@ export default function HomePage() {
     // Check if user is a seller and redirect to seller dashboard
     const userData = localStorage.getItem('user_session')
     if (userData) {
-      const user = JSON.parse(userData)
-      if (user.role === 'SELLER') {
-        router.push('/seller/dashboard')
-        return
+      try {
+        const user = JSON.parse(userData)
+        if (user.role === 'SELLER') {
+          // Verify the session is still valid before redirecting
+          fetch('/api/auth/verify', {
+            method: 'GET',
+            credentials: 'include'
+          })
+          .then(response => {
+            if (response.ok) {
+              return response.json()
+            }
+            throw new Error('Session invalid')
+          })
+          .then(data => {
+            if (data.user && data.user.role === 'SELLER') {
+              router.push('/seller/dashboard')
+            } else {
+              // User is not a seller or session is invalid, clear localStorage
+              localStorage.removeItem('user_session')
+            }
+          })
+          .catch(() => {
+            // Session is invalid, clear localStorage and stay on home page
+            localStorage.removeItem('user_session')
+          })
+          return
+        }
+      } catch (error) {
+        // Invalid JSON in localStorage, clear it
+        localStorage.removeItem('user_session')
       }
     }
   }, [router])

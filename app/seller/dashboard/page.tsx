@@ -363,6 +363,9 @@ export default function SellerDashboard() {
   const [holidayMode, setHolidayMode] = useState(defaultHolidayModeSettings)
   const [categories, setCategories] = useState<any[]>([])
   
+  // Calculate pending orders count
+  const pendingOrdersCount = orders.filter(order => order.status === 'pending').length
+  
   // Add product form state
   interface ProductForm {
     name: string
@@ -1177,7 +1180,14 @@ export default function SellerDashboard() {
                     : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
                 }`}
               >
-                <DocumentTextIcon className="mr-3 h-5 w-5" />
+                <div className="relative mr-3">
+                  <DocumentTextIcon className="h-5 w-5" />
+                  {pendingOrdersCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+                      {pendingOrdersCount > 99 ? '99+' : pendingOrdersCount}
+                    </span>
+                  )}
+                </div>
                 Orders
               </button>
               
@@ -1292,7 +1302,14 @@ export default function SellerDashboard() {
                     : 'text-gray-600 hover:bg-gray-50/80 hover:text-gray-900 hover:shadow-sm'
                 }`}
               >
-                <DocumentTextIcon className="mr-3 h-5 w-5" />
+                <div className="relative mr-3">
+                  <DocumentTextIcon className="h-5 w-5" />
+                  {pendingOrdersCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+                      {pendingOrdersCount > 99 ? '99+' : pendingOrdersCount}
+                    </span>
+                  )}
+                </div>
                 Orders
               </button>
               

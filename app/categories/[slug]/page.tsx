@@ -667,9 +667,10 @@ export default function CategoryPage() {
                                 e.stopPropagation()
                                 handleAddToCart(product)
                               }}
-                              className="w-8 h-8 lg:w-10 lg:h-10 bg-white/80 backdrop-blur-sm border border-gray-300 hover:bg-white hover:border-gray-400 text-gray-700 rounded-lg flex items-center justify-center transition-all duration-200 touch-manipulation shadow-sm"
+                              className="w-8 h-8 lg:w-10 lg:h-10 bg-white/80 backdrop-blur-sm border border-gray-300 hover:bg-white hover:border-gray-400 text-gray-700 rounded-lg flex items-center justify-center transition-all duration-200 touch-manipulation shadow-sm relative"
                             >
-                              <PlusIcon className="h-4 lg:h-5 w-4 lg:w-5" />
+                              <ShoppingCartIcon className="h-4 lg:h-5 w-4 lg:w-5" />
+                              <PlusIcon className="h-2 lg:h-3 w-2 lg:w-3 absolute -top-1 -right-1 bg-gray-700 text-white rounded-full p-0.5" />
                             </button>
                           ) : (
                             <div className="flex items-center space-x-1 bg-white/80 backdrop-blur-sm border border-gray-300 rounded-lg px-1 py-1 shadow-sm">

@@ -199,19 +199,29 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               {categories.map((category) => (
                 <div key={category.name}>
                   <div className="flex items-center">
-                    <Link
-                      href={category.href}
-                      className="flex-1 flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-                      onClick={(e) => {
-                        // Only close sidebar if there are no subcategories
-                        if (!category.subcategories) {
-                          onClose()
-                        }
-                      }}
-                    >
-                      <category.icon className="h-4 w-4 mr-3 text-gray-500" />
-                      {category.name}
-                    </Link>
+                    {category.subcategories ? (
+                      // For categories with subcategories, make the entire area clickable for dropdown
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          toggleCategory(category.name)
+                        }}
+                        className="flex-1 flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors text-left"
+                      >
+                        <category.icon className="h-4 w-4 mr-3 text-gray-500" />
+                        {category.name}
+                      </button>
+                    ) : (
+                      // For categories without subcategories, use regular link
+                      <Link
+                        href={category.href}
+                        className="flex-1 flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                        onClick={onClose}
+                      >
+                        <category.icon className="h-4 w-4 mr-3 text-gray-500" />
+                        {category.name}
+                      </Link>
+                    )}
                     {category.subcategories && (
                       <button
                         onClick={(e) => {
@@ -232,6 +242,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   {/* Subcategories */}
                   {category.subcategories && openCategories.includes(category.name) && (
                     <div className="ml-6 mt-1 space-y-1">
+                      <Link
+                        href={category.href}
+                        className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors font-medium"
+                        onClick={onClose}
+                      >
+                        View All {category.name}
+                      </Link>
                       {category.subcategories.map((subcategory) => (
                         <Link
                           key={subcategory.name}

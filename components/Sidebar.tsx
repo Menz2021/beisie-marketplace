@@ -242,13 +242,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   {/* Subcategories */}
                   {category.subcategories && openCategories.includes(category.name) && (
                     <div className="ml-6 mt-1 space-y-1">
-                      <Link
-                        href={category.href}
-                        className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors font-medium"
-                        onClick={onClose}
-                      >
-                        View All {category.name}
-                      </Link>
                       {category.subcategories.map((subcategory) => (
                         <Link
                           key={subcategory.name}

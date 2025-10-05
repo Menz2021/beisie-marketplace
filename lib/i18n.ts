@@ -214,7 +214,7 @@ const translations: Record<Language, Translations> = {
     
     // Categories
     electronics: 'Electronics',
-    mobilePhones: 'Mobile Phones',
+    mobilePhones: 'Mobiles and Accessories',
     gaming: 'Gaming',
     laptops: 'Laptops & Computers',
     homeKitchen: 'Home & Kitchen',

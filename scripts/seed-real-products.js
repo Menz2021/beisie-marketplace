@@ -92,7 +92,7 @@ async function main() {
         isFeatured: true,
         approvalStatus: 'APPROVED',
         slug: 'iphone-15-pro-max-256gb',
-        categoryId: categories.find(c => c.name === 'Mobile Phones')?.id,
+        categoryId: categories.find(c => c.name === 'Mobiles and Accessories')?.id,
         vendorId: vendor.id,
         deliveryTimeDays: 1,
         deliveryTimeText: 'Next day delivery',

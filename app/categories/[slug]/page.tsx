@@ -121,7 +121,7 @@ export default function CategoryPage() {
   const getFallbackCategory = (categorySlug: string) => {
     const fallbackCategories = [
       { id: '1', name: 'Electronics', slug: 'electronics', description: 'Electronic devices and gadgets', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-      { id: '2', name: 'Mobile Phones', slug: 'mobile-phones', description: 'Smartphones and mobile accessories', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+      { id: '2', name: 'Mobiles and Accessories', slug: 'mobile-phones', description: 'Smartphones and mobile accessories', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
       { id: '3', name: 'Laptops & Computers', slug: 'laptops-computers', description: 'Laptops, desktops and computer accessories', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
       { id: '4', name: 'Fashion', slug: 'fashion', description: 'Clothing and fashion accessories', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
       { id: '5', name: 'Beauty & Health', slug: 'beauty-health', description: 'Beauty products and health items', isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },

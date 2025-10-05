@@ -14,7 +14,7 @@ interface ProductFiltersProps {
 const categories = [
   { value: 'all', label: 'All Categories' },
   { value: 'Electronics', label: 'Electronics' },
-  { value: 'Mobile Phones', label: 'Mobile Phones' },
+  { value: 'Mobiles and Accessories', label: 'Mobiles and Accessories' },
   { value: 'Power Banks', label: '→ Power Banks' },
   { value: 'Headphones & Earphones', label: '→ Headphones & Earphones' },
   { value: 'Wearables', label: '→ Wearables' },

@@ -103,7 +103,7 @@ const mockProduct = {
     'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop'
   ],
   brand: 'Samsung',
-  category: 'Mobile Phones',
+  category: 'Mobiles and Accessories',
   stock: 15,
   sku: 'SGS23U-256-BLK',
   weight: 0.234,

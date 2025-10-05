@@ -50,7 +50,7 @@ export function ShopByCategory() {
   // Fallback static categories
   const getStaticCategories = () => [
     { id: '1', name: 'Electronics', slug: 'electronics', isActive: true },
-    { id: '2', name: 'Mobile Phones', slug: 'mobile-phones', isActive: true },
+    { id: '2', name: 'Mobiles and Accessories', slug: 'mobile-phones', isActive: true },
     { id: '3', name: 'Laptops & Computers', slug: 'laptops-computers', isActive: true },
     { id: '4', name: 'Fashion', slug: 'fashion', isActive: true },
     { id: '5', name: 'Beauty & Health', slug: 'beauty-health', isActive: true },
@@ -111,7 +111,7 @@ export function ShopByCategory() {
       'Lighting': '/images/Electronics.jpg',
       'Makeup': '/images/fragances.avif',
       'Men\'s Fashion': '/images/mens fashion.avif',
-      'Mobile Phones': '/images/Mobile phones.jpg',
+      'Mobiles and Accessories': '/images/Mobile phones.jpg',
       'Outdoor & Camping': '/images/Automotives.avif',
       'Personal Care': '/images/fragances.avif',
       'Pet Supplies': '/images/Toys and games.jpg',

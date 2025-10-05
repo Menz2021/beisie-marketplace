@@ -46,7 +46,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       icon: ShoppingBagIcon,
       subcategories: [
         { name: 'All Electronics', href: '/categories/electronics' },
-        { name: 'Mobile Phones', href: '/categories/mobile-phones' },
+        { name: 'Mobiles and Accessories', href: '/categories/mobile-phones' },
         { name: 'Laptops & Computers', href: '/categories/laptops-computers' },
         { name: 'TVs & Accessories', href: '/categories/tvs-accessories' },
         { name: 'Cameras', href: '/categories/cameras' },

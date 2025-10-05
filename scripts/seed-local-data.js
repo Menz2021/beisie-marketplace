@@ -27,7 +27,7 @@ async function seedLocalData() {
     console.log('📂 Creating categories...')
     const categories = [
       { name: 'Electronics', description: 'Electronic devices and gadgets', slug: 'electronics' },
-      { name: 'Mobile Phones', description: 'Smartphones and mobile accessories', slug: 'mobile-phones' },
+      { name: 'Mobiles and Accessories', description: 'Smartphones and mobile accessories', slug: 'mobile-phones' },
       { name: 'Fashion', description: 'Clothing and fashion items', slug: 'fashion' },
       { name: 'Home & Kitchen', description: 'Home and kitchen products', slug: 'home-kitchen' },
       { name: 'Beauty & Health', description: 'Beauty and health products', slug: 'beauty-health' },

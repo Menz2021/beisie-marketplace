@@ -45,7 +45,7 @@ export default function SellOnBeisiePage() {
 
   const categories = [
     'Electronics',
-    'Mobile Phones',
+    'Mobiles and Accessories',
     'Power Banks',
     'Headphones & Earphones',
     'Wearables',

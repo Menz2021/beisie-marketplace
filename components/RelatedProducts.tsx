@@ -103,7 +103,7 @@ export function RelatedProducts({ productSlug, limit = 6 }: RelatedProductsProps
             discount: 7,
             category: {
               id: '1',
-              name: 'Mobile Phones',
+              name: 'Mobiles and Accessories',
               slug: 'mobile-phones'
             },
             vendor: {
@@ -138,7 +138,7 @@ export function RelatedProducts({ productSlug, limit = 6 }: RelatedProductsProps
             discount: 10,
             category: {
               id: '1',
-              name: 'Mobile Phones',
+              name: 'Mobiles and Accessories',
               slug: 'mobile-phones'
             },
             vendor: {
@@ -171,7 +171,7 @@ export function RelatedProducts({ productSlug, limit = 6 }: RelatedProductsProps
             discount: 8,
             category: {
               id: '1',
-              name: 'Mobile Phones',
+              name: 'Mobiles and Accessories',
               slug: 'mobile-phones'
             },
             vendor: {
@@ -204,7 +204,7 @@ export function RelatedProducts({ productSlug, limit = 6 }: RelatedProductsProps
             discount: 8,
             category: {
               id: '1',
-              name: 'Mobile Phones',
+              name: 'Mobiles and Accessories',
               slug: 'mobile-phones'
             },
             vendor: {
@@ -237,7 +237,7 @@ export function RelatedProducts({ productSlug, limit = 6 }: RelatedProductsProps
             discount: 9,
             category: {
               id: '1',
-              name: 'Mobile Phones',
+              name: 'Mobiles and Accessories',
               slug: 'mobile-phones'
             },
             vendor: {
@@ -270,7 +270,7 @@ export function RelatedProducts({ productSlug, limit = 6 }: RelatedProductsProps
             discount: 8,
             category: {
               id: '1',
-              name: 'Mobile Phones',
+              name: 'Mobiles and Accessories',
               slug: 'mobile-phones'
             },
             vendor: {

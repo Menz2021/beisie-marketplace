@@ -17,7 +17,7 @@ async function main() {
         slug: 'electronics'
       },
       {
-        name: 'Mobile Phones',
+        name: 'Mobiles and Accessories',
         description: 'Smartphones and accessories',
         image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop',
         slug: 'mobile-phones'

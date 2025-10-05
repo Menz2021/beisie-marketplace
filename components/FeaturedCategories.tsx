@@ -52,7 +52,7 @@ const categories = [
   },
   {
     id: '7',
-    name: 'Mobile Phones',
+    name: 'Mobiles and Accessories',
     description: 'Latest smartphones & accessories',
     image: 'https://images.unsplash.com/photo-1511707171634-5e560c06d30e?w=500&h=400&fit=crop&crop=center',
     slug: 'mobile-phones',

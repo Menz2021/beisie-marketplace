@@ -585,9 +585,10 @@ export default function CategoryPage() {
                     Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0
 
                   return (
-                    <div
+                    <Link
                       key={product.id}
-                      className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow touch-manipulation ${
+                      href={`/products/${product.slug}`}
+                      className={`group block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow touch-manipulation ${
                         viewMode === 'list' ? 'flex' : ''
                       }`}
                     >
@@ -645,7 +646,11 @@ export default function CategoryPage() {
                         {/* Actions */}
                         <div className={`flex items-center ${viewMode === 'list' ? 'space-x-2' : 'flex-col space-y-2'}`}>
                           <button
-                            onClick={() => handleAddToCart(product)}
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              handleAddToCart(product)
+                            }}
                             className={`flex items-center justify-center px-2 lg:px-3 py-2 bg-purple-600 text-white text-xs lg:text-sm font-medium rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 touch-manipulation min-h-[40px] lg:min-h-[44px] ${
                               viewMode === 'list' ? 'flex-1' : 'w-full'
                             }`}
@@ -653,17 +658,9 @@ export default function CategoryPage() {
                             <ShoppingCartIcon className="h-3 lg:h-4 w-3 lg:w-4 mr-1" />
                             Add to Cart
                           </button>
-                          <Link
-                            href={`/products/${product.slug}`}
-                            className={`px-2 lg:px-3 py-2 border border-gray-300 text-gray-700 text-xs lg:text-sm font-medium rounded-md hover:bg-gray-50 touch-manipulation min-h-[40px] lg:min-h-[44px] flex items-center justify-center ${
-                              viewMode === 'list' ? '' : 'w-full'
-                            }`}
-                          >
-                            View
-                          </Link>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   )
                 })}
               </div>

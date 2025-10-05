@@ -235,7 +235,7 @@ export default function CategoryPage() {
       {slug === 'mobile-phones' && (
         <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
           <Image
-            src="/images/iphone%2017.avif"
+            src="/images/iphone-17.jpg"
             alt="iPhone 17 - Latest Mobile Technology"
             fill
             className="object-cover"

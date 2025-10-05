@@ -643,20 +643,17 @@ export default function CategoryPage() {
                           )}
                         </div>
 
-                        {/* Actions */}
-                        <div className={`flex items-center ${viewMode === 'list' ? 'space-x-2' : 'flex-col space-y-2'}`}>
+                        {/* Shopping Cart Icon */}
+                        <div className="flex justify-end">
                           <button
                             onClick={(e) => {
                               e.preventDefault()
                               e.stopPropagation()
                               handleAddToCart(product)
                             }}
-                            className={`flex items-center justify-center px-2 lg:px-3 py-2 bg-purple-600 text-white text-xs lg:text-sm font-medium rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 touch-manipulation min-h-[40px] lg:min-h-[44px] ${
-                              viewMode === 'list' ? 'flex-1' : 'w-full'
-                            }`}
+                            className="w-8 h-8 lg:w-10 lg:h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center transition-colors duration-200 touch-manipulation"
                           >
-                            <ShoppingCartIcon className="h-3 lg:h-4 w-3 lg:w-4 mr-1" />
-                            Add to Cart
+                            <ShoppingCartIcon className="h-4 lg:h-5 w-4 lg:w-5" />
                           </button>
                         </div>
                       </div>

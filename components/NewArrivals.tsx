@@ -8,6 +8,7 @@ import { HeartIcon as HeartSolidIcon, StarIcon } from '@heroicons/react/24/solid
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import toast from 'react-hot-toast'
+import { PlusIcon, MinusIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 
 interface NewArrival {
   id: string
@@ -32,7 +33,7 @@ interface NewArrival {
 export function NewArrivals() {
   const [newArrivals, setNewArrivals] = useState<NewArrival[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const { addItem } = useCartStore()
+  const { addItem, updateQuantity, items } = useCartStore()
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore()
 
   useEffect(() => {
@@ -99,6 +100,19 @@ export function NewArrivals() {
       vendorId: product.vendor || 'unknown'
     })
     toast.success(`${product.name} added to cart!`)
+  }
+
+  const handleUpdateQuantity = (product: NewArrival, newQuantity: number) => {
+    updateQuantity(product.id, newQuantity)
+  }
+
+  const getCartQuantity = (productId: string) => {
+    const cartItem = items.find(item => item.id === productId)
+    return cartItem ? cartItem.quantity : 0
+  }
+
+  const isInCart = (productId: string) => {
+    return items.some(item => item.id === productId)
   }
 
   const formatCurrency = (amount: number) => {
@@ -279,18 +293,52 @@ export function NewArrivals() {
                           )}
                         </div>
 
-                        {/* Add to Cart Button */}
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            handleAddToCart(product)
-                          }}
-                          className="w-full flex items-center justify-center px-3 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
-                        >
-                          <ShoppingCartIcon className="h-4 w-4 mr-1" />
-                          Add to Cart
-                        </button>
+                        {/* Shopping Cart Icon */}
+                        <div className="flex justify-end">
+                          {!isInCart(product.id) ? (
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                handleAddToCart(product)
+                              }}
+                              className="w-8 h-8 lg:w-10 lg:h-10 bg-white/80 backdrop-blur-sm border border-gray-300 hover:bg-white hover:border-gray-400 text-gray-700 rounded-lg flex items-center justify-center transition-all duration-200 touch-manipulation shadow-sm relative"
+                            >
+                              <ShoppingCartIcon className="h-4 lg:h-5 w-4 lg:w-5" />
+                              <PlusIcon className="h-2 lg:h-3 w-2 lg:w-3 absolute -top-1 -right-1 bg-gray-700 text-white rounded-full p-0.5" />
+                            </button>
+                          ) : (
+                            <div className="flex items-center space-x-1 bg-white/80 backdrop-blur-sm border border-gray-300 rounded-lg px-1 py-1 shadow-sm">
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  e.stopPropagation()
+                                  const currentQuantity = getCartQuantity(product.id)
+                                  if (currentQuantity > 1) {
+                                    handleUpdateQuantity(product, currentQuantity - 1)
+                                  }
+                                }}
+                                className="w-6 h-6 lg:w-7 lg:h-7 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded flex items-center justify-center transition-colors duration-200 touch-manipulation"
+                              >
+                                <MinusIcon className="h-3 lg:h-4 w-3 lg:w-4" />
+                              </button>
+                              <span className="text-xs lg:text-sm font-medium text-gray-900 min-w-[20px] text-center">
+                                {getCartQuantity(product.id)}
+                              </span>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  e.stopPropagation()
+                                  const currentQuantity = getCartQuantity(product.id)
+                                  handleUpdateQuantity(product, currentQuantity + 1)
+                                }}
+                                className="w-6 h-6 lg:w-7 lg:h-7 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded flex items-center justify-center transition-colors duration-200 touch-manipulation"
+                              >
+                                <PlusIcon className="h-3 lg:h-4 w-3 lg:w-4" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </Link>
@@ -397,18 +445,52 @@ export function NewArrivals() {
                             </span>
                           </div>
 
-                          {/* Add to Cart Button */}
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault()
-                              e.stopPropagation()
-                              handleAddToCart(product)
-                            }}
-                            className="w-full flex items-center justify-center px-3 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
-                          >
-                            <ShoppingCartIcon className="h-4 w-4 mr-1" />
-                            Add to Cart
-                          </button>
+                          {/* Shopping Cart Icon */}
+                          <div className="flex justify-end">
+                            {!isInCart(product.id) ? (
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  e.stopPropagation()
+                                  handleAddToCart(product)
+                                }}
+                                className="w-8 h-8 lg:w-10 lg:h-10 bg-white/80 backdrop-blur-sm border border-gray-300 hover:bg-white hover:border-gray-400 text-gray-700 rounded-lg flex items-center justify-center transition-all duration-200 touch-manipulation shadow-sm relative"
+                              >
+                                <ShoppingCartIcon className="h-4 lg:h-5 w-4 lg:w-5" />
+                                <PlusIcon className="h-2 lg:h-3 w-2 lg:w-3 absolute -top-1 -right-1 bg-gray-700 text-white rounded-full p-0.5" />
+                              </button>
+                            ) : (
+                              <div className="flex items-center space-x-1 bg-white/80 backdrop-blur-sm border border-gray-300 rounded-lg px-1 py-1 shadow-sm">
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    const currentQuantity = getCartQuantity(product.id)
+                                    if (currentQuantity > 1) {
+                                      handleUpdateQuantity(product, currentQuantity - 1)
+                                    }
+                                  }}
+                                  className="w-6 h-6 lg:w-7 lg:h-7 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded flex items-center justify-center transition-colors duration-200 touch-manipulation"
+                                >
+                                  <MinusIcon className="h-3 lg:h-4 w-3 lg:w-4" />
+                                </button>
+                                <span className="text-xs lg:text-sm font-medium text-gray-900 min-w-[20px] text-center">
+                                  {getCartQuantity(product.id)}
+                                </span>
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    const currentQuantity = getCartQuantity(product.id)
+                                    handleUpdateQuantity(product, currentQuantity + 1)
+                                  }}
+                                  className="w-6 h-6 lg:w-7 lg:h-7 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded flex items-center justify-center transition-colors duration-200 touch-manipulation"
+                                >
+                                  <PlusIcon className="h-3 lg:h-4 w-3 lg:w-4" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </Link>

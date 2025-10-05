@@ -8,6 +8,7 @@ import { HeartIcon as HeartOutlineIcon } from '@heroicons/react/24/outline'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import toast from 'react-hot-toast'
+import { PlusIcon, MinusIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 
 interface Product {
   id: string
@@ -34,7 +35,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCartStore()
+  const { addItem, updateQuantity, items } = useCartStore()
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore()
   const [isAddingToCart, setIsAddingToCart] = useState(false)
   const [isTogglingWishlist, setIsTogglingWishlist] = useState(false)
@@ -100,6 +101,19 @@ export function ProductCard({ product }: ProductCardProps) {
     } finally {
       setIsAddingToCart(false)
     }
+  }
+
+  const handleUpdateQuantity = (newQuantity: number) => {
+    updateQuantity(product.id, newQuantity)
+  }
+
+  const getCartQuantity = () => {
+    const cartItem = items.find(item => item.id === product.id)
+    return cartItem ? cartItem.quantity : 0
+  }
+
+  const isInCart = () => {
+    return items.some(item => item.id === product.id)
   }
 
   const productImages = product.images ? JSON.parse(product.images) : []
@@ -195,13 +209,49 @@ export function ProductCard({ product }: ProductCardProps) {
               )}
             </div>
 
-            <button
-              onClick={handleAddToCart}
-              disabled={isAddingToCart}
-              className="w-full btn-primary btn-sm lg:btn-md disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[40px] lg:min-h-[44px]"
-            >
-              {isAddingToCart ? 'Adding...' : 'Add to Cart'}
-            </button>
+            {/* Shopping Cart Icon */}
+            <div className="flex justify-end">
+              {!isInCart() ? (
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isAddingToCart}
+                  className="w-8 h-8 lg:w-10 lg:h-10 bg-white/80 backdrop-blur-sm border border-gray-300 hover:bg-white hover:border-gray-400 text-gray-700 rounded-lg flex items-center justify-center transition-all duration-200 touch-manipulation shadow-sm relative disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ShoppingCartIcon className="h-4 lg:h-5 w-4 lg:w-5" />
+                  <PlusIcon className="h-2 lg:h-3 w-2 lg:w-3 absolute -top-1 -right-1 bg-gray-700 text-white rounded-full p-0.5" />
+                </button>
+              ) : (
+                <div className="flex items-center space-x-1 bg-white/80 backdrop-blur-sm border border-gray-300 rounded-lg px-1 py-1 shadow-sm">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      const currentQuantity = getCartQuantity()
+                      if (currentQuantity > 1) {
+                        handleUpdateQuantity(currentQuantity - 1)
+                      }
+                    }}
+                    className="w-6 h-6 lg:w-7 lg:h-7 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded flex items-center justify-center transition-colors duration-200 touch-manipulation"
+                  >
+                    <MinusIcon className="h-3 lg:h-4 w-3 lg:w-4" />
+                  </button>
+                  <span className="text-xs lg:text-sm font-medium text-gray-900 min-w-[20px] text-center">
+                    {getCartQuantity()}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      const currentQuantity = getCartQuantity()
+                      handleUpdateQuantity(currentQuantity + 1)
+                    }}
+                    className="w-6 h-6 lg:w-7 lg:h-7 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded flex items-center justify-center transition-colors duration-200 touch-manipulation"
+                  >
+                    <PlusIcon className="h-3 lg:h-4 w-3 lg:w-4" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

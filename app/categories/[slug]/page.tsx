@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { 
   MagnifyingGlassIcon,
   FunnelIcon,
@@ -233,10 +234,11 @@ export default function CategoryPage() {
       {/* Hero Image for Mobile and Accessories */}
       {slug === 'mobile-phones' && (
         <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
-          <img
-            src="/images/iphone 17.avif"
+          <Image
+            src="/images/Mobile phones.jpg"
             alt="iPhone 17 - Latest Mobile Technology"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
             <div className="text-center text-white">

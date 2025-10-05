@@ -235,10 +235,11 @@ export default function CategoryPage() {
       {slug === 'mobile-phones' && (
         <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
           <Image
-            src="/images/Mobile phones.jpg"
+            src="/images/iphone%2017.avif"
             alt="iPhone 17 - Latest Mobile Technology"
             fill
             className="object-cover"
+            priority
           />
           <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
             <div className="text-center text-white">

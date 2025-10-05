@@ -230,6 +230,27 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Hero Image for Mobile and Accessories */}
+      {slug === 'mobile-phones' && (
+        <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
+          <img
+            src="/images/iphone 17.avif"
+            alt="iPhone 17 - Latest Mobile Technology"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+            <div className="text-center text-white">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+                Mobiles and Accessories
+              </h1>
+              <p className="text-lg md:text-xl lg:text-2xl opacity-90">
+                Discover the latest smartphones and accessories
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Header */}
       <div className="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-40">
         <div className="px-4 py-3">

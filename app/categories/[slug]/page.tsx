@@ -400,51 +400,53 @@ export default function CategoryPage() {
         </div>
       )}
 
-      {/* Desktop Category Header */}
-      <div className="hidden lg:block bg-white border-b border-gray-200">
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between">
-            <div>
-              {/* Breadcrumb for subcategories */}
-              <nav className="flex mb-4" aria-label="Breadcrumb">
-                <ol className="inline-flex items-center space-x-1 md:space-x-3">
-                  <li className="inline-flex items-center">
-                    <Link href="/" className="text-gray-700 hover:text-purple-600">
-                      Home
-                    </Link>
-                  </li>
-                  <li>
-                    <div className="flex items-center">
-                      <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
-                      </svg>
-                      <Link href="/categories" className="ml-1 text-gray-700 hover:text-purple-600 md:ml-2">
-                        Categories
+      {/* Desktop Category Header - Hidden for mobile-phones since we have hero image */}
+      {slug !== 'mobile-phones' && (
+        <div className="hidden lg:block bg-white border-b border-gray-200">
+          <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
+            <div className="flex items-center justify-between">
+              <div>
+                {/* Breadcrumb for subcategories */}
+                <nav className="flex mb-4" aria-label="Breadcrumb">
+                  <ol className="inline-flex items-center space-x-1 md:space-x-3">
+                    <li className="inline-flex items-center">
+                      <Link href="/" className="text-gray-700 hover:text-purple-600">
+                        Home
                       </Link>
-                    </div>
-                  </li>
-                  <li aria-current="page">
-                    <div className="flex items-center">
-                      <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
-                      </svg>
-                      <span className="ml-1 text-gray-500 md:ml-2">{category.name}</span>
-                    </div>
-                  </li>
-                </ol>
-              </nav>
-              
-              <h1 className="text-3xl font-bold text-gray-900">{category.name}</h1>
-              {category.description && (
-                <p className="mt-2 text-gray-600">{category.description}</p>
-              )}
-              <p className="mt-2 text-sm text-gray-500">
-                {products.length} product{products.length !== 1 ? 's' : ''} found
-              </p>
+                    </li>
+                    <li>
+                      <div className="flex items-center">
+                        <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
+                        </svg>
+                        <Link href="/categories" className="ml-1 text-gray-700 hover:text-purple-600 md:ml-2">
+                          Categories
+                        </Link>
+                      </div>
+                    </li>
+                    <li aria-current="page">
+                      <div className="flex items-center">
+                        <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
+                        </svg>
+                        <span className="ml-1 text-gray-500 md:ml-2">{category.name}</span>
+                      </div>
+                    </li>
+                  </ol>
+                </nav>
+                
+                <h1 className="text-3xl font-bold text-gray-900">{category.name}</h1>
+                {category.description && (
+                  <p className="mt-2 text-gray-600">{category.description}</p>
+                )}
+                <p className="mt-2 text-sm text-gray-500">
+                  {products.length} product{products.length !== 1 ? 's' : ''} found
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="w-full px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">

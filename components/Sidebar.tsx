@@ -202,14 +202,22 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     <Link
                       href={category.href}
                       className="flex-1 flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-                      onClick={onClose}
+                      onClick={(e) => {
+                        // Only close sidebar if there are no subcategories
+                        if (!category.subcategories) {
+                          onClose()
+                        }
+                      }}
                     >
                       <category.icon className="h-4 w-4 mr-3 text-gray-500" />
                       {category.name}
                     </Link>
                     {category.subcategories && (
                       <button
-                        onClick={() => toggleCategory(category.name)}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          toggleCategory(category.name)
+                        }}
                         className="p-2 text-gray-400 hover:text-gray-600"
                       >
                         {openCategories.includes(category.name) ? (

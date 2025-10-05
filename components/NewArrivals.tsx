@@ -3,12 +3,11 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { HeartIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
+import { HeartIcon, ShoppingCartIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolidIcon, StarIcon } from '@heroicons/react/24/solid'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import toast from 'react-hot-toast'
-import { PlusIcon, MinusIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 
 interface NewArrival {
   id: string

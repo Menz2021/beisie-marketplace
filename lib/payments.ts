@@ -288,6 +288,9 @@ export class FlutterwavePayment {
         ? 'https://api.flutterwave.com/v3' 
         : 'https://api.flutterwave.com/v3'
 
+      // Get the selected payment method from request metadata
+      const paymentMethod = (request as any).flutterwaveMethod || 'mobile_money'
+
       const payload = {
         tx_ref: request.orderId,
         amount: request.amount,
@@ -304,8 +307,13 @@ export class FlutterwavePayment {
           logo: 'https://beisie-marketplace.vercel.app/logo.png'
         },
         meta: {
-          orderId: request.orderId
-        }
+          orderId: request.orderId,
+          paymentMethod: paymentMethod
+        },
+        // Specify payment method
+        payment_options: paymentMethod === 'mobile_money' ? 'mobilemoney' : 
+                        paymentMethod === 'card' ? 'card' : 
+                        paymentMethod === 'bank_transfer' ? 'banktransfer' : 'mobilemoney'
       }
 
       const response = await fetch(`${baseUrl}/payments`, {

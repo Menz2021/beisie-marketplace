@@ -7,7 +7,7 @@ import { prisma } from '@/lib/prisma'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { orderId, paymentMethod, amount, currency, customerPhone, customerEmail, description } = body
+    const { orderId, paymentMethod, amount, currency, customerPhone, customerEmail, description, flutterwaveMethod } = body
 
     // Validate required fields
     if (!orderId || !paymentMethod || !amount || !currency) {
@@ -60,8 +60,9 @@ export async function POST(request: NextRequest) {
       orderId,
       customerPhone: customerPhone || order.customer.phone,
       customerEmail: customerEmail || order.customer.email,
-      description: description || `Payment for order ${order.orderNumber}`
-    }
+      description: description || `Payment for order ${order.orderNumber}`,
+      flutterwaveMethod: flutterwaveMethod
+    } as any
 
     // Initiate payment based on method
     let paymentResponse

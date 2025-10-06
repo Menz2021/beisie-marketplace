@@ -8,6 +8,7 @@ import {
   MapPinIcon,
   TruckIcon,
   ShieldCheckIcon,
+  BuildingOfficeIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
@@ -230,6 +231,11 @@ export default function CheckoutPage() {
         // If payment method is mobile money or Flutterwave, initiate payment
         if (formData.paymentMethod === 'MTN_MOBILE_MONEY' || formData.paymentMethod === 'AIRTEL_MONEY' || formData.paymentMethod === 'FLUTTERWAVE') {
           try {
+            // Get selected Flutterwave method
+            const flutterwaveMethod = formData.paymentMethod === 'FLUTTERWAVE' 
+              ? document.querySelector('input[name="flutterwaveMethod"]:checked')?.value || 'mobile_money'
+              : undefined
+
             const paymentResponse = await fetch('/api/payments', {
               method: 'POST',
               headers: {
@@ -242,7 +248,8 @@ export default function CheckoutPage() {
                 currency: 'UGX',
                 customerPhone: formData.phoneNumber,
                 customerEmail: user.email,
-                description: `Payment for order ${result.data.orderNumber}`
+                description: `Payment for order ${result.data.orderNumber}`,
+                flutterwaveMethod: flutterwaveMethod
               })
             })
 
@@ -593,11 +600,79 @@ export default function CheckoutPage() {
                               </div>
                               <div className="flex-1">
                                 <h4 className="text-sm font-semibold text-blue-900 mb-1">
-                                  Flutterwave Payment
+                                  Choose Payment Method
                                 </h4>
                                 <p className="text-xs text-blue-700 leading-relaxed">
-                                  You'll be redirected to Flutterwave's secure payment page where you can pay with Mobile Money, Cards, or Bank Transfer.
+                                  Select your preferred payment option below.
                                 </p>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-3">
+                              {/* Mobile Money Options */}
+                              <div className="bg-white rounded-lg p-3 border border-blue-200">
+                                <h5 className="text-sm font-semibold text-gray-800 mb-2">Mobile Money</h5>
+                                <div className="space-y-2">
+                                  <label className="flex items-center p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input
+                                      type="radio"
+                                      name="flutterwaveMethod"
+                                      value="mobile_money"
+                                      className="mr-3"
+                                      defaultChecked
+                                    />
+                                    <div className="flex items-center">
+                                      <DevicePhoneMobileIcon className="h-5 w-5 text-green-600 mr-2" />
+                                      <span className="text-sm font-medium">MTN Mobile Money</span>
+                                    </div>
+                                  </label>
+                                  <label className="flex items-center p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input
+                                      type="radio"
+                                      name="flutterwaveMethod"
+                                      value="mobile_money"
+                                      className="mr-3"
+                                    />
+                                    <div className="flex items-center">
+                                      <DevicePhoneMobileIcon className="h-5 w-5 text-red-600 mr-2" />
+                                      <span className="text-sm font-medium">Airtel Money</span>
+                                    </div>
+                                  </label>
+                                </div>
+                              </div>
+                              
+                              {/* Card Payment Option */}
+                              <div className="bg-white rounded-lg p-3 border border-blue-200">
+                                <h5 className="text-sm font-semibold text-gray-800 mb-2">Card Payment</h5>
+                                <label className="flex items-center p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="flutterwaveMethod"
+                                    value="card"
+                                    className="mr-3"
+                                  />
+                                  <div className="flex items-center">
+                                    <CreditCardIcon className="h-5 w-5 text-blue-600 mr-2" />
+                                    <span className="text-sm font-medium">Visa / Mastercard</span>
+                                  </div>
+                                </label>
+                              </div>
+                              
+                              {/* Bank Transfer Option */}
+                              <div className="bg-white rounded-lg p-3 border border-blue-200">
+                                <h5 className="text-sm font-semibold text-gray-800 mb-2">Bank Transfer</h5>
+                                <label className="flex items-center p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="flutterwaveMethod"
+                                    value="bank_transfer"
+                                    className="mr-3"
+                                  />
+                                  <div className="flex items-center">
+                                    <BuildingOfficeIcon className="h-5 w-5 text-purple-600 mr-2" />
+                                    <span className="text-sm font-medium">Bank Transfer</span>
+                                  </div>
+                                </label>
                               </div>
                             </div>
                           </div>

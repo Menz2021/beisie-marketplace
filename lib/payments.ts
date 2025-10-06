@@ -45,12 +45,36 @@ export class MTNMobileMoney {
         ? 'https://api.mtn.com/v1' 
         : 'https://sandbox.momodeveloper.mtn.com/v1'
 
-      const response = await fetch(`${baseUrl}/collection/token/`, {
+      // Step 1: Get access token
+      const tokenResponse = await fetch(`${baseUrl}/collection/token/`, {
         method: 'POST',
         headers: {
           'Authorization': `Basic ${Buffer.from(`${this.config.apiKey}:${this.config.apiSecret}`).toString('base64')}`,
           'Content-Type': 'application/json',
           'X-Target-Environment': this.config.environment
+        }
+      })
+
+      if (!tokenResponse.ok) {
+        return {
+          success: false,
+          status: 'FAILED',
+          message: 'Failed to get access token'
+        }
+      }
+
+      const tokenData = await tokenResponse.json()
+      const accessToken = tokenData.access_token
+
+      // Step 2: Make collection request (this prompts user for PIN)
+      const collectionResponse = await fetch(`${baseUrl}/collection/v1_0/requesttopay`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          'X-Target-Environment': this.config.environment,
+          'X-Reference-Id': request.orderId,
+          'X-Callback-Url': this.config.callbackUrl
         },
         body: JSON.stringify({
           amount: request.amount.toString(),
@@ -65,21 +89,21 @@ export class MTNMobileMoney {
         })
       })
 
-      const data = await response.json()
+      const data = await collectionResponse.json()
 
-      if (response.ok) {
+      if (collectionResponse.ok) {
         return {
           success: true,
-          transactionId: data.transactionId,
+          transactionId: request.orderId, // Use orderId as reference
           status: 'PENDING',
-          message: 'Payment initiated successfully',
-          paymentUrl: data.paymentUrl
+          message: 'Payment request sent. Please check your phone and enter your MoMo PIN to complete the payment.',
+          paymentUrl: undefined // MTN doesn't provide a payment URL, user gets SMS/USSD prompt
         }
       } else {
         return {
           success: false,
           status: 'FAILED',
-          message: data.message || 'Payment initiation failed'
+          message: data.message || 'Payment request failed'
         }
       }
     } catch (error) {
@@ -97,10 +121,32 @@ export class MTNMobileMoney {
         ? 'https://api.mtn.com/v1' 
         : 'https://sandbox.momodeveloper.mtn.com/v1'
 
+      // Step 1: Get access token
+      const tokenResponse = await fetch(`${baseUrl}/collection/token/`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${Buffer.from(`${this.config.apiKey}:${this.config.apiSecret}`).toString('base64')}`,
+          'Content-Type': 'application/json',
+          'X-Target-Environment': this.config.environment
+        }
+      })
+
+      if (!tokenResponse.ok) {
+        return {
+          success: false,
+          status: 'FAILED',
+          message: 'Failed to get access token'
+        }
+      }
+
+      const tokenData = await tokenResponse.json()
+      const accessToken = tokenData.access_token
+
+      // Step 2: Check payment status
       const response = await fetch(`${baseUrl}/collection/v1_0/requesttopay/${transactionId}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.config.apiKey}`,
+          'Authorization': `Bearer ${accessToken}`,
           'X-Target-Environment': this.config.environment
         }
       })

@@ -219,10 +219,48 @@ export default function CheckoutPage() {
       const result = await response.json()
 
       if (result.success) {
-        setIsProcessing(false)
-        clearCart()
-        alert('Order placed successfully! You will receive a confirmation SMS shortly.')
-        window.location.href = '/orders'
+        // If payment method is mobile money, initiate payment
+        if (formData.paymentMethod === 'MTN_MOBILE_MONEY' || formData.paymentMethod === 'AIRTEL_MONEY') {
+          try {
+            const paymentResponse = await fetch('/api/payments', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                orderId: result.data.id,
+                paymentMethod: formData.paymentMethod,
+                amount: getTotalPrice(),
+                currency: 'UGX',
+                customerPhone: formData.phoneNumber,
+                customerEmail: user.email,
+                description: `Payment for order ${result.data.orderNumber}`
+              })
+            })
+
+            const paymentResult = await paymentResponse.json()
+            
+            if (paymentResult.success) {
+              setIsProcessing(false)
+              clearCart()
+              alert(paymentResult.message || 'Payment request sent! Please check your phone and enter your MoMo PIN to complete the payment.')
+              window.location.href = '/orders'
+            } else {
+              throw new Error(paymentResult.error || 'Failed to initiate payment')
+            }
+          } catch (paymentError) {
+            console.error('Error initiating payment:', paymentError)
+            setIsProcessing(false)
+            alert('Order created but payment initiation failed. Please contact support.')
+            window.location.href = '/orders'
+          }
+        } else {
+          // For card payments or other methods, just show success
+          setIsProcessing(false)
+          clearCart()
+          alert('Order placed successfully! You will receive a confirmation SMS shortly.')
+          window.location.href = '/orders'
+        }
       } else {
         throw new Error(result.error || 'Failed to create order')
       }
@@ -502,7 +540,7 @@ export default function CheckoutPage() {
                                   {method.id === 'MTN_MOBILE_MONEY' ? 'MTN' : 'Airtel'} Mobile Money
                                 </h4>
                                 <p className="text-xs text-green-700 leading-relaxed">
-                                  You'll receive a payment request on your phone to complete the transaction.
+                                  You'll receive a payment request on your phone. Check your phone and enter your MoMo PIN to complete the transaction.
                                 </p>
                               </div>
                             </div>

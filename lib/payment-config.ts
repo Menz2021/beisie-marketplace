@@ -12,6 +12,12 @@ export interface PaymentConfig {
     environment: 'sandbox' | 'production'
     callbackUrl: string
   }
+  flutterwave: {
+    secretKey: string
+    publicKey: string
+    environment: 'sandbox' | 'production'
+    redirectUrl: string
+  }
   stripe: {
     publicKey: string
     secretKey: string
@@ -38,6 +44,12 @@ export function getPaymentConfig(): PaymentConfig {
       environment: (process.env.AIRTEL_ENVIRONMENT as 'sandbox' | 'production') || 'sandbox',
       callbackUrl: process.env.AIRTEL_CALLBACK_URL || 'http://localhost:3000/api/payments/airtel/callback'
     },
+    flutterwave: {
+      secretKey: process.env.FLUTTERWAVE_SECRET_KEY || '',
+      publicKey: process.env.FLUTTERWAVE_PUBLIC_KEY || '',
+      environment: (process.env.FLUTTERWAVE_ENVIRONMENT as 'sandbox' | 'production') || 'sandbox',
+      redirectUrl: process.env.FLUTTERWAVE_REDIRECT_URL || 'http://localhost:3000/checkout/success'
+    },
     stripe: {
       publicKey: process.env.STRIPE_PUBLIC_KEY || '',
       secretKey: process.env.STRIPE_SECRET_KEY || '',
@@ -62,6 +74,10 @@ export function validatePaymentConfig(): { isValid: boolean; errors: string[] } 
   // Check Airtel Money
   if (!config.airtel.clientId) errors.push('AIRTEL_CLIENT_ID is required')
   if (!config.airtel.clientSecret) errors.push('AIRTEL_CLIENT_SECRET is required')
+
+  // Check Flutterwave
+  if (!config.flutterwave.secretKey) errors.push('FLUTTERWAVE_SECRET_KEY is required')
+  if (!config.flutterwave.publicKey) errors.push('FLUTTERWAVE_PUBLIC_KEY is required')
 
   // Check Stripe
   if (!config.stripe.publicKey) errors.push('STRIPE_PUBLIC_KEY is required')

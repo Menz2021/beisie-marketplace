@@ -75,6 +75,10 @@ export async function POST(request: NextRequest) {
           const airtelProvider = PaymentFactory.createPaymentProvider('AIRTEL_MONEY', config.airtel) as any
           paymentResponse = await airtelProvider.initiatePayment(paymentRequest)
           break
+        case 'FLUTTERWAVE':
+          const flutterwaveProvider = PaymentFactory.createPaymentProvider('FLUTTERWAVE', config.flutterwave) as any
+          paymentResponse = await flutterwaveProvider.initiatePayment(paymentRequest)
+          break
         case 'VISA':
         case 'MASTERCARD':
           const stripeProvider = PaymentFactory.createPaymentProvider('VISA', config.stripe) as any

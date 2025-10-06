@@ -24,6 +24,10 @@ export async function GET(request: NextRequest) {
         mtnApiSecret: config.mtn.apiSecret ? `${config.mtn.apiSecret.substring(0, 8)}...` : 'NOT SET',
         mtnEnvironment: config.mtn.environment,
         mtnCallbackUrl: config.mtn.callbackUrl,
+        flutterwaveSecretKey: config.flutterwave.secretKey ? `${config.flutterwave.secretKey.substring(0, 8)}...` : 'NOT SET',
+        flutterwavePublicKey: config.flutterwave.publicKey ? `${config.flutterwave.publicKey.substring(0, 8)}...` : 'NOT SET',
+        flutterwaveEnvironment: config.flutterwave.environment,
+        flutterwaveRedirectUrl: config.flutterwave.redirectUrl,
         isValid: validation.isValid,
         errors: validation.errors
       }

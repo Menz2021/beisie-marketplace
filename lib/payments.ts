@@ -1,5 +1,12 @@
 // Payment integration for Uganda - MTN Mobile Money, Airtel Money, Visa/MasterCard
 
+export interface FlutterwaveConfig {
+  secretKey: string
+  publicKey: string
+  environment: 'sandbox' | 'production'
+  redirectUrl: string
+}
+
 export interface PaymentRequest {
   amount: number
   currency: string
@@ -267,6 +274,119 @@ export class AirtelMoney {
   }
 }
 
+// Flutterwave Integration
+export class FlutterwavePayment {
+  private config: FlutterwaveConfig
+
+  constructor(config: FlutterwaveConfig) {
+    this.config = config
+  }
+
+  async initiatePayment(request: PaymentRequest): Promise<PaymentResponse> {
+    try {
+      const baseUrl = this.config.environment === 'production' 
+        ? 'https://api.flutterwave.com/v3' 
+        : 'https://api.flutterwave.com/v3'
+
+      const payload = {
+        tx_ref: request.orderId,
+        amount: request.amount,
+        currency: request.currency,
+        redirect_url: this.config.redirectUrl,
+        customer: {
+          email: request.customerEmail,
+          phone_number: request.customerPhone,
+          name: 'Customer'
+        },
+        customizations: {
+          title: 'Beisie Marketplace',
+          description: request.description,
+          logo: 'https://beisie-marketplace.vercel.app/logo.png'
+        },
+        meta: {
+          orderId: request.orderId
+        }
+      }
+
+      const response = await fetch(`${baseUrl}/payments`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.config.secretKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.status === 'success') {
+        return {
+          success: true,
+          transactionId: data.data.tx_ref,
+          status: 'PENDING',
+          message: 'Payment initiated successfully. Redirecting to payment page...',
+          paymentUrl: data.data.link
+        }
+      } else {
+        console.error('Flutterwave API Error:', data)
+        return {
+          success: false,
+          status: 'FAILED',
+          message: data.message || 'Payment initiation failed'
+        }
+      }
+    } catch (error) {
+      console.error('Flutterwave Payment Error:', error)
+      return {
+        success: false,
+        status: 'FAILED',
+        message: 'Network error occurred'
+      }
+    }
+  }
+
+  async checkPaymentStatus(transactionId: string): Promise<PaymentResponse> {
+    try {
+      const baseUrl = this.config.environment === 'production' 
+        ? 'https://api.flutterwave.com/v3' 
+        : 'https://api.flutterwave.com/v3'
+
+      const response = await fetch(`${baseUrl}/transactions/${transactionId}/verify`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.config.secretKey}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.status === 'success') {
+        const transaction = data.data
+        return {
+          success: true,
+          transactionId: transaction.tx_ref,
+          status: transaction.status === 'successful' ? 'COMPLETED' : 'PENDING',
+          message: 'Payment status retrieved'
+        }
+      } else {
+        return {
+          success: false,
+          status: 'FAILED',
+          message: data.message || 'Failed to check payment status'
+        }
+      }
+    } catch (error) {
+      console.error('Flutterwave Status Check Error:', error)
+      return {
+        success: false,
+        status: 'FAILED',
+        message: 'Network error occurred'
+      }
+    }
+  }
+}
+
 // Stripe Integration for Visa/MasterCard
 export class StripePayment {
   private stripe: any
@@ -329,6 +449,8 @@ export class PaymentFactory {
         return new MTNMobileMoney(config)
       case 'AIRTEL_MONEY':
         return new AirtelMoney(config)
+      case 'FLUTTERWAVE':
+        return new FlutterwavePayment(config)
       case 'VISA':
       case 'MASTERCARD':
         return new StripePayment(config.stripeSecretKey)

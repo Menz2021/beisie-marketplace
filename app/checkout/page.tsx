@@ -38,7 +38,7 @@ export default function CheckoutPage() {
     postalCode: '',
     
     // Payment Information
-    paymentMethod: 'MTN_MOBILE_MONEY',
+    paymentMethod: 'FLUTTERWAVE',
     phoneNumber: '',
     
     // Card Information (for Visa/Mastercard)
@@ -90,6 +90,13 @@ export default function CheckoutPage() {
   const total = subtotal + shippingCost + tax
 
   const paymentMethods = [
+    {
+      id: 'FLUTTERWAVE',
+      name: 'Flutterwave',
+      icon: DevicePhoneMobileIcon,
+      description: 'Pay with Mobile Money, Cards, or Bank Transfer',
+      color: 'text-blue-600'
+    },
     {
       id: 'MTN_MOBILE_MONEY',
       name: 'MTN Mobile Money',
@@ -219,8 +226,8 @@ export default function CheckoutPage() {
       const result = await response.json()
 
       if (result.success) {
-        // If payment method is mobile money, initiate payment
-        if (formData.paymentMethod === 'MTN_MOBILE_MONEY' || formData.paymentMethod === 'AIRTEL_MONEY') {
+        // If payment method is mobile money or Flutterwave, initiate payment
+        if (formData.paymentMethod === 'MTN_MOBILE_MONEY' || formData.paymentMethod === 'AIRTEL_MONEY' || formData.paymentMethod === 'FLUTTERWAVE') {
           try {
             const paymentResponse = await fetch('/api/payments', {
               method: 'POST',
@@ -243,8 +250,14 @@ export default function CheckoutPage() {
             if (paymentResult.success) {
               setIsProcessing(false)
               clearCart()
-              alert(paymentResult.message || 'Payment request sent! Please check your phone and enter your MoMo PIN to complete the payment.')
-              window.location.href = '/orders'
+              
+              if (formData.paymentMethod === 'FLUTTERWAVE' && paymentResult.data.paymentUrl) {
+                // Redirect to Flutterwave payment page
+                window.location.href = paymentResult.data.paymentUrl
+              } else {
+                alert(paymentResult.message || 'Payment request sent! Please check your phone and enter your MoMo PIN to complete the payment.')
+                window.location.href = '/orders'
+              }
             } else {
               throw new Error(paymentResult.error || 'Failed to initiate payment')
             }

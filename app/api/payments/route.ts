@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PaymentFactory, PaymentRequest } from '@/lib/payments'
-import { getPaymentConfig, validatePaymentConfig } from '@/lib/payment-config'
+import { getPaymentConfig, validatePaymentMethodConfig } from '@/lib/payment-config'
 import { prisma } from '@/lib/prisma'
 
 // POST - Initiate payment
@@ -17,13 +17,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate payment configuration
-    const configValidation = validatePaymentConfig()
-    if (!configValidation.isValid) {
+    // Validate payment method configuration
+    const methodValidation = validatePaymentMethodConfig(paymentMethod)
+    if (!methodValidation.isValid) {
       return NextResponse.json(
         { 
-          error: 'Payment configuration incomplete', 
-          details: configValidation.errors 
+          error: `Payment method configuration incomplete for ${paymentMethod}`, 
+          details: methodValidation.errors 
         },
         { status: 500 }
       )

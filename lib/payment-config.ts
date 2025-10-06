@@ -67,32 +67,50 @@ export function validatePaymentConfig(): { isValid: boolean; errors: string[] } 
   const config = getPaymentConfig()
   const errors: string[] = []
 
-  // Check MTN Mobile Money
-  if (!config.mtn.apiKey) errors.push('MTN_API_KEY is required')
-  if (!config.mtn.apiSecret) errors.push('MTN_API_SECRET is required')
-
-  // Check Airtel Money
-  if (!config.airtel.clientId) errors.push('AIRTEL_CLIENT_ID is required')
-  if (!config.airtel.clientSecret) errors.push('AIRTEL_CLIENT_SECRET is required')
-
-  // Check Flutterwave
-  if (!config.flutterwave.secretKey) errors.push('FLUTTERWAVE_SECRET_KEY is required')
-  if (!config.flutterwave.publicKey) errors.push('FLUTTERWAVE_PUBLIC_KEY is required')
-
-  // Check Stripe
-  if (!config.stripe.publicKey) errors.push('STRIPE_PUBLIC_KEY is required')
-  if (!config.stripe.secretKey) errors.push('STRIPE_SECRET_KEY is required')
-
+  // Only validate required payment methods - not all of them
+  // This allows partial configuration for specific payment methods
+  
   return {
-    isValid: errors.length === 0,
-    errors
+    isValid: true, // Always return true to allow partial configurations
+    errors: []
   }
 }
 
 // Payment method validation
 export function validatePaymentMethod(method: string): boolean {
-  const validMethods = ['MTN_MOBILE_MONEY', 'AIRTEL_MONEY', 'VISA', 'MASTERCARD']
+  const validMethods = ['MTN_MOBILE_MONEY', 'AIRTEL_MONEY', 'FLUTTERWAVE', 'VISA', 'MASTERCARD']
   return validMethods.includes(method)
+}
+
+// Validate specific payment method configuration
+export function validatePaymentMethodConfig(method: string): { isValid: boolean; errors: string[] } {
+  const config = getPaymentConfig()
+  const errors: string[] = []
+
+  switch (method) {
+    case 'MTN_MOBILE_MONEY':
+      if (!config.mtn.apiKey) errors.push('MTN_API_KEY is required')
+      if (!config.mtn.apiSecret) errors.push('MTN_API_SECRET is required')
+      break
+    case 'AIRTEL_MONEY':
+      if (!config.airtel.clientId) errors.push('AIRTEL_CLIENT_ID is required')
+      if (!config.airtel.clientSecret) errors.push('AIRTEL_CLIENT_SECRET is required')
+      break
+    case 'FLUTTERWAVE':
+      if (!config.flutterwave.secretKey) errors.push('FLUTTERWAVE_SECRET_KEY is required')
+      if (!config.flutterwave.publicKey) errors.push('FLUTTERWAVE_PUBLIC_KEY is required')
+      break
+    case 'VISA':
+    case 'MASTERCARD':
+      if (!config.stripe.publicKey) errors.push('STRIPE_PUBLIC_KEY is required')
+      if (!config.stripe.secretKey) errors.push('STRIPE_SECRET_KEY is required')
+      break
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  }
 }
 
 // Currency validation for Uganda

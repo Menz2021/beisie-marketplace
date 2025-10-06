@@ -82,7 +82,7 @@ export class MTNMobileMoney {
           externalId: request.orderId,
           payer: {
             partyIdType: 'MSISDN',
-            partyId: request.customerPhone
+            partyId: request.customerPhone.replace(/^\+/, '') // Remove + prefix for MTN API
           },
           payerMessage: request.description,
           payeeNote: `Payment for order ${request.orderId}`
@@ -100,13 +100,19 @@ export class MTNMobileMoney {
           paymentUrl: undefined // MTN doesn't provide a payment URL, user gets SMS/USSD prompt
         }
       } else {
+        console.error('MTN API Error:', {
+          status: collectionResponse.status,
+          statusText: collectionResponse.statusText,
+          data: data
+        })
         return {
           success: false,
           status: 'FAILED',
-          message: data.message || 'Payment request failed'
+          message: data.message || `Payment request failed: ${collectionResponse.statusText}`
         }
       }
     } catch (error) {
+      console.error('MTN Payment Error:', error)
       return {
         success: false,
         status: 'FAILED',

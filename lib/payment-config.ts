@@ -1,5 +1,4 @@
 // Payment configuration and environment setup
-export interface PaymentConfig {
   mtn: {
     apiKey: string
     apiSecret: string

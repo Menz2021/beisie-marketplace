@@ -1,8 +1,8 @@
 // Payment testing and validation utilities
-import { getPaymentConfig, validatePaymentConfig } from './lib/payment-config'
-import { PaymentFactory } from './lib/payments'
+const { getPaymentConfig, validatePaymentConfig } = require('./lib/payment-config')
+const { PaymentFactory } = require('./lib/payments')
 
-export async function testPaymentConfiguration() {
+async function testPaymentConfiguration() {
   console.log('🔧 Testing Payment Configuration...')
   
   const configValidation = validatePaymentConfig()
@@ -47,7 +47,7 @@ export async function testPaymentConfiguration() {
   return true
 }
 
-export async function testPaymentFlow() {
+async function testPaymentFlow() {
   console.log('🧪 Testing Payment Flow...')
   
   const testPaymentRequest = {
@@ -114,12 +114,12 @@ export async function testPaymentFlow() {
   }
 }
 
-export function validateUgandaPhoneNumber(phone: string): boolean {
+function validateUgandaPhoneNumber(phone) {
   const ugandaPhoneRegex = /^(\+256|256|0)?[7][0-9]{8}$/
   return ugandaPhoneRegex.test(phone.replace(/\s/g, ''))
 }
 
-export function formatUgandaPhoneNumber(phone: string): string {
+function formatUgandaPhoneNumber(phone) {
   const cleaned = phone.replace(/\D/g, '')
   if (cleaned.startsWith('256')) {
     return `+${cleaned}`
@@ -132,7 +132,7 @@ export function formatUgandaPhoneNumber(phone: string): string {
 }
 
 // Test phone numbers for different providers
-export const TEST_PHONE_NUMBERS = {
+const TEST_PHONE_NUMBERS = {
   MTN: '+256700000000',
   AIRTEL: '+256700000001',
   VALID_UGANDA: '+256701234567',
@@ -140,7 +140,7 @@ export const TEST_PHONE_NUMBERS = {
 }
 
 // Test card numbers for Stripe
-export const TEST_CARD_NUMBERS = {
+const TEST_CARD_NUMBERS = {
   VISA_SUCCESS: '4242424242424242',
   VISA_DECLINE: '4000000000000002',
   MASTERCARD_SUCCESS: '5555555555554444',

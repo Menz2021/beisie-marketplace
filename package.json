@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test:payment-config": "node scripts/test-payments.js",
+    "test:payments": "node scripts/test-payments.js",
+    "check:payment-config": "node -e \"console.log('Checking payment configuration...'); require('./lib/payment-config').validatePaymentConfig()\""
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",

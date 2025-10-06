@@ -170,12 +170,13 @@ export default function CheckoutPage() {
           alert('Please enter a valid phone number for mobile money')
           return
         }
-      } else {
+      } else if (formData.paymentMethod === 'VISA' || formData.paymentMethod === 'MASTERCARD') {
         if (!formData.cardNumber || !formData.expiryDate || !formData.cvv || !formData.cardName) {
           alert('Please fill in all card details')
           return
         }
       }
+      // Flutterwave doesn't require additional validation - it will redirect to their payment page
     }
     
     setStep(step + 1)
@@ -577,6 +578,25 @@ export default function CheckoutPage() {
                                 </div>
                                 <p className="text-xs text-gray-600 leading-relaxed">
                                   Enter the phone number linked to your {method.id === 'MTN_MOBILE_MONEY' ? 'MTN' : 'Airtel'} Mobile Money account
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Inline Payment Form - Flutterwave */}
+                        {formData.paymentMethod === method.id && method.id === 'FLUTTERWAVE' && (
+                          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 sm:p-5 ml-6 sm:ml-8">
+                            <div className="flex items-start mb-3">
+                              <div className="p-1.5 bg-blue-100 rounded-lg mr-3">
+                                <ShieldCheckIcon className="h-5 w-5 text-blue-600" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-semibold text-blue-900 mb-1">
+                                  Flutterwave Payment
+                                </h4>
+                                <p className="text-xs text-blue-700 leading-relaxed">
+                                  You'll be redirected to Flutterwave's secure payment page where you can pay with Mobile Money, Cards, or Bank Transfer.
                                 </p>
                               </div>
                             </div>

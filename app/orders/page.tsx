@@ -309,11 +309,35 @@ export default function OrdersPage() {
 
   const handleCancelOrder = useCallback(async (orderId: string) => {
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      toast.success('Order cancelled successfully')
-      // In a real app, update the order status
+      const response = await fetch('/api/orders/cancel', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId })
+      })
+
+      const data = await response.json()
+      
+      if (data.success) {
+        toast.success('Order cancelled successfully')
+        // Update the orders list
+        setOrders(prevOrders => 
+          prevOrders.map(order => 
+            order.id === orderId 
+              ? { ...order, status: 'cancelled' }
+              : order
+          )
+        )
+        // Close the modal
+        setShowOrderDetails(false)
+        // Refresh orders
+        fetchOrders()
+      } else {
+        toast.error(data.error || 'Failed to cancel order')
+      }
     } catch (error) {
+      console.error('Error cancelling order:', error)
       toast.error('Failed to cancel order')
     }
   }, [])

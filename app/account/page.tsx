@@ -551,6 +551,35 @@ export default function AccountPage() {
     setShowRefundModal(true)
   }
 
+  const handleCancelOrder = async (orderId: string) => {
+    if (!confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+      return
+    }
+
+    try {
+      const response = await fetch('/api/orders/cancel', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId })
+      })
+
+      const data = await response.json()
+      
+      if (data.success) {
+        alert('Order cancelled successfully')
+        // Refresh orders
+        fetchOrders()
+      } else {
+        alert(data.error || 'Failed to cancel order')
+      }
+    } catch (error) {
+      console.error('Error cancelling order:', error)
+      alert('Failed to cancel order')
+    }
+  }
+
   const handleRefundRequest = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedOrder || !user) return
@@ -935,7 +964,10 @@ export default function AccountPage() {
                             </button>
                           )}
                           {order.status === 'pending' && (
-                            <button className="text-sm text-red-600 hover:text-red-700 touch-manipulation min-h-[44px] flex items-center justify-center sm:justify-start">
+                            <button 
+                              onClick={() => handleCancelOrder(order.id)}
+                              className="text-sm text-red-600 hover:text-red-700 touch-manipulation min-h-[44px] flex items-center justify-center sm:justify-start"
+                            >
                               Cancel Order
                             </button>
                           )}

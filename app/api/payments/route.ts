@@ -63,19 +63,26 @@ export async function POST(request: NextRequest) {
       description: description || `Payment for order ${order.orderNumber}`
     }
 
-    // Create payment provider
-    let paymentProvider
+    // Initiate payment based on method
+    let paymentResponse
     try {
       switch (paymentMethod) {
         case 'MTN_MOBILE_MONEY':
-          paymentProvider = PaymentFactory.createPaymentProvider('MTN_MOBILE_MONEY', config.mtn)
+          const mtnProvider = PaymentFactory.createPaymentProvider('MTN_MOBILE_MONEY', config.mtn) as any
+          paymentResponse = await mtnProvider.initiatePayment(paymentRequest)
           break
         case 'AIRTEL_MONEY':
-          paymentProvider = PaymentFactory.createPaymentProvider('AIRTEL_MONEY', config.airtel)
+          const airtelProvider = PaymentFactory.createPaymentProvider('AIRTEL_MONEY', config.airtel) as any
+          paymentResponse = await airtelProvider.initiatePayment(paymentRequest)
           break
         case 'VISA':
         case 'MASTERCARD':
-          paymentProvider = PaymentFactory.createPaymentProvider('VISA', config.stripe)
+          const stripeProvider = PaymentFactory.createPaymentProvider('VISA', config.stripe) as any
+          paymentResponse = await stripeProvider.createPaymentIntent(
+            paymentRequest.amount,
+            paymentRequest.currency,
+            paymentRequest.orderId
+          )
           break
         default:
           return NextResponse.json(
@@ -89,9 +96,6 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
-
-    // Initiate payment
-    const paymentResponse = await paymentProvider.initiatePayment(paymentRequest)
 
     if (!paymentResponse.success) {
       return NextResponse.json(
@@ -196,7 +200,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check payment status
-    const statusResponse = await paymentProvider.checkPaymentStatus(order.paymentId!)
+    const statusResponse = await (paymentProvider as any).checkPaymentStatus(order.paymentId!)
 
     // Update order status if payment is completed
     if (statusResponse.success && statusResponse.status === 'COMPLETED') {

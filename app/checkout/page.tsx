@@ -233,7 +233,7 @@ export default function CheckoutPage() {
           try {
             // Get selected Flutterwave method
             const flutterwaveMethod = formData.paymentMethod === 'FLUTTERWAVE' 
-              ? document.querySelector('input[name="flutterwaveMethod"]:checked')?.value || 'mobile_money'
+              ? (document.querySelector('input[name="flutterwaveMethod"]:checked') as HTMLInputElement)?.value || 'mobile_money'
               : undefined
 
             const paymentResponse = await fetch('/api/payments', {

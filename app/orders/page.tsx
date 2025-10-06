@@ -332,7 +332,9 @@ export default function OrdersPage() {
         // Close the modal
         setShowOrderDetails(false)
         // Refresh orders
-        fetchOrders()
+        if (user) {
+          fetchUserOrders(user.id)
+        }
       } else {
         toast.error(data.error || 'Failed to cancel order')
       }

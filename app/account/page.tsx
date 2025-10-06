@@ -570,7 +570,9 @@ export default function AccountPage() {
       if (data.success) {
         alert('Order cancelled successfully')
         // Refresh orders
-        fetchOrders()
+        if (user) {
+          fetchUserOrders(user.id)
+        }
       } else {
         alert(data.error || 'Failed to cancel order')
       }

@@ -82,7 +82,7 @@ export class MTNMobileMoney {
           externalId: request.orderId,
           payer: {
             partyIdType: 'MSISDN',
-            partyId: request.customerPhone.replace(/^\+/, '') // Remove + prefix for MTN API
+            partyId: (request.customerPhone || '').replace(/^\+/, '') // Remove + prefix for MTN API
           },
           payerMessage: request.description,
           payeeNote: `Payment for order ${request.orderId}`

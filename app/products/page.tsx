@@ -214,7 +214,7 @@ export default function ProductsPage() {
             {/* Desktop Controls */}
             <div className="hidden lg:flex items-center justify-between mb-6">
               <p className="text-gray-600">
-                Showing {sortedProducts.length} of {products.length} products
+                {/* Product count removed */}
               </p>
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-500">View:</span>
@@ -239,11 +239,9 @@ export default function ProductsPage() {
               </div>
             </div>
 
-            {/* Mobile Results Count */}
+            {/* Mobile Results Count - Removed */}
             <div className="lg:hidden mb-4">
-              <p className="text-sm text-gray-600">
-                {sortedProducts.length} products found
-              </p>
+              {/* Product count removed */}
             </div>
 
             {isLoading && products.length === 0 ? (

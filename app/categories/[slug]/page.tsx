@@ -508,9 +508,7 @@ export default function CategoryPage() {
             <div className="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-700">
-                    Showing {sortedProducts.length} of {products.length} products
-                  </span>
+                  {/* Product count removed */}
                 </div>
                 
                 <div className="flex items-center space-x-4">

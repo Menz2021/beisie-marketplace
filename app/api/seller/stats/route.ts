@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       where: { vendorId: sellerId }
     })
 
-    // Get seller's orders count (this week)
+    // Get seller's orders count (this week) - EXCLUDE CANCELLED orders
     const oneWeekAgo = new Date()
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
     
@@ -35,11 +35,14 @@ export async function GET(request: NextRequest) {
         },
         createdAt: {
           gte: oneWeekAgo
+        },
+        status: {
+          not: 'CANCELLED' // Exclude cancelled orders
         }
       }
     })
 
-    // Get seller's revenue (this week)
+    // Get seller's revenue (this week) - EXCLUDE CANCELLED orders
     const weeklyOrdersData = await prisma.order.findMany({
       where: {
         orderItems: {
@@ -51,6 +54,9 @@ export async function GET(request: NextRequest) {
         },
         createdAt: {
           gte: oneWeekAgo
+        },
+        status: {
+          not: 'CANCELLED' // Exclude cancelled orders
         }
       },
       include: {
@@ -66,9 +72,12 @@ export async function GET(request: NextRequest) {
 
     const weeklyRevenue = weeklyOrdersData.reduce((total, order) => {
       const sellerItems = order.orderItems
-      // Calculate total revenue from seller's products (full price with VAT)
-      const sellerTotal = sellerItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-      return total + sellerTotal
+      // Only count revenue for DELIVERED orders
+      if (order.status === 'DELIVERED') {
+        const sellerTotal = sellerItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+        return total + sellerTotal
+      }
+      return total
     }, 0)
 
     // Calculate amount to be paid (90% after 10% commission)

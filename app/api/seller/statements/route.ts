@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Get orders for this seller within the date range
+    // Get orders for this seller within the date range - EXCLUDE CANCELLED orders
     const orders = await prisma.order.findMany({
       where: {
         orderItems: {
@@ -83,6 +83,9 @@ export async function GET(request: NextRequest) {
               vendorId: sellerId
             }
           }
+        },
+        status: {
+          not: 'CANCELLED' // Exclude cancelled orders
         },
         ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter })
       },
@@ -173,7 +176,7 @@ export async function GET(request: NextRequest) {
 
     const transactions = []
 
-    // Process orders
+    // Process orders - only credit for DELIVERED orders
     for (const order of orders) {
       const sellerItems = order.orderItems
       // Calculate total revenue from seller's products (full price with VAT)
@@ -181,17 +184,25 @@ export async function GET(request: NextRequest) {
       const commission = sellerTotal * 0.1 // 10% commission
       const sellerAmount = sellerTotal * 0.9 // 90% to seller
       
-      totalSales += sellerTotal
-      totalEarnings += sellerTotal
-      totalCommission += commission
+      // Only add to totals if order is DELIVERED
+      if (order.status === 'DELIVERED') {
+        totalSales += sellerTotal
+        totalEarnings += sellerTotal
+        totalCommission += commission
+        totalPayouts += sellerAmount
+      } else {
+        // For non-delivered orders, only add to pending
+        pendingPayout += sellerAmount
+      }
 
       // Determine transaction status based on order status
       let transactionStatus = 'pending'
       if (order.status === 'DELIVERED') {
         transactionStatus = 'completed'
-        totalPayouts += sellerAmount
-      } else if (order.status === 'PENDING' || order.status === 'PROCESSING' || order.status === 'SHIPPED') {
-        pendingPayout += sellerAmount
+      } else if (order.status === 'CANCELLED') {
+        transactionStatus = 'cancelled'
+      } else {
+        transactionStatus = 'pending'
       }
 
       // Create transaction record

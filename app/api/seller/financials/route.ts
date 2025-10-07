@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     let pendingPayout = 0
     let commissionPaid = 0
 
-    // Process each order to calculate financial data
+    // Process each order to calculate financial data - only credit for DELIVERED orders
     const transactions = []
     
     for (const order of allOrders) {
@@ -67,16 +67,24 @@ export async function GET(request: NextRequest) {
       const commission = sellerTotal * 0.1 // 10% commission
       const sellerAmount = sellerTotal * 0.9 // 90% to seller
       
-      totalEarnings += sellerTotal
-      commissionPaid += commission
+      // Only add to totals if order is DELIVERED
+      if (order.status === 'DELIVERED') {
+        totalEarnings += sellerTotal
+        commissionPaid += commission
+        totalPayouts += sellerAmount
+      } else if (order.status !== 'CANCELLED') {
+        // For non-delivered, non-cancelled orders, add to pending
+        pendingPayout += sellerAmount
+      }
 
       // Determine transaction status based on order status
       let transactionStatus = 'pending'
       if (order.status === 'DELIVERED') {
         transactionStatus = 'paid'
-        totalPayouts += sellerAmount
-      } else if (order.status === 'PENDING' || order.status === 'PROCESSING') {
-        pendingPayout += sellerAmount
+      } else if (order.status === 'CANCELLED') {
+        transactionStatus = 'cancelled'
+      } else {
+        transactionStatus = 'pending'
       }
 
       // Create transaction record

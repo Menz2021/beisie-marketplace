@@ -309,12 +309,10 @@ export class FlutterwavePayment {
         meta: {
           orderId: request.orderId,
           paymentMethod: paymentMethod
-        },
-        // Specify payment method
-        payment_options: paymentMethod === 'mobile_money' ? 'mobilemoney' : 
-                        paymentMethod === 'card' ? 'card' : 
-                        paymentMethod === 'bank_transfer' ? 'banktransfer' : 'mobilemoney'
+        }
       }
+
+      console.log('Flutterwave Payment Request:', JSON.stringify(payload, null, 2))
 
       const response = await fetch(`${baseUrl}/payments`, {
         method: 'POST',
@@ -326,6 +324,8 @@ export class FlutterwavePayment {
       })
 
       const data = await response.json()
+      console.log('Flutterwave API Response:', JSON.stringify(data, null, 2))
+      console.log('Response Status:', response.status)
 
       if (response.ok && data.status === 'success') {
         return {

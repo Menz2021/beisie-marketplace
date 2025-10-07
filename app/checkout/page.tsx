@@ -267,12 +267,14 @@ export default function CheckoutPage() {
                 window.location.href = '/orders'
               }
             } else {
-              throw new Error(paymentResult.error || 'Failed to initiate payment')
+              console.error('Payment initiation failed:', paymentResult)
+              throw new Error(paymentResult.error || paymentResult.message || 'Failed to initiate payment')
             }
           } catch (paymentError) {
             console.error('Error initiating payment:', paymentError)
             setIsProcessing(false)
-            alert('Order created but payment initiation failed. Please contact support.')
+            const errorMessage = paymentError instanceof Error ? paymentError.message : 'Unknown error'
+            alert(`Order created but payment initiation failed: ${errorMessage}. Please contact support.`)
             window.location.href = '/orders'
           }
         } else {

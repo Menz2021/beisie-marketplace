@@ -671,7 +671,7 @@ export default function ProductDetailPage() {
               <p className="text-gray-700 mb-4">{product.description}</p>
               <div 
                 className="text-gray-700"
-                dangerouslySetInnerHTML={{ __html: mockProduct.longDescription }}
+                dangerouslySetInnerHTML={{ __html: product.longDescription || product.description }}
               />
             </div>
           )}

@@ -233,13 +233,15 @@ export default function CategoryPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Image for Mobile and Accessories */}
       {slug === 'mobile-phones' && (
-        <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
+        <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 overflow-hidden">
           <Image
             src="/images/iphone-17.jpg"
             alt="iPhone 17 - Latest Mobile Technology"
             fill
             className="object-cover"
             priority
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
+            quality={85}
           />
         </div>
       )}
@@ -564,11 +566,17 @@ export default function CategoryPage() {
                     >
                       {/* Product Image */}
                       <div className={`relative ${viewMode === 'list' ? 'w-32 lg:w-48 flex-shrink-0' : 'aspect-square'}`}>
-                        <img
+                        <Image
                           src={productImages[0] || '/api/placeholder/300/300'}
                           alt={product.name}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                           loading="lazy"
+                          sizes={viewMode === 'list' 
+                            ? "(max-width: 1024px) 128px, 192px"
+                            : "(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                          }
+                          quality={75}
                         />
                         {discount > 0 && (
                           <div className="absolute top-1 lg:top-2 left-1 lg:left-2 bg-red-500 text-white text-xs font-bold px-1 lg:px-2 py-0.5 lg:py-1 rounded">

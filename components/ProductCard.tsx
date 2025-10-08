@@ -123,16 +123,19 @@ export function ProductCard({ product }: ProductCardProps) {
     <Link href={`/products/${product.slug}`} className="group block">
       <div className="card overflow-hidden hover:shadow-lg transition-shadow duration-300">
         <div className="relative">
-          <div className="relative bg-gray-100" style={{ height: '200px' }}>
-            <img
+          <div className="relative bg-gray-100 aspect-square sm:h-[200px]">
+            <Image
               src={mainImage}
               alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+              quality={75}
               onError={(e) => {
                 console.log('Image failed to load:', mainImage);
                 e.currentTarget.src = '/api/placeholder/300/300/Error';
               }}
-              onLoad={() => console.log('Image loaded:', mainImage)}
             />
             
             {/* Badges */}

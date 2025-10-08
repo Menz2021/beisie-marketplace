@@ -267,19 +267,7 @@ export default function CategoryPage() {
             </button>
           </div>
           
-          {/* Mobile Search */}
-          <div className="mt-3">
-            <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search products..."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-base"
-              />
-            </div>
-          </div>
+          {/* Mobile Search removed for cleaner look */}
         </div>
       </div>
 

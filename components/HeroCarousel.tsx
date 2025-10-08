@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from '@heroicons/react/24/outline'
+import { StarIcon as StarSolidIcon } from '@heroicons/react/24/solid'
 
 interface HeroProduct {
   id: string
@@ -136,7 +137,63 @@ export function HeroCarousel() {
               {/* Overlay for better text readability */}
               <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-40 transition-opacity duration-300"></div>
               
-              {/* Content removed - no overlay text */}
+              {/* Content */}
+              <div className="relative z-10 h-full flex items-center justify-center">
+                <div className="text-center max-w-2xl px-4 sm:px-8">
+                  <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 ${banner.textColor} group-hover:scale-105 transition-transform duration-300`}>
+                    {banner.title}
+                  </h1>
+                  <p className={`text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 ${banner.textColor} opacity-90 group-hover:opacity-100 transition-opacity duration-300`}>
+                    {banner.description}
+                  </p>
+                  
+                  {/* Product-specific information */}
+                  {heroProducts.length > 0 && 'price' in banner && (
+                    <div className="mb-6">
+                      <div className="flex items-center justify-center mb-2">
+                        {(banner as any).averageRating > 0 && (
+                          <div className="flex items-center mr-4">
+                            {[...Array(5)].map((_, i) => (
+                              <StarSolidIcon
+                                key={i}
+                                className={`h-4 w-4 ${
+                                  i < Math.floor((banner as any).averageRating)
+                                    ? 'text-yellow-400'
+                                    : 'text-gray-300'
+                                }`}
+                              />
+                            ))}
+                            <span className="ml-2 text-white text-sm">
+                              ({(banner as any).totalReviews} reviews)
+                            </span>
+                          </div>
+                        )}
+                        {(banner as any).discount > 0 && (
+                          <span className="bg-red-500 text-white text-sm font-bold px-2 py-1 rounded">
+                            -{(banner as any).discount}% OFF
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-center space-x-2">
+                        <span className="text-2xl font-bold text-white">
+                          {formatCurrency(banner.price as number)}
+                        </span>
+                        {(banner as any).originalPrice && (
+                          <span className="text-lg text-gray-300 line-through">
+                            {formatCurrency((banner as any).originalPrice)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Click indicator */}
+                  <div className="inline-flex items-center text-white text-sm font-medium opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                    Click to explore
+                    <ChevronRightIcon className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  </div>
+                </div>
+              </div>
             </div>
           </Link>
         ))}

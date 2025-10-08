@@ -147,6 +147,11 @@ export function HeroCarousel() {
                     {banner.description}
                   </p>
                   
+                  {/* Debug info */}
+                  <div className="text-xs text-white opacity-50 mb-2">
+                    Debug: {heroProducts.length > 0 ? 'Hero Products' : 'Fallback Banners'} | Banner ID: {banner.id}
+                  </div>
+                  
                   {/* Product-specific information */}
                   {heroProducts.length > 0 && 'price' in banner && (
                     <div className="mb-6">

@@ -231,21 +231,6 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Image for Mobile and Accessories */}
-      {slug === 'mobile-phones' && (
-        <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 overflow-hidden">
-          <Image
-            src="/images/iphone-17.jpg"
-            alt="iPhone 17 - Latest Mobile Technology"
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
-            quality={85}
-          />
-        </div>
-      )}
-
       {/* Mobile Header */}
       <div className="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-40">
         <div className="px-4 py-3">
@@ -272,6 +257,21 @@ export default function CategoryPage() {
           {/* Mobile Search removed for cleaner look */}
         </div>
       </div>
+
+      {/* Hero Image for Mobile and Accessories - Now positioned after header */}
+      {slug === 'mobile-phones' && (
+        <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8">
+          <Image
+            src="/images/iphone-17.jpg"
+            alt="iPhone 17 - Latest Mobile Technology"
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
+            quality={85}
+          />
+        </div>
+      )}
 
       {/* Mobile Filters Overlay */}
       {showMobileFilters && (

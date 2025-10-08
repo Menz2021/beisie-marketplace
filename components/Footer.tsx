@@ -15,20 +15,20 @@ export function Footer() {
   }, [])
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
           {/* Company Info */}
           <div className="col-span-1 sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center mb-3">
-              <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-3">
-                <span className="text-white font-bold text-lg">B</span>
+            <div className="flex items-center mb-2 sm:mb-3">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-600 rounded-full flex items-center justify-center mr-2 sm:mr-3">
+                <span className="text-white font-bold text-sm sm:text-lg">B</span>
               </div>
-              <span className="text-xl font-bold text-white">Beisie</span>
+              <span className="text-lg sm:text-xl font-bold text-white">Beisie</span>
             </div>
-            <p className="text-gray-300 mb-4 max-w-md text-sm">
+            <p className="text-gray-300 mb-3 sm:mb-4 max-w-md text-xs sm:text-sm hidden sm:block">
               Your premier marketplace in Uganda. Shop with confidence and convenience.
             </p>
-            <div className="flex space-x-3">
+            <div className="flex space-x-2 sm:space-x-3">
               <a href="#" className="text-gray-400 hover:text-white transition-colors p-1">
                 <span className="sr-only">Facebook</span>
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -52,35 +52,35 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-base font-bold text-white mb-3">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="text-sm sm:text-base font-bold text-white mb-2 sm:mb-3">Quick Links</h3>
+            <ul className="space-y-1 sm:space-y-2">
               <li>
-                <Link href="/" className="text-gray-300 hover:text-white transition-colors text-sm block py-1">
+                <Link href="/" className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm block py-0.5 sm:py-1">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/products" className="text-gray-300 hover:text-white transition-colors text-sm block py-1">
+                <Link href="/products" className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm block py-0.5 sm:py-1">
                   Shop
                 </Link>
               </li>
-              <li>
-                <Link href="/sell" className="text-gray-300 hover:text-white transition-colors text-sm block py-1">
+              <li className="hidden sm:block">
+                <Link href="/sell" className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm block py-0.5 sm:py-1">
                   Sell on Beisie
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors text-sm block py-1">
+                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm block py-0.5 sm:py-1">
                   Contact Us
                 </Link>
               </li>
               {!isUserLoggedIn && (
-                <li>
+                <li className="hidden sm:block">
                   <Link 
                     href="/admin/login" 
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-300 hover:text-white transition-colors text-sm block py-1"
+                    className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm block py-0.5 sm:py-1"
                   >
                     Admin Login
                   </Link>
@@ -91,25 +91,25 @@ export function Footer() {
 
           {/* Customer Service */}
           <div>
-            <h3 className="text-base font-bold text-white mb-3">Support</h3>
-            <ul className="space-y-2">
+            <h3 className="text-sm sm:text-base font-bold text-white mb-2 sm:mb-3">Support</h3>
+            <ul className="space-y-1 sm:space-y-2">
               <li>
-                <Link href="/account" className="text-gray-300 hover:text-white transition-colors text-sm block py-1">
+                <Link href="/account" className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm block py-0.5 sm:py-1">
                   My Account
                 </Link>
               </li>
-              <li>
-                <Link href="/track-order" className="text-gray-300 hover:text-white transition-colors text-sm block py-1">
+              <li className="hidden sm:block">
+                <Link href="/track-order" className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm block py-0.5 sm:py-1">
                   Track Order
                 </Link>
               </li>
-              <li>
-                <Link href="/returns" className="text-gray-300 hover:text-white transition-colors text-sm block py-1">
+              <li className="hidden sm:block">
+                <Link href="/returns" className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm block py-0.5 sm:py-1">
                   Returns
                 </Link>
               </li>
               <li>
-                <Link href="/help" className="text-gray-300 hover:text-white transition-colors text-sm block py-1">
+                <Link href="/help" className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm block py-0.5 sm:py-1">
                   Help Center
                 </Link>
               </li>
@@ -118,12 +118,12 @@ export function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-6 pt-4 border-t border-gray-800">
-          <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+        <div className="mt-3 sm:mt-4 lg:mt-6 pt-3 sm:pt-4 border-t border-gray-800">
+          <div className="flex flex-col sm:flex-row justify-between items-center space-y-1 sm:space-y-2">
             <p className="text-gray-400 text-xs text-center sm:text-left">
               © 2024 Beisie. All rights reserved.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3 sm:space-x-4">
               <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors text-xs">
                 Privacy Policy
               </Link>

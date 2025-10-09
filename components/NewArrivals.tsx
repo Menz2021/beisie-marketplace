@@ -254,9 +254,6 @@ export function NewArrivals() {
                           {product.brand && (
                             <p className="text-xs text-gray-500">{product.brand}</p>
                           )}
-                          <p className="text-xs text-gray-400">
-                            Added {product.daysSinceAdded === 0 ? 'today' : `${product.daysSinceAdded} days ago`}
-                          </p>
                         </div>
                         
                         {/* Rating */}
@@ -438,11 +435,6 @@ export function NewArrivals() {
                             )}
                           </div>
 
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs text-green-600 font-medium">
-                              Added {product.daysSinceAdded} days ago
-                            </span>
-                          </div>
 
                           {/* Shopping Cart Icon */}
                           <div className="flex justify-end">

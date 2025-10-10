@@ -140,12 +140,9 @@ export function HeroCarousel() {
               {/* Content */}
               <div className="relative z-10 h-full flex items-center justify-center">
                 <div className="text-center max-w-2xl px-4 sm:px-8">
-                  <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 ${banner.textColor} group-hover:scale-105 transition-transform duration-300`}>
+                  <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 ${banner.textColor} group-hover:scale-105 transition-transform duration-300`}>
                     {banner.title}
                   </h1>
-                  <p className={`text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 ${banner.textColor} opacity-90 group-hover:opacity-100 transition-opacity duration-300`}>
-                    {banner.description}
-                  </p>
                   
                   {/* Product-specific information */}
                   {heroProducts.length > 0 && 'price' in banner && (

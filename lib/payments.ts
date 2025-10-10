@@ -395,6 +395,47 @@ export class FlutterwavePayment {
   }
 }
 
+// Cash on Delivery Integration
+export class CashOnDelivery {
+  async initiatePayment(request: PaymentRequest): Promise<PaymentResponse> {
+    try {
+      // For cash on delivery, we don't need to process payment immediately
+      // The order will be marked as pending and payment will be collected on delivery
+      return {
+        success: true,
+        transactionId: `cod_${request.orderId}_${Date.now()}`,
+        status: 'PENDING',
+        message: 'Order placed successfully. Payment will be collected on delivery.',
+        paymentUrl: undefined
+      }
+    } catch (error) {
+      return {
+        success: false,
+        status: 'FAILED',
+        message: 'Failed to process cash on delivery order'
+      }
+    }
+  }
+
+  async checkPaymentStatus(transactionId: string): Promise<PaymentResponse> {
+    try {
+      // For cash on delivery, payment status remains pending until delivery
+      return {
+        success: true,
+        transactionId,
+        status: 'PENDING',
+        message: 'Payment pending - will be collected on delivery'
+      }
+    } catch (error) {
+      return {
+        success: false,
+        status: 'FAILED',
+        message: 'Failed to check payment status'
+      }
+    }
+  }
+}
+
 // Stripe Integration for Visa/MasterCard
 export class StripePayment {
   private stripe: any
@@ -453,6 +494,8 @@ export class StripePayment {
 export class PaymentFactory {
   static createPaymentProvider(method: string, config: any) {
     switch (method) {
+      case 'CASH_ON_DELIVERY':
+        return new CashOnDelivery()
       case 'MTN_MOBILE_MONEY':
         return new MTNMobileMoney(config)
       case 'AIRTEL_MONEY':

@@ -10,7 +10,8 @@ import {
   ShieldCheckIcon,
   BuildingOfficeIcon,
   CheckCircleIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  BanknotesIcon
 } from '@heroicons/react/24/outline'
 import { formatUgandaCurrency, validateUgandaPhoneNumber, formatUgandaPhoneNumber } from '@/lib/payments'
 import { MobileCheckoutSummary } from '@/components/MobileCheckoutSummary'
@@ -91,6 +92,13 @@ export default function CheckoutPage() {
   const total = subtotal + shippingCost + tax
 
   const paymentMethods = [
+    {
+      id: 'CASH_ON_DELIVERY',
+      name: 'Cash on Delivery',
+      icon: BanknotesIcon,
+      description: 'Pay with cash when your order is delivered',
+      color: 'text-green-600'
+    },
     {
       id: 'FLUTTERWAVE',
       name: 'Flutterwave',

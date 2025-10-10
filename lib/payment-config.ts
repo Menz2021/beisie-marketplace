@@ -78,7 +78,7 @@ export function validatePaymentConfig(): { isValid: boolean; errors: string[] } 
 
 // Payment method validation
 export function validatePaymentMethod(method: string): boolean {
-  const validMethods = ['MTN_MOBILE_MONEY', 'AIRTEL_MONEY', 'FLUTTERWAVE', 'VISA', 'MASTERCARD']
+  const validMethods = ['CASH_ON_DELIVERY', 'MTN_MOBILE_MONEY', 'AIRTEL_MONEY', 'FLUTTERWAVE', 'VISA', 'MASTERCARD']
   return validMethods.includes(method)
 }
 
@@ -88,6 +88,9 @@ export function validatePaymentMethodConfig(method: string): { isValid: boolean;
   const errors: string[] = []
 
   switch (method) {
+    case 'CASH_ON_DELIVERY':
+      // No configuration required for cash on delivery
+      break
     case 'MTN_MOBILE_MONEY':
       if (!config.mtn.apiKey) errors.push('MTN_API_KEY is required')
       if (!config.mtn.apiSecret) errors.push('MTN_API_SECRET is required')

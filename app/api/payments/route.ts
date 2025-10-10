@@ -68,6 +68,10 @@ export async function POST(request: NextRequest) {
     let paymentResponse
     try {
       switch (paymentMethod) {
+        case 'CASH_ON_DELIVERY':
+          const codProvider = PaymentFactory.createPaymentProvider('CASH_ON_DELIVERY', config) as any
+          paymentResponse = await codProvider.initiatePayment(paymentRequest)
+          break
         case 'MTN_MOBILE_MONEY':
           const mtnProvider = PaymentFactory.createPaymentProvider('MTN_MOBILE_MONEY', config.mtn) as any
           paymentResponse = await mtnProvider.initiatePayment(paymentRequest)

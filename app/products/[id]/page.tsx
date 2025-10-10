@@ -682,17 +682,30 @@ export default function ProductDetailPage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Specifications</h3>
                 <div className="space-y-3">
                   {(() => {
-                    // Parse specifications from product data or use mock data as fallback
+                    // Parse specifications from product data only
                     let specifications = {}
                     if (product.specifications) {
                       try {
                         specifications = JSON.parse(product.specifications)
                       } catch (e) {
                         console.error('Error parsing specifications:', e)
-                        specifications = mockProduct.specifications
+                        specifications = {}
                       }
-                    } else {
-                      specifications = mockProduct.specifications
+                    }
+                    
+                    // Only show specifications if they exist
+                    if (Object.keys(specifications).length === 0) {
+                      return (
+                        <div className="text-center py-8">
+                          <div className="text-gray-500">
+                            <svg className="h-12 w-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p className="text-lg font-medium">No specifications available</p>
+                            <p className="text-sm">Specifications will appear here when added by the seller</p>
+                          </div>
+                        </div>
+                      )
                     }
                     
                     return Object.entries(specifications).map(([key, value]) => (

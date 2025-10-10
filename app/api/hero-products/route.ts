@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
           : 0,
         // Create hero banner content
         title: product.name,
-        description: `Discover ${product.name} - ${product.brand ? `by ${product.brand}` : ''} ${product.category ? `in ${product.category}` : ''}`,
+        description: `Discover ${product.name}${product.brand ? ` by ${product.brand}` : ''}${product.category ? ` in ${product.category}` : ''}`,
         buttonText: "View Product",
         buttonLink: `/products/${product.slug}`,
         backgroundImage: mainImage,

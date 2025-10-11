@@ -260,16 +260,24 @@ export default function CategoryPage() {
 
       {/* Hero Image for Mobile and Accessories - Now positioned after header */}
       {slug === 'mobile-phones' && (
-        <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8">
-          <Image
-            src="/images/iphone-17.jpg"
-            alt="iPhone 17 - Latest Mobile Technology"
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
-            quality={85}
-          />
+        <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+          {/* Mobile: Show full image height */}
+          <div className="block sm:hidden">
+            <img
+              src="/images/iphone-17.jpg"
+              alt="iPhone 17 - Latest Mobile Technology"
+              className="w-full h-auto object-contain"
+            />
+          </div>
+          
+          {/* Desktop: Fixed height with cover */}
+          <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
+            <img
+              src="/images/iphone-17.jpg"
+              alt="iPhone 17 - Latest Mobile Technology"
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
       )}
 

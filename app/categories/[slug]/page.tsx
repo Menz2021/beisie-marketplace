@@ -273,6 +273,21 @@ export default function CategoryPage() {
         </div>
       )}
 
+      {/* Hero Image for Kids Fashion - Now positioned after header */}
+      {slug === 'kids-fashion' && (
+        <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8">
+          <Image
+            src="/images/kids.gif"
+            alt="Kids Fashion - Adorable Children's Clothing"
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
+            quality={85}
+          />
+        </div>
+      )}
+
       {/* Mobile Filters Overlay */}
       {showMobileFilters && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">

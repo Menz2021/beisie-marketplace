@@ -117,6 +117,10 @@ export const imageTestSets = {
     '/images/smartphones.jpg',
     '/watches.avif'
   ],
+  appleProducts: [
+    '/images/Apple watch series.jpg',
+    '/images/iphone-17.jpg'
+  ],
   kids: [
     '/images/kids.gif',
     '/images/kids-test.gif'

@@ -11,6 +11,12 @@ export default function ImageTestPage() {
         </h1>
         
         <div className="space-y-8">
+          {/* Apple Products Images */}
+          <ImageTest 
+            images={imageTestSets.appleProducts}
+            title="Apple Products Images Test"
+          />
+          
           {/* Wearables Images */}
           <ImageTest 
             images={imageTestSets.wearables}

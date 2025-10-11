@@ -306,31 +306,39 @@ export default function CategoryPage() {
         </div>
       )}
 
+      {/* Debug: Current slug for wearables */}
+      {slug === 'wearables' && (
+        <div className="bg-blue-100 p-2 text-center text-sm">
+          Debug: Current slug is "{slug}" - Watches image should show below
+        </div>
+      )}
+
       {/* Hero Image for Wearables - Now positioned after header */}
       {slug === 'wearables' && (
         <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
           {/* Mobile: Show full image height */}
           <div className="block sm:hidden">
-            <img
+            <Image
               src="/images/watches.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
+              width={800}
+              height={600}
               className="w-full h-auto object-contain"
-              onError={(e) => {
-                console.error('Wearables image failed to load:', e);
-              }}
+              unoptimized={true}
+              onError={() => console.error('Wearables image failed to load')}
               onLoad={() => console.log('Wearables image loaded successfully')}
             />
           </div>
           
           {/* Desktop: Fixed height with cover */}
           <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
-            <img
+            <Image
               src="/images/watches.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                console.error('Wearables image failed to load:', e);
-              }}
+              fill
+              className="object-cover"
+              unoptimized={true}
+              onError={() => console.error('Wearables image failed to load')}
               onLoad={() => console.log('Wearables image loaded successfully')}
             />
           </div>

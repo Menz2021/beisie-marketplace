@@ -316,9 +316,17 @@ export default function CategoryPage() {
       {/* Hero Image for Wearables - Now positioned after header */}
       {slug === 'wearables' && (
         <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
-          {/* Test image first */}
+          {/* Test with iPhone image first */}
           <div className="bg-gray-200 p-2 text-center">
-            <p className="text-xs text-gray-600">Testing watches image:</p>
+            <p className="text-xs text-gray-600">Testing iPhone image (should work):</p>
+            <img
+              src="/images/iphone-17.jpg"
+              alt="Test iPhone"
+              className="w-24 h-16 object-cover mx-auto mb-2"
+              onLoad={() => console.log('Test iPhone image loaded')}
+              onError={() => console.error('Test iPhone image failed')}
+            />
+            <p className="text-xs text-gray-600">Testing watches image (problematic):</p>
             <img
               src="/images/watches.jpg"
               alt="Test Watches"
@@ -328,29 +336,22 @@ export default function CategoryPage() {
             />
           </div>
           
-          {/* Mobile: Show full image height */}
+          {/* Use iPhone image as hero for now */}
           <div className="block sm:hidden">
             <img
-              src="/images/watches.jpg"
+              src="/images/iphone-17.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
               className="w-full h-auto object-contain"
-              onError={(e) => {
-                console.error('Watches image failed to load:', e);
-              }}
-              onLoad={() => console.log('Watches image loaded successfully')}
+              onLoad={() => console.log('Hero iPhone image loaded successfully')}
             />
           </div>
           
-          {/* Desktop: Fixed height with cover */}
           <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
             <img
-              src="/images/watches.jpg"
+              src="/images/iphone-17.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
               className="w-full h-full object-cover"
-              onError={(e) => {
-                console.error('Watches image failed to load:', e);
-              }}
-              onLoad={() => console.log('Watches image loaded successfully')}
+              onLoad={() => console.log('Hero iPhone image loaded successfully')}
             />
           </div>
         </div>

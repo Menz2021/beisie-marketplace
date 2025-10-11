@@ -282,8 +282,8 @@ export default function CategoryPage() {
             fill
             className="object-cover"
             priority
+            unoptimized={true}
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
-            quality={85}
           />
         </div>
       )}

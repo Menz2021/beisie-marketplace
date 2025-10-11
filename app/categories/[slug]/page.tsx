@@ -315,6 +315,10 @@ export default function CategoryPage() {
               src="/images/watches.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
               className="w-full h-auto object-contain"
+              onError={(e) => {
+                console.error('Watches image failed to load:', e);
+              }}
+              onLoad={() => console.log('Watches image loaded successfully')}
             />
           </div>
           
@@ -324,6 +328,10 @@ export default function CategoryPage() {
               src="/images/watches.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
               className="w-full h-full object-cover"
+              onError={(e) => {
+                console.error('Watches image failed to load:', e);
+              }}
+              onLoad={() => console.log('Watches image loaded successfully')}
             />
           </div>
         </div>

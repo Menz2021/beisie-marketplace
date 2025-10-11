@@ -306,9 +306,28 @@ export default function CategoryPage() {
         </div>
       )}
 
+      {/* Debug: Wearables page */}
+      {slug === 'wearables' && (
+        <div className="bg-red-100 p-2 text-center text-sm">
+          Debug: Wearables page - slug: "{slug}" - Image should show below
+        </div>
+      )}
+
       {/* Hero Image for Wearables - Now positioned after header */}
       {slug === 'wearables' && (
         <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+          {/* Test image first */}
+          <div className="bg-gray-200 p-2 text-center">
+            <p className="text-xs text-gray-600">Testing watches image:</p>
+            <img
+              src="/images/watches.jpg"
+              alt="Test Watches"
+              className="w-24 h-16 object-cover mx-auto"
+              onLoad={() => console.log('Test watches image loaded')}
+              onError={() => console.error('Test watches image failed')}
+            />
+          </div>
+          
           {/* Mobile: Show full image height */}
           <div className="block sm:hidden">
             <img

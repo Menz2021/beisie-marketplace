@@ -312,7 +312,7 @@ export default function CategoryPage() {
           {/* Mobile: Show full image height */}
           <div className="block sm:hidden">
             <img
-              src="/images/wearables.avif"
+              src="/images/watches.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
               className="w-full h-auto object-contain"
               onError={(e) => {
@@ -325,7 +325,7 @@ export default function CategoryPage() {
           {/* Desktop: Fixed height with cover */}
           <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
             <img
-              src="/images/wearables.avif"
+              src="/images/watches.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
               className="w-full h-full object-cover"
               onError={(e) => {

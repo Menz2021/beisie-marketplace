@@ -316,42 +316,37 @@ export default function CategoryPage() {
       {/* Hero Image for Wearables - Now positioned after header */}
       {slug === 'wearables' && (
         <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
-          {/* Test both images */}
+          {/* Test Apple Watch image */}
           <div className="bg-gray-200 p-2 text-center">
-            <p className="text-xs text-gray-600">Testing iPhone (should work):</p>
+            <p className="text-xs text-gray-600">Testing Apple Watch Series image:</p>
             <img
-              src="/images/iphone-17.jpg"
-              alt="Test iPhone"
-              className="w-24 h-16 object-cover mx-auto mb-2"
-              onLoad={() => console.log('iPhone test loaded')}
-              onError={() => console.error('iPhone test failed')}
-            />
-            <p className="text-xs text-gray-600">Testing wearables1.jpg:</p>
-            <img
-              src="/images/wearables1.jpg"
-              alt="Test Wearables1"
+              src="/images/Apple watch series.jpg"
+              alt="Test Apple Watch"
               className="w-24 h-16 object-cover mx-auto"
-              onLoad={() => console.log('Wearables1 test loaded')}
-              onError={() => console.error('Wearables1 test failed')}
+              onLoad={() => console.log('Apple Watch test loaded')}
+              onError={() => console.error('Apple Watch test failed')}
             />
           </div>
           
-          {/* Use iPhone as hero for now */}
+          {/* Mobile: Show full image height */}
           <div className="block sm:hidden">
             <img
-              src="/images/iphone-17.jpg"
-              alt="Wearables - Smart Watches and Fitness Trackers"
+              src="/images/Apple watch series.jpg"
+              alt="Wearables - Apple Watch Series and Smart Watches"
               className="w-full h-auto object-contain"
-              onLoad={() => console.log('iPhone hero loaded')}
+              onLoad={() => console.log('Apple Watch hero loaded')}
+              onError={() => console.error('Apple Watch hero failed')}
             />
           </div>
           
+          {/* Desktop: Fixed height with cover */}
           <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
             <img
-              src="/images/iphone-17.jpg"
-              alt="Wearables - Smart Watches and Fitness Trackers"
+              src="/images/Apple watch series.jpg"
+              alt="Wearables - Apple Watch Series and Smart Watches"
               className="w-full h-full object-cover"
-              onLoad={() => console.log('iPhone hero loaded')}
+              onLoad={() => console.log('Apple Watch hero loaded')}
+              onError={() => console.error('Apple Watch hero failed')}
             />
           </div>
         </div>

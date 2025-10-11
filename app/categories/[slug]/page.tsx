@@ -273,18 +273,28 @@ export default function CategoryPage() {
         </div>
       )}
 
-      {/* Hero Image for Kids Fashion - Now positioned after header */}
+      {/* Debug: Current slug */}
       {slug === 'kids-fashion' && (
+        <div className="bg-yellow-100 p-2 text-center text-sm">
+          Debug: Current slug is "{slug}" - Kids image should show below
+        </div>
+      )}
+
+      {/* Hero Image for Kids Fashion - Now positioned after header */}
+      {(slug === 'kids-fashion' || slug === 'kids_fashion') && (
         <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8">
-          <Image
-            src="/images/kids.gif"
-            alt="Kids Fashion - Adorable Children's Clothing"
-            fill
-            className="object-cover"
-            priority
-            unoptimized={true}
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
-          />
+          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+            <img
+              src="/images/kids.gif"
+              alt="Kids Fashion - Adorable Children's Clothing"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                console.error('Primary image failed, trying fallback');
+                e.currentTarget.src = '/kids-test.gif';
+              }}
+              onLoad={() => console.log('Kids image loaded successfully')}
+            />
+          </div>
         </div>
       )}
 

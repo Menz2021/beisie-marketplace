@@ -306,54 +306,24 @@ export default function CategoryPage() {
         </div>
       )}
 
-      {/* Debug: Test different wearables images */}
-      {slug === 'wearables' && (
-        <div className="bg-blue-100 p-2 text-center text-sm">
-          Debug: Testing different wearables images
-        </div>
-      )}
-
       {/* Hero Image for Wearables - Now positioned after header */}
       {slug === 'wearables' && (
         <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
-          {/* Test different images */}
-          <div className="bg-gray-200 p-2 text-center">
-            <p className="text-xs text-gray-600">Testing watch.avif from images folder:</p>
-            <img
-              src="/images/watch.avif"
-              alt="Test Watch AVIF"
-              className="w-24 h-16 object-cover mx-auto mb-2"
-              onLoad={() => console.log('Watch AVIF from images loaded')}
-              onError={() => console.error('Watch AVIF from images failed')}
-            />
-            <p className="text-xs text-gray-600">Testing smartphones.jpg:</p>
-            <img
-              src="/images/smartphones.jpg"
-              alt="Test Smartphones"
-              className="w-24 h-16 object-cover mx-auto"
-              onLoad={() => console.log('Smartphones loaded')}
-              onError={() => console.error('Smartphones failed')}
-            />
-          </div>
-          
-          {/* Use watch.avif as hero */}
+          {/* Mobile: Show full image height */}
           <div className="block sm:hidden">
             <img
               src="/images/watch.avif"
               alt="Wearables - Smart Watches and Fitness Trackers"
               className="w-full h-auto object-contain"
-              onLoad={() => console.log('Watch AVIF hero loaded')}
-              onError={() => console.error('Watch AVIF hero failed')}
             />
           </div>
           
+          {/* Desktop: Fixed height with cover */}
           <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
             <img
               src="/images/watch.avif"
               alt="Wearables - Smart Watches and Fitness Trackers"
               className="w-full h-full object-cover"
-              onLoad={() => console.log('Watch AVIF hero loaded')}
-              onError={() => console.error('Watch AVIF hero failed')}
             />
           </div>
         </div>

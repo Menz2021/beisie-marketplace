@@ -316,29 +316,43 @@ export default function CategoryPage() {
       {/* Hero Image for Wearables - Now positioned after header */}
       {slug === 'wearables' && (
         <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+          {/* Test with iPhone image first */}
+          <div className="bg-gray-200 p-4 text-center">
+            <p className="text-sm text-gray-600 mb-2">Testing image loading...</p>
+            <img
+              src="/images/iphone-17.jpg"
+              alt="Test Image"
+              className="w-32 h-20 object-cover mx-auto mb-2"
+              onLoad={() => console.log('Test iPhone image loaded successfully')}
+              onError={() => console.error('Test iPhone image failed')}
+            />
+            <p className="text-xs text-gray-500">If you see this iPhone image above, image loading works</p>
+          </div>
+          
           {/* Mobile: Show full image height */}
           <div className="block sm:hidden">
-            <Image
+            <img
               src="/images/watches.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
-              width={800}
-              height={600}
               className="w-full h-auto object-contain"
-              unoptimized={true}
-              onError={() => console.error('Wearables image failed to load')}
+              onError={(e) => {
+                console.error('Primary watches image failed, trying fallback');
+                e.currentTarget.src = '/watches-test.jpg';
+              }}
               onLoad={() => console.log('Wearables image loaded successfully')}
             />
           </div>
           
           {/* Desktop: Fixed height with cover */}
           <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
-            <Image
+            <img
               src="/images/watches.jpg"
               alt="Wearables - Smart Watches and Fitness Trackers"
-              fill
-              className="object-cover"
-              unoptimized={true}
-              onError={() => console.error('Wearables image failed to load')}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                console.error('Primary watches image failed, trying fallback');
+                e.currentTarget.src = '/watches-test.jpg';
+              }}
               onLoad={() => console.log('Wearables image loaded successfully')}
             />
           </div>

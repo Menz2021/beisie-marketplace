@@ -275,17 +275,34 @@ export default function CategoryPage() {
 
       {/* Hero Image for Kids Fashion - Now positioned after header */}
       {(slug === 'kids-fashion' || slug === 'kids_fashion') && (
-        <div className="relative w-screen h-48 sm:h-56 md:h-64 lg:h-80 xl:h-96 overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
-          <img
-            src="/images/kids.gif"
-            alt="Kids Fashion - Adorable Children's Clothing"
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              console.error('Primary image failed, trying fallback');
-              e.currentTarget.src = '/kids-test.gif';
-            }}
-            onLoad={() => console.log('Kids image loaded successfully')}
-          />
+        <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+          {/* Mobile: Show full image height */}
+          <div className="block sm:hidden">
+            <img
+              src="/images/kids.gif"
+              alt="Kids Fashion - Adorable Children's Clothing"
+              className="w-full h-auto object-contain"
+              onError={(e) => {
+                console.error('Primary image failed, trying fallback');
+                e.currentTarget.src = '/kids-test.gif';
+              }}
+              onLoad={() => console.log('Kids image loaded successfully')}
+            />
+          </div>
+          
+          {/* Desktop: Fixed height with cover */}
+          <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
+            <img
+              src="/images/kids.gif"
+              alt="Kids Fashion - Adorable Children's Clothing"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                console.error('Primary image failed, trying fallback');
+                e.currentTarget.src = '/kids-test.gif';
+              }}
+              onLoad={() => console.log('Kids image loaded successfully')}
+            />
+          </div>
         </div>
       )}
 

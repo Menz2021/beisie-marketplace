@@ -337,27 +337,18 @@ export default function CategoryPage() {
         </div>
       )}
 
-      {/* Hero Image for Home & Kitchen - Now positioned after header */}
+      {/* Background Image for Home & Kitchen - Extends down the page */}
       {slug === 'home-kitchen' && (
-        <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
-          {/* Mobile: Show full image height */}
-          <div className="block sm:hidden">
-            <img
-              src="/images/kitchen essentials.jpg"
-              alt="Home & Kitchen - Essential Kitchen Tools and Appliances"
-              className="w-full h-auto object-contain"
-            />
-          </div>
-          
-          {/* Desktop: Fixed height with cover */}
-          <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
-            <img
-              src="/images/kitchen essentials.jpg"
-              alt="Home & Kitchen - Essential Kitchen Tools and Appliances"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
+        <div 
+          className="fixed inset-0 w-full h-full z-0"
+          style={{
+            backgroundImage: 'url(/images/kitchen essentials.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'fixed'
+          }}
+        />
       )}
 
       {/* Mobile Filters Overlay */}
@@ -485,11 +476,11 @@ export default function CategoryPage() {
       )}
 
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
+      <div className={`w-full px-4 sm:px-6 lg:px-8 py-4 lg:py-8 ${slug === 'home-kitchen' ? 'relative z-10' : ''}`}>
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           {/* Desktop Filters Sidebar */}
           <div className="hidden lg:block lg:w-64 flex-shrink-0">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 ${slug === 'home-kitchen' ? 'bg-white/90 backdrop-blur-sm' : ''}`}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
                 <button
@@ -625,7 +616,7 @@ export default function CategoryPage() {
 
             {/* Products Grid/List */}
             {sortedProducts.length === 0 ? (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 lg:p-12 text-center">
+              <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-8 lg:p-12 text-center ${slug === 'home-kitchen' ? 'bg-white/90 backdrop-blur-sm' : ''}`}>
                 <div className="text-gray-500">
                   <FunnelIcon className="h-12 w-12 mx-auto mb-4" />
                   <p className="text-lg font-medium">No products found</p>
@@ -647,7 +638,7 @@ export default function CategoryPage() {
                     <Link
                       key={product.id}
                       href={`/products/${product.slug}`}
-                      className={`group block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow touch-manipulation ${
+                      className={`group block ${slug === 'home-kitchen' ? 'bg-white/90 backdrop-blur-sm' : 'bg-white'} rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow touch-manipulation ${
                         viewMode === 'list' ? 'flex' : ''
                       }`}
                     >

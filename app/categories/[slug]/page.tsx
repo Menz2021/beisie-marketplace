@@ -548,13 +548,13 @@ export default function CategoryPage() {
             </svg>
           </button>
           
-          {/* Dots indicator - extremely small dots on mobile, invisible but clickable */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1 z-10">
+          {/* Dots indicator - hidden on mobile, visible on desktop */}
+          <div className="hidden sm:flex absolute bottom-4 left-1/2 transform -translate-x-1/2 space-x-1 z-10">
             {[0, 1, 2].map((index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`w-0 h-0 sm:w-1 sm:h-1 rounded-full transition-colors ${
+                className={`w-1 h-1 rounded-full transition-colors ${
                   currentSlide === index ? 'bg-white' : 'bg-white/50'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
@@ -634,13 +634,13 @@ export default function CategoryPage() {
             </svg>
           </button>
           
-          {/* Dots indicator - extremely small dots on mobile, invisible but clickable */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1 z-10">
+          {/* Dots indicator - hidden on mobile, visible on desktop */}
+          <div className="hidden sm:flex absolute bottom-4 left-1/2 transform -translate-x-1/2 space-x-1 z-10">
             {[0, 1, 2].map((index) => (
               <button
                 key={index}
                 onClick={() => setCurrentTvSlide(index)}
-                className={`w-0 h-0 sm:w-1 sm:h-1 rounded-full transition-colors ${
+                className={`w-1 h-1 rounded-full transition-colors ${
                   currentTvSlide === index ? 'bg-white' : 'bg-white/50'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}

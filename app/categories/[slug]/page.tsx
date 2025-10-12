@@ -352,18 +352,35 @@ export default function CategoryPage() {
             }}
           />
           
-          {/* Fallback Image for debugging */}
+          {/* Fallback Image for debugging - Better mobile sizing */}
           <div className="relative w-screen overflow-hidden mb-4" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
-            <img
-              src="/images/kitchen essentials.jpg"
-              alt="Home & Kitchen - Essential Kitchen Tools and Appliances"
-              className="w-full h-64 md:h-80 lg:h-96 object-cover"
-              onError={(e) => {
-                console.error('Kitchen image failed to load:', e);
-                e.currentTarget.style.display = 'none';
-              }}
-              onLoad={() => console.log('Kitchen image loaded successfully')}
-            />
+            {/* Mobile: Show full image height */}
+            <div className="block sm:hidden">
+              <img
+                src="/images/kitchen essentials.jpg"
+                alt="Home & Kitchen - Essential Kitchen Tools and Appliances"
+                className="w-full h-auto object-contain"
+                onError={(e) => {
+                  console.error('Kitchen image failed to load:', e);
+                  e.currentTarget.style.display = 'none';
+                }}
+                onLoad={() => console.log('Kitchen image loaded successfully')}
+              />
+            </div>
+            
+            {/* Desktop: Fixed height with cover */}
+            <div className="hidden sm:block h-64 md:h-80 lg:h-96">
+              <img
+                src="/images/kitchen essentials.jpg"
+                alt="Home & Kitchen - Essential Kitchen Tools and Appliances"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  console.error('Kitchen image failed to load:', e);
+                  e.currentTarget.style.display = 'none';
+                }}
+                onLoad={() => console.log('Kitchen image loaded successfully')}
+              />
+            </div>
           </div>
         </>
       )}

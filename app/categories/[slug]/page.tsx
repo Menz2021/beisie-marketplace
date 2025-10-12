@@ -391,6 +391,29 @@ export default function CategoryPage() {
         </div>
       )}
 
+      {/* Hero Image for Gaming - Now positioned after header */}
+      {slug === 'gaming' && (
+        <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+          {/* Mobile: Show full image height */}
+          <div className="block sm:hidden">
+            <img
+              src="/images/gaming store.jpg"
+              alt="Gaming - Consoles, Games and Accessories"
+              className="w-full h-auto object-contain"
+            />
+          </div>
+          
+          {/* Desktop: Fixed height with cover */}
+          <div className="hidden sm:block h-56 md:h-64 lg:h-80 xl:h-96">
+            <img
+              src="/images/gaming store.jpg"
+              alt="Gaming - Consoles, Games and Accessories"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Mobile Filters Overlay */}
       {showMobileFilters && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">

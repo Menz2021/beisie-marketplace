@@ -342,7 +342,7 @@ export default function CategoryPage() {
         <>
           {/* Background Image */}
           <div 
-            className="fixed inset-0 w-full h-full z-0"
+            className="fixed inset-0 w-full h-full -z-10"
             style={{
               backgroundImage: 'url(/images/kitchen essentials.jpg)',
               backgroundSize: 'cover',

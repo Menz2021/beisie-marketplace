@@ -143,7 +143,7 @@ export function Navbar() {
   return (
     <>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white/90 backdrop-blur-sm border-b border-white/20">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Desktop Layout */}
           <div className="hidden lg:flex justify-between items-center h-16">

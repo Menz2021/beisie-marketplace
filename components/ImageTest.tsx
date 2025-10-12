@@ -139,6 +139,7 @@ export const imageTestSets = {
     '/images/kids.gif',
     '/images/iphone-17.jpg',
     '/images/Mobile phones.jpg',
-    '/watches.avif'
+    '/watches.avif',
+    '/images/phones.jpg'
   ]
 }

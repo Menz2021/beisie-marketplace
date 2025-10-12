@@ -51,7 +51,7 @@ export default function HomePage() {
   }, [router])
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-transparent">
       <HeroCarousel />
       <ShopByCategory />
       <TrendingProducts />

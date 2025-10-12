@@ -14,7 +14,7 @@ export function Footer() {
     setIsUserLoggedIn(isLoggedIn)
   }, [])
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-900/90 backdrop-blur-sm text-white">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-6">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
           {/* Company Info */}

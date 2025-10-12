@@ -44,7 +44,7 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
   
   if (shouldShowNavbar) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-transparent">
         <Navbar />
         <main className="flex-1">
           {children}
@@ -56,7 +56,7 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
   
   // For dashboard pages (admin, seller, etc.), return just the content
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-transparent">
       {children}
     </div>
   )

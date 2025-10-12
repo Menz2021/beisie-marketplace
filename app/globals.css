@@ -117,4 +117,22 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
+  
+  /* Auto-scrolling animation for automotive carousel */
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  .animate-scroll-left {
+    animation: scroll-left 15s linear infinite;
+  }
+  
+  .animate-scroll-left:hover {
+    animation-play-state: paused;
+  }
 }

@@ -454,6 +454,49 @@ export default function CategoryPage() {
         </div>
       )}
 
+      {/* Auto-scrolling Automotive Carousel - Now positioned after header */}
+      {slug === 'automotive' && (
+        <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+          <div className="h-56 md:h-64 lg:h-80 xl:h-96 relative overflow-hidden">
+            {/* Auto-scrolling carousel container */}
+            <div className="flex animate-scroll-left h-full">
+              {/* First set of images */}
+              <img
+                src="/images/auto1.jpg"
+                alt="Automotive - Car Accessories and Parts"
+                className="w-full h-full object-cover flex-shrink-0"
+              />
+              <img
+                src="/images/auto2.jpg"
+                alt="Automotive - Car Accessories and Parts"
+                className="w-full h-full object-cover flex-shrink-0"
+              />
+              <img
+                src="/images/auto3.jpg"
+                alt="Automotive - Car Accessories and Parts"
+                className="w-full h-full object-cover flex-shrink-0"
+              />
+              {/* Duplicate set for seamless loop */}
+              <img
+                src="/images/auto1.jpg"
+                alt="Automotive - Car Accessories and Parts"
+                className="w-full h-full object-cover flex-shrink-0"
+              />
+              <img
+                src="/images/auto2.jpg"
+                alt="Automotive - Car Accessories and Parts"
+                className="w-full h-full object-cover flex-shrink-0"
+              />
+              <img
+                src="/images/auto3.jpg"
+                alt="Automotive - Car Accessories and Parts"
+                className="w-full h-full object-cover flex-shrink-0"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Filters Overlay */}
       {showMobileFilters && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">

@@ -27,7 +27,10 @@ export function Footer() {
                 onError={(e) => {
                   // Fallback to original logo if image fails to load
                   e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextElementSibling.style.display = 'flex';
+                  const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (fallback) {
+                    fallback.style.display = 'flex';
+                  }
                 }}
               />
               <div className="w-5 h-5 sm:w-6 sm:h-6 bg-purple-600 rounded-full flex items-center justify-center mr-2" style={{ display: 'none' }}>

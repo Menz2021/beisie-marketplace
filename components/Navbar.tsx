@@ -167,7 +167,10 @@ export function Navbar() {
                   onError={(e) => {
                     // Fallback to original logo if image fails to load
                     e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling.style.display = 'flex';
+                    const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                    if (fallback) {
+                      fallback.style.display = 'flex';
+                    }
                   }}
                 />
                 <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-2" style={{ display: 'none' }}>

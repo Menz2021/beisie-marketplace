@@ -339,16 +339,33 @@ export default function CategoryPage() {
 
       {/* Background Image for Home & Kitchen - Extends down the page */}
       {slug === 'home-kitchen' && (
-        <div 
-          className="fixed inset-0 w-full h-full z-0"
-          style={{
-            backgroundImage: 'url(/images/kitchen essentials.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center top',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'fixed'
-          }}
-        />
+        <>
+          {/* Background Image */}
+          <div 
+            className="fixed inset-0 w-full h-full z-0"
+            style={{
+              backgroundImage: 'url(/images/kitchen essentials.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center top',
+              backgroundRepeat: 'no-repeat',
+              backgroundAttachment: 'fixed'
+            }}
+          />
+          
+          {/* Fallback Image for debugging */}
+          <div className="relative w-screen overflow-hidden mb-4" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+            <img
+              src="/images/kitchen essentials.jpg"
+              alt="Home & Kitchen - Essential Kitchen Tools and Appliances"
+              className="w-full h-64 md:h-80 lg:h-96 object-cover"
+              onError={(e) => {
+                console.error('Kitchen image failed to load:', e);
+                e.currentTarget.style.display = 'none';
+              }}
+              onLoad={() => console.log('Kitchen image loaded successfully')}
+            />
+          </div>
+        </>
       )}
 
       {/* Mobile Filters Overlay */}

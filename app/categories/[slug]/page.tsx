@@ -79,11 +79,23 @@ export default function CategoryPage() {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' })
   const [showFilters, setShowFilters] = useState(false)
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [currentSlide, setCurrentSlide] = useState(0)
   const { addItem, updateQuantity, items } = useCartStore()
 
   useEffect(() => {
     if (slug) {
       fetchCategoryAndProducts()
+    }
+  }, [slug])
+
+  // Auto-advance slideshow for automotive category
+  useEffect(() => {
+    if (slug === 'automotive') {
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev === 2 ? 0 : prev + 1))
+      }, 2000) // Change every 2 seconds
+
+      return () => clearInterval(interval)
     }
   }, [slug])
 
@@ -454,13 +466,12 @@ export default function CategoryPage() {
         </div>
       )}
 
-      {/* Auto-scrolling Automotive Carousel - Now positioned after header */}
+      {/* Automotive Slideshow - Now positioned after header */}
       {slug === 'automotive' && (
         <div className="relative w-screen overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
           <div className="h-56 md:h-64 lg:h-80 xl:h-96 relative overflow-hidden">
-            {/* Auto-scrolling carousel container */}
-            <div className="flex animate-scroll-left h-full">
-              {/* First set of images */}
+            {/* Slideshow container */}
+            <div className="flex h-full transition-transform duration-1000 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
               <img
                 src="/images/auto1.jpg"
                 alt="Automotive - Car Accessories and Parts"
@@ -476,22 +487,41 @@ export default function CategoryPage() {
                 alt="Automotive - Car Accessories and Parts"
                 className="w-full h-full object-cover flex-shrink-0"
               />
-              {/* Duplicate set for seamless loop */}
-              <img
-                src="/images/auto1.jpg"
-                alt="Automotive - Car Accessories and Parts"
-                className="w-full h-full object-cover flex-shrink-0"
-              />
-              <img
-                src="/images/auto2.jpg"
-                alt="Automotive - Car Accessories and Parts"
-                className="w-full h-full object-cover flex-shrink-0"
-              />
-              <img
-                src="/images/auto3.jpg"
-                alt="Automotive - Car Accessories and Parts"
-                className="w-full h-full object-cover flex-shrink-0"
-              />
+            </div>
+            
+            {/* Navigation buttons */}
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev === 0 ? 2 : prev - 1))}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+              aria-label="Previous image"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev === 2 ? 0 : prev + 1))}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+              aria-label="Next image"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+            
+            {/* Dots indicator */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+              {[0, 1, 2].map((index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    currentSlide === index ? 'bg-white' : 'bg-white/50'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
           </div>
         </div>

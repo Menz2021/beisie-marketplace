@@ -160,7 +160,17 @@ export function Navbar() {
             {/* Logo */}
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
-                <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-2">
+                <img
+                  src="/images/logo1.jpg"
+                  alt="Beisie Logo"
+                  className="w-8 h-8 rounded-full mr-2"
+                  onError={(e) => {
+                    // Fallback to original logo if image fails to load
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-2" style={{ display: 'none' }}>
                   <span className="text-white font-bold text-lg">B</span>
                 </div>
                 <span className="text-2xl font-bold text-gray-900">Beisie</span>

@@ -20,7 +20,17 @@ export function Footer() {
           {/* Company Info */}
           <div className="col-span-2 sm:col-span-1">
             <div className="flex items-center mb-1 sm:mb-2">
-              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-purple-600 rounded-full flex items-center justify-center mr-2">
+              <img
+                src="/images/logo1.jpg"
+                alt="Beisie Logo"
+                className="w-5 h-5 sm:w-6 sm:h-6 rounded-full mr-2"
+                onError={(e) => {
+                  // Fallback to original logo if image fails to load
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextElementSibling.style.display = 'flex';
+                }}
+              />
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-purple-600 rounded-full flex items-center justify-center mr-2" style={{ display: 'none' }}>
                 <span className="text-white font-bold text-xs sm:text-sm">B</span>
               </div>
               <span className="text-sm sm:text-base font-bold text-white">Beisie</span>

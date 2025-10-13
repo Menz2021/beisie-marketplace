@@ -22,7 +22,7 @@ export function HeroCarousel() {
   const categoryBanners: CategoryBanner[] = [
     {
       id: 'automotive',
-      image: '/auto1.jpg',
+      image: '/images/auto1.jpg',
       title: 'Automotive',
       description: 'Discover quality automotive products',
       categorySlug: 'automotive',
@@ -30,7 +30,7 @@ export function HeroCarousel() {
     },
     {
       id: 'laptops',
-      image: '/computer.jpg',
+      image: '/images/computer.jpg',
       title: 'Laptops & Computers',
       description: 'Powerful laptops and computing solutions',
       categorySlug: 'laptops-computers',
@@ -38,7 +38,7 @@ export function HeroCarousel() {
     },
     {
       id: 'electronics',
-      image: '/computer1.jpg',
+      image: '/images/computer1.jpg',
       title: 'Electronics',
       description: 'Latest electronic gadgets and devices',
       categorySlug: 'electronics',
@@ -46,7 +46,7 @@ export function HeroCarousel() {
     },
     {
       id: 'audio',
-      image: '/earpods.jpg',
+      image: '/images/earpods.jpg',
       title: 'Audio & Headphones',
       description: 'Premium audio equipment and headphones',
       categorySlug: 'audio-headphones',
@@ -54,7 +54,7 @@ export function HeroCarousel() {
     },
     {
       id: 'gaming',
-      image: '/games1.jpg',
+      image: '/images/games1.jpg',
       title: 'Gaming',
       description: 'Gaming accessories and equipment',
       categorySlug: 'gaming',
@@ -62,7 +62,7 @@ export function HeroCarousel() {
     },
     {
       id: 'kitchen',
-      image: '/home appliances.jpg',
+      image: '/images/home appliances.jpg',
       title: 'Kitchen Appliances',
       description: 'Modern kitchen appliances for your home',
       categorySlug: 'home-kitchen',
@@ -70,7 +70,7 @@ export function HeroCarousel() {
     },
     {
       id: 'mobile',
-      image: '/phones.jpg',
+      image: '/images/phones.jpg',
       title: 'Mobile Phones & Accessories',
       description: 'Latest smartphones and mobile accessories',
       categorySlug: 'mobile-phones',
@@ -125,7 +125,7 @@ export function HeroCarousel() {
             className="w-full h-full flex-shrink-0 relative block cursor-pointer group"
           >
             {/* Background Image */}
-            <div className="w-full h-full relative overflow-hidden">
+            <div className="w-full h-full relative overflow-hidden bg-gradient-to-br from-purple-500 to-blue-600">
               <Image
                 src={banner.image}
                 alt={banner.title}
@@ -133,6 +133,15 @@ export function HeroCarousel() {
                 className="object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
                 priority={banner.id === categoryBanners[0].id}
                 sizes="100vw"
+                onError={(e) => {
+                  console.error(`Failed to load image: ${banner.image}`, e)
+                  // Fallback to a solid color if image fails
+                  const target = e.target as HTMLImageElement
+                  target.style.display = 'none'
+                }}
+                onLoad={() => {
+                  console.log(`Successfully loaded image: ${banner.image}`)
+                }}
               />
               
               {/* Overlay for better text readability */}

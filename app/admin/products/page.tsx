@@ -38,6 +38,7 @@ interface Product {
   vendorId: string
   deliveryTimeDays?: number
   deliveryTimeText?: string
+  specifications?: string
   createdAt: string
   updatedAt: string
   category?: {
@@ -88,7 +89,8 @@ export default function AdminProductsPage() {
     isActive: true,
     isFeatured: false,
     deliveryTimeDays: 0,
-    deliveryTimeText: ''
+    deliveryTimeText: '',
+    specifications: ''
   })
   const router = useRouter()
 
@@ -355,6 +357,7 @@ export default function AdminProductsPage() {
       formDataToSend.append('isFeatured', formData.isFeatured.toString())
       formDataToSend.append('deliveryTimeDays', formData.deliveryTimeDays.toString())
       formDataToSend.append('deliveryTimeText', formData.deliveryTimeText || '')
+      formDataToSend.append('specifications', formData.specifications || '')
       
       // Add images
       selectedImages.forEach((image, index) => {
@@ -414,7 +417,8 @@ export default function AdminProductsPage() {
       isActive: product.isActive,
       isFeatured: product.isFeatured,
       deliveryTimeDays: product.deliveryTimeDays || 0,
-      deliveryTimeText: product.deliveryTimeText || ''
+      deliveryTimeText: product.deliveryTimeText || '',
+      specifications: product.specifications || ''
     })
     setShowAddModal(true)
   }
@@ -450,6 +454,7 @@ export default function AdminProductsPage() {
       formDataToSend.append('isFeatured', formData.isFeatured.toString())
       formDataToSend.append('deliveryTimeDays', formData.deliveryTimeDays.toString())
       formDataToSend.append('deliveryTimeText', formData.deliveryTimeText || '')
+      formDataToSend.append('specifications', formData.specifications || '')
       
       // Add images (only if new ones are selected)
       selectedImages.forEach((image, index) => {
@@ -555,7 +560,8 @@ export default function AdminProductsPage() {
       isActive: true,
       isFeatured: false,
       deliveryTimeDays: 0,
-      deliveryTimeText: ''
+      deliveryTimeText: '',
+      specifications: ''
     })
     setSelectedImages([])
     setImagePreviews([])
@@ -1349,6 +1355,22 @@ export default function AdminProductsPage() {
                   />
                 </div>
                 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Specifications
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={formData.specifications}
+                    onChange={(e) => setFormData({...formData, specifications: e.target.value})}
+                    className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation"
+                    placeholder="Enter product specifications (e.g., dimensions, materials, features, etc.)..."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Optional: Add detailed specifications like dimensions, materials, features, technical details, etc.
+                  </p>
+                </div>
+                
                 <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-3 sm:space-y-0">
                   <label className="flex items-center touch-manipulation">
                     <input
@@ -1499,6 +1521,12 @@ export default function AdminProductsPage() {
                             {previewProduct.deliveryTimeText && ` (${previewProduct.deliveryTimeText})`}
                           </p>
                         </div>
+                        {previewProduct.specifications && (
+                          <div className="bg-gray-50 p-2 rounded-lg">
+                            <span className="text-xs font-medium text-gray-500">Specifications:</span>
+                            <p className="text-sm text-gray-900 break-words whitespace-pre-wrap">{previewProduct.specifications}</p>
+                          </div>
+                        )}
                       </div>
                     </div>
 

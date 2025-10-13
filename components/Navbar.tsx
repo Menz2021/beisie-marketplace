@@ -45,12 +45,8 @@ export function Navbar() {
       if (userData) {
         try {
           const parsedUser = JSON.parse(userData)
-          // Only set user if they are not a seller (sellers should use seller dashboard)
-          if (parsedUser.role !== 'SELLER') {
-            setUser(parsedUser)
-          } else {
-            setUser(null)
-          }
+          // Always set user regardless of role so dropdown works for all roles
+          setUser(parsedUser)
         } catch (error) {
           console.error('Error parsing user data:', error)
           setUser(null)
@@ -98,18 +94,20 @@ export function Navbar() {
     }
 
     // Add both click and touch event listeners for better mobile support
-    document.addEventListener('click', handleClickOutside)
-    document.addEventListener('touchstart', handleClickOutside)
+    document.addEventListener('click', handleClickOutside, { capture: true })
+    document.addEventListener('touchstart', handleClickOutside, { capture: true })
     
     return () => {
-      document.removeEventListener('click', handleClickOutside)
-      document.removeEventListener('touchstart', handleClickOutside)
+      document.removeEventListener('click', handleClickOutside, { capture: true })
+      document.removeEventListener('touchstart', handleClickOutside, { capture: true })
     }
   }, [showUserMenu])
 
   const handleLogout = () => {
     // Clear all user-related data from localStorage
     localStorage.removeItem('user_session')
+    localStorage.removeItem('admin_session')
+    localStorage.removeItem('seller_session')
     localStorage.removeItem('cart-storage')
     localStorage.removeItem('wishlist-storage')
     localStorage.removeItem('user_preferences')

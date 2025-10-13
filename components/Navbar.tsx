@@ -141,7 +141,7 @@ export function Navbar() {
   return (
     <>
       {/* Header */}
-      <div className="bg-white/90 backdrop-blur-sm border-b border-white/20">
+      <div className="bg-white/90 backdrop-blur-sm border-b border-white/20 relative z-[10000]">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Desktop Layout */}
           <div className="hidden lg:flex justify-between items-center h-16">
@@ -216,7 +216,10 @@ export function Navbar() {
               {user ? (
                 <div className="relative">
                   <button
-                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    onClick={() => {
+                      console.log('Account button clicked, current state:', showUserMenu)
+                      setShowUserMenu(!showUserMenu)
+                    }}
                     data-dropdown-button
                     className="flex flex-col items-center text-gray-600 hover:text-gray-900"
                   >
@@ -233,6 +236,7 @@ export function Navbar() {
                     <div 
                       data-dropdown-menu
                       className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-[9999] border border-gray-200 animate-in slide-in-from-top-2 duration-200"
+                      style={{ zIndex: 9999 }}
                     >
                       <div className="px-4 py-3 border-b border-gray-100">
                         <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
@@ -332,7 +336,10 @@ export function Navbar() {
                 {user ? (
                   <div className="relative">
                     <button
-                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      onClick={() => {
+                        console.log('Mobile account button clicked, current state:', showUserMenu)
+                        setShowUserMenu(!showUserMenu)
+                      }}
                       data-dropdown-button
                       className="flex items-center justify-center p-3 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 active:bg-gray-200 transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
                     >
@@ -348,6 +355,7 @@ export function Navbar() {
                       <div 
                         data-dropdown-menu
                         className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl py-2 z-[9999] border border-gray-200 animate-in slide-in-from-top-2 duration-200"
+                        style={{ zIndex: 9999 }}
                       >
                         <div className="px-4 py-3 border-b border-gray-100">
                           <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>

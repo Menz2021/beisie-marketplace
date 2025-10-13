@@ -105,8 +105,10 @@ export default function LoginPage() {
         console.log('Redirect parameter:', redirectTo) // Debug log
         if (redirectTo) {
           console.log('Redirecting to:', redirectTo) // Debug log
-          // Use router.push for better mobile compatibility
-          router.push(redirectTo)
+          // Use window.location.href for more reliable redirect
+          setTimeout(() => {
+            window.location.href = redirectTo
+          }, 100)
           return
         }
         

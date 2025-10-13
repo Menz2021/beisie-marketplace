@@ -719,7 +719,6 @@ export default function ProductDetailPage() {
           {/* Tab Content */}
           {activeTab === 'description' && (
             <div className="prose max-w-none">
-              <p className="text-gray-700 mb-4">{product.description}</p>
               <div
                 className="text-gray-700"
                 dangerouslySetInnerHTML={{ __html: product.description }}

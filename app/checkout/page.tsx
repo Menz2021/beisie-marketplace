@@ -200,7 +200,9 @@ export default function CheckoutPage() {
       if (!userData) {
         alert('Please log in to place an order')
         // Redirect to login with return URL to checkout
-        window.location.href = '/auth/login?redirect=' + encodeURIComponent('/checkout')
+        const redirectUrl = '/auth/login?redirect=' + encodeURIComponent('/checkout')
+        console.log('Redirecting to:', redirectUrl) // Debug log
+        window.location.href = redirectUrl
         return
       }
 

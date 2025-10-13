@@ -102,7 +102,9 @@ export default function LoginPage() {
         
         // Check for redirect parameter first
         const redirectTo = searchParams.get('redirect')
+        console.log('Redirect parameter:', redirectTo) // Debug log
         if (redirectTo) {
+          console.log('Redirecting to:', redirectTo) // Debug log
           // Use router.push for better mobile compatibility
           router.push(redirectTo)
           return

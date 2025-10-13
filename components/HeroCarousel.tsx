@@ -112,7 +112,7 @@ export function HeroCarousel() {
   }
 
   return (
-    <div className="relative w-full h-64 sm:h-80 lg:h-96 overflow-hidden">
+    <div className="relative w-full h-64 sm:h-80 lg:h-96 overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8">
       {/* Carousel Container */}
       <div 
         className="flex transition-transform duration-500 ease-in-out h-full"

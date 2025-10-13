@@ -170,13 +170,13 @@ export function ShopByCategory() {
                 href={`/categories/${category.slug}`}
                 className="group text-center hover:scale-105 transition-transform duration-200 touch-manipulation"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full mx-auto mb-2 flex items-center justify-center bg-white border-2 border-gray-200 group-hover:border-gray-300 group-hover:shadow-lg transition-all duration-200 touch-manipulation min-h-[40px] min-w-[40px]">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full mx-auto mb-2 overflow-hidden group-hover:shadow-lg transition-all duration-200 touch-manipulation min-h-[40px] min-w-[40px]">
                   <Image
                     src={getCategoryImage(category.name)}
                     alt={category.name}
                     width={32}
                     height={32}
-                    className="w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 rounded-full object-cover"
+                    className="w-full h-full rounded-full object-cover"
                     loading="lazy"
                   />
                 </div>

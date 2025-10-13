@@ -52,9 +52,23 @@ export default function CheckoutPage() {
   
   const [isProcessing, setIsProcessing] = useState(false)
 
-  // Fetch delivery zones on component mount
+  // Fetch delivery zones on component mount and restore form data
   useEffect(() => {
     fetchDeliveryZones()
+    
+    // Restore form data from localStorage if it exists
+    try {
+      const savedFormData = localStorage.getItem('checkout_form_data')
+      if (savedFormData) {
+        const parsedData = JSON.parse(savedFormData)
+        console.log('Restoring form data:', parsedData) // Debug log
+        setFormData(parsedData)
+        // Clear the saved data after restoring
+        localStorage.removeItem('checkout_form_data')
+      }
+    } catch (error) {
+      console.error('Failed to restore form data:', error)
+    }
   }, [])
 
   // Update selected zone when district changes
@@ -199,6 +213,13 @@ export default function CheckoutPage() {
       const userData = localStorage.getItem('user_session')
       if (!userData) {
         alert('Please log in to place an order')
+        // Save form data to localStorage before redirecting
+        try {
+          localStorage.setItem('checkout_form_data', JSON.stringify(formData))
+          console.log('Saved form data:', formData) // Debug log
+        } catch (error) {
+          console.error('Failed to save form data:', error)
+        }
         // Redirect to login with return URL to checkout
         const redirectUrl = '/auth/login?redirect=' + encodeURIComponent('/checkout')
         console.log('Redirecting to:', redirectUrl) // Debug log

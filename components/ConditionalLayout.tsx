@@ -46,7 +46,7 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
     return (
       <div className="min-h-screen flex flex-col bg-transparent">
         <Navbar />
-        <main className="flex-1 m-0 p-0">
+        <main className="flex-1 m-0 p-0 overflow-x-hidden">
           {children}
         </main>
         <Footer />

@@ -103,7 +103,7 @@ export function ShopByCategory() {
       'Haircare': '/images/fragances.avif',
       'Health & Wellness': '/images/fragances.avif',
       'Home Decor': '/images/Electronics.jpg',
-      'Jewelry': '/images/Electronics.jpg',
+      'Jewelry': '/images/test-jewelry.jpg',
       'Kids Fashion': '/images/Fashion.avif',
       'Kitchen Appliances': '/images/machines.jpg',
       'Laptops & Computers': '/images/Lapptops and computers.jpg',

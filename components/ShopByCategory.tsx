@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 
 interface Category {
   id: string
@@ -144,7 +143,9 @@ export function ShopByCategory() {
       'Machines': '/images/machines.jpg'
     }
     
-    return categoryImageMap[categoryName] || '/images/Electronics.jpg' // Default fallback
+    const imagePath = categoryImageMap[categoryName] || '/images/Electronics.jpg'
+    console.log(`Category: ${categoryName}, Image Path: ${imagePath}`) // Debug log
+    return imagePath
   }
 
   // Removed colored backgrounds for clear circles
@@ -171,11 +172,9 @@ export function ShopByCategory() {
                 className="group text-center hover:scale-105 transition-transform duration-200 touch-manipulation"
               >
                 <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full mx-auto mb-2 overflow-hidden group-hover:shadow-lg transition-all duration-200 touch-manipulation min-h-[40px] min-w-[40px]">
-                  <Image
+                  <img
                     src={getCategoryImage(category.name)}
                     alt={category.name}
-                    width={32}
-                    height={32}
                     className="w-full h-full rounded-full object-cover"
                     loading="lazy"
                   />

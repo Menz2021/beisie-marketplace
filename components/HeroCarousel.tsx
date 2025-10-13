@@ -125,7 +125,7 @@ export function HeroCarousel() {
             className="w-full h-full flex-shrink-0 relative block cursor-pointer group"
           >
             {/* Background Image */}
-            <div className="w-full h-full relative overflow-hidden bg-gradient-to-br from-purple-500 to-blue-600">
+            <div className="w-full h-full relative overflow-hidden bg-white">
               {/* Mobile: Show full image */}
               <div className="block sm:hidden">
                 <Image

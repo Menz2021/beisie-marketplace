@@ -126,23 +126,46 @@ export function HeroCarousel() {
           >
             {/* Background Image */}
             <div className="w-full h-full relative overflow-hidden bg-gradient-to-br from-purple-500 to-blue-600">
-              <Image
-                src={banner.image}
-                alt={banner.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
-                priority={banner.id === categoryBanners[0].id}
-                sizes="100vw"
-                onError={(e) => {
-                  console.error(`Failed to load image: ${banner.image}`, e)
-                  // Fallback to a solid color if image fails
-                  const target = e.target as HTMLImageElement
-                  target.style.display = 'none'
-                }}
-                onLoad={() => {
-                  console.log(`Successfully loaded image: ${banner.image}`)
-                }}
-              />
+              {/* Mobile: Show full image */}
+              <div className="block sm:hidden">
+                <Image
+                  src={banner.image}
+                  alt={banner.title}
+                  width={400}
+                  height={256}
+                  className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                  priority={banner.id === categoryBanners[0].id}
+                  sizes="100vw"
+                  onError={(e) => {
+                    console.error(`Failed to load image: ${banner.image}`, e)
+                    const target = e.target as HTMLImageElement
+                    target.style.display = 'none'
+                  }}
+                  onLoad={() => {
+                    console.log(`Successfully loaded image: ${banner.image}`)
+                  }}
+                />
+              </div>
+              
+              {/* Desktop: Show cropped image */}
+              <div className="hidden sm:block">
+                <Image
+                  src={banner.image}
+                  alt={banner.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                  priority={banner.id === categoryBanners[0].id}
+                  sizes="100vw"
+                  onError={(e) => {
+                    console.error(`Failed to load image: ${banner.image}`, e)
+                    const target = e.target as HTMLImageElement
+                    target.style.display = 'none'
+                  }}
+                  onLoad={() => {
+                    console.log(`Successfully loaded image: ${banner.image}`)
+                  }}
+                />
+              </div>
               
             </div>
           </Link>
@@ -165,7 +188,7 @@ export function HeroCarousel() {
       </button>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10 hidden sm:flex">
         {categoryBanners.map((_, index) => (
           <button
             key={index}

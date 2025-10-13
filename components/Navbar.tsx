@@ -232,7 +232,7 @@ export function Navbar() {
                   {showUserMenu && (
                     <div 
                       data-dropdown-menu
-                      className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200 animate-in slide-in-from-top-2 duration-200"
+                      className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-[9999] border border-gray-200 animate-in slide-in-from-top-2 duration-200"
                     >
                       <div className="px-4 py-3 border-b border-gray-100">
                         <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
@@ -347,7 +347,7 @@ export function Navbar() {
                     {showUserMenu && (
                       <div 
                         data-dropdown-menu
-                        className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200 animate-in slide-in-from-top-2 duration-200"
+                        className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl py-2 z-[9999] border border-gray-200 animate-in slide-in-from-top-2 duration-200"
                       >
                         <div className="px-4 py-3 border-b border-gray-100">
                           <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>

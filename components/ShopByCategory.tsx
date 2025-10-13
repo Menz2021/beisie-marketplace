@@ -147,16 +147,7 @@ export function ShopByCategory() {
     return categoryImageMap[categoryName] || '/images/Electronics.jpg' // Default fallback
   }
 
-  const categoryColors = [
-    'bg-blue-100',
-    'bg-purple-100', 
-    'bg-gray-100',
-    'bg-indigo-100',
-    'bg-green-100',
-    'bg-yellow-100',
-    'bg-red-100',
-    'bg-pink-100'
-  ]
+  // Removed colored backgrounds for clear circles
 
   return (
     <section className="py-4 sm:py-8 lg:py-12 bg-white">
@@ -179,7 +170,7 @@ export function ShopByCategory() {
                 href={`/categories/${category.slug}`}
                 className="group text-center hover:scale-105 transition-transform duration-200 touch-manipulation"
               >
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full mx-auto mb-2 flex items-center justify-center ${categoryColors[index % categoryColors.length]} group-hover:shadow-lg transition-shadow touch-manipulation min-h-[40px] min-w-[40px]`}>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full mx-auto mb-2 flex items-center justify-center bg-white border-2 border-gray-200 group-hover:border-gray-300 group-hover:shadow-lg transition-all duration-200 touch-manipulation min-h-[40px] min-w-[40px]">
                   <Image
                     src={getCategoryImage(category.name)}
                     alt={category.name}

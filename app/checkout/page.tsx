@@ -199,7 +199,8 @@ export default function CheckoutPage() {
       const userData = localStorage.getItem('user_session')
       if (!userData) {
         alert('Please log in to place an order')
-        window.location.href = '/auth/login'
+        // Redirect to login with return URL to checkout
+        window.location.href = '/auth/login?redirect=' + encodeURIComponent('/checkout')
         return
       }
 

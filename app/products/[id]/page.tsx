@@ -12,7 +12,9 @@ import {
   ShieldCheckIcon,
   ArrowLeftIcon,
   MinusIcon,
-  PlusIcon
+  PlusIcon,
+  XMarkIcon,
+  ClipboardDocumentIcon
 } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolidIcon, StarIcon as StarSolidIcon } from '@heroicons/react/24/solid'
 import { useCartStore } from '@/store/cartStore'
@@ -164,6 +166,7 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1)
   const [activeTab, setActiveTab] = useState('description')
   const [reviews, setReviews] = useState<any[]>([])
+  const [showShareModal, setShowShareModal] = useState(false)
   const { addItem } = useCartStore()
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore()
 
@@ -193,6 +196,51 @@ export default function ProductDetailPage() {
       }
     } catch (error) {
       console.error('Error toggling wishlist:', error)
+    }
+  }
+
+  const handleShare = () => {
+    setShowShareModal(true)
+  }
+
+  const copyToClipboard = async () => {
+    if (!product) return
+    
+    const productUrl = `${window.location.origin}/products/${product.slug}`
+    try {
+      await navigator.clipboard.writeText(productUrl)
+      toast.success('Product link copied to clipboard!')
+    } catch (error) {
+      console.error('Failed to copy:', error)
+      toast.error('Failed to copy link')
+    }
+  }
+
+  const shareToSocial = (platform: string) => {
+    if (!product) return
+    
+    const productUrl = `${window.location.origin}/products/${product.slug}`
+    const text = `Check out this amazing product: ${product.name}`
+    
+    let shareUrl = ''
+    
+    switch (platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`
+        break
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(productUrl)}`
+        break
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(`${text} ${productUrl}`)}`
+        break
+      case 'telegram':
+        shareUrl = `https://t.me/share/url?url=${encodeURIComponent(productUrl)}&text=${encodeURIComponent(text)}`
+        break
+    }
+    
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'width=600,height=400')
     }
   }
 
@@ -632,10 +680,13 @@ export default function ProductDetailPage() {
                 <ShieldCheckIcon className="h-5 w-5 text-gray-400" />
                 <span className="text-sm text-gray-600">1 year warranty included</span>
               </div>
-              <div className="flex items-center space-x-3">
+              <button
+                onClick={handleShare}
+                className="flex items-center space-x-3 hover:text-purple-600 transition-colors"
+              >
                 <ShareIcon className="h-5 w-5 text-gray-400" />
                 <span className="text-sm text-gray-600">Share this product</span>
-              </div>
+              </button>
             </div>
 
           </div>
@@ -803,6 +854,69 @@ export default function ProductDetailPage() {
           <RelatedProducts productSlug={product.slug} limit={6} />
         </div>
       </div>
+
+      {/* Share Modal */}
+      {showShareModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Share this product</h3>
+              <button
+                onClick={() => setShowShareModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <XMarkIcon className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Copy Link */}
+              <button
+                onClick={copyToClipboard}
+                className="w-full flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <ClipboardDocumentIcon className="h-5 w-5 text-gray-500" />
+                <span className="text-gray-700">Copy Link</span>
+              </button>
+              
+              {/* Social Media Options */}
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => shareToSocial('facebook')}
+                  className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-colors"
+                >
+                  <div className="w-5 h-5 bg-blue-600 rounded text-white flex items-center justify-center text-xs font-bold">f</div>
+                  <span className="text-gray-700">Facebook</span>
+                </button>
+                
+                <button
+                  onClick={() => shareToSocial('twitter')}
+                  className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-colors"
+                >
+                  <div className="w-5 h-5 bg-blue-400 rounded text-white flex items-center justify-center text-xs font-bold">t</div>
+                  <span className="text-gray-700">Twitter</span>
+                </button>
+                
+                <button
+                  onClick={() => shareToSocial('whatsapp')}
+                  className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-green-50 hover:border-green-200 transition-colors"
+                >
+                  <div className="w-5 h-5 bg-green-500 rounded text-white flex items-center justify-center text-xs font-bold">W</div>
+                  <span className="text-gray-700">WhatsApp</span>
+                </button>
+                
+                <button
+                  onClick={() => shareToSocial('telegram')}
+                  className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-colors"
+                >
+                  <div className="w-5 h-5 bg-blue-500 rounded text-white flex items-center justify-center text-xs font-bold">T</div>
+                  <span className="text-gray-700">Telegram</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

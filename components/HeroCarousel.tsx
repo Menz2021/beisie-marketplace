@@ -103,7 +103,7 @@ export function HeroCarousel() {
 
   if (isLoading) {
     return (
-      <div className="relative w-full h-64 sm:h-80 lg:h-96 overflow-hidden bg-gray-200 animate-pulse">
+      <div className="relative w-screen h-80 sm:h-96 lg:h-[500px] overflow-hidden bg-gray-200 animate-pulse" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-gray-500">Loading...</div>
         </div>
@@ -112,7 +112,7 @@ export function HeroCarousel() {
   }
 
   return (
-    <div className="relative w-full h-64 sm:h-80 lg:h-96 overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8">
+    <div className="relative w-screen h-80 sm:h-96 lg:h-[500px] overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
       {/* Carousel Container */}
       <div 
         className="flex transition-transform duration-500 ease-in-out h-full"

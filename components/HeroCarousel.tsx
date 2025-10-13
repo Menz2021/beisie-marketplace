@@ -127,13 +127,13 @@ export function HeroCarousel() {
             {/* Background Image */}
             <div className="w-full h-full relative overflow-hidden bg-white">
               {/* Mobile: Show full image */}
-              <div className="block sm:hidden">
+              <div className="block sm:hidden h-full">
                 <Image
                   src={banner.image}
                   alt={banner.title}
                   width={400}
                   height={256}
-                  className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 ease-in-out"
                   priority={banner.id === categoryBanners[0].id}
                   sizes="100vw"
                   onError={(e) => {

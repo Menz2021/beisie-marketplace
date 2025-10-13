@@ -65,7 +65,7 @@ export function ShopByCategory() {
 
   if (isLoading) {
     return (
-      <section className="py-8 lg:py-12 bg-white">
+      <section className="py-4 sm:py-8 lg:py-12 bg-white">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6 lg:mb-8">
             <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">Shop by Category</h2>
@@ -159,7 +159,7 @@ export function ShopByCategory() {
   ]
 
   return (
-    <section className="py-8 lg:py-12 bg-white">
+    <section className="py-4 sm:py-8 lg:py-12 bg-white">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6 lg:mb-8">
           <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">Shop by Category</h2>

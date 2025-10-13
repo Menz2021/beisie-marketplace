@@ -143,9 +143,7 @@ export function ShopByCategory() {
       'Machines': '/images/machines.jpg'
     }
     
-    const imagePath = categoryImageMap[categoryName] || '/images/Electronics.jpg'
-    console.log(`Category: ${categoryName}, Image Path: ${imagePath}`) // Debug log
-    return imagePath
+    return categoryImageMap[categoryName] || '/images/Electronics.jpg' // Default fallback
   }
 
   // Removed colored backgrounds for clear circles

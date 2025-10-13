@@ -144,26 +144,6 @@ export function HeroCarousel() {
                 }}
               />
               
-              {/* Overlay for better text readability */}
-              <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-40 transition-opacity duration-300"></div>
-              
-              {/* Content */}
-              <div className="relative z-10 h-full flex items-center justify-center">
-                <div className="text-center max-w-2xl px-4 sm:px-8">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-white group-hover:scale-105 transition-transform duration-300">
-                    {banner.title}
-                  </h1>
-                  <p className="text-lg sm:text-xl text-gray-200 mb-6 max-w-lg mx-auto">
-                    {banner.description}
-                  </p>
-                  
-                  {/* Click indicator */}
-                  <div className="inline-flex items-center text-white text-sm font-medium opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                    Click to explore
-                    <ChevronRightIcon className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </div>
-                </div>
-              </div>
             </div>
           </Link>
         ))}

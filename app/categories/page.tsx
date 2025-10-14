@@ -25,7 +25,7 @@ const getCategoryImage = (categoryName: string): string => {
   const imageMap: { [key: string]: string } = {
     // Production categories (matching actual database)
     'Audio & Headphones': '/images/Headphones.avif',
-    'Automotive': '/images/Automotives.avif',
+    'Automotive': '/images/Automotives.jpg',
     'Baby Care': '/images/Baby care.avif',
     'Bags & Luggage': '/images/luggage.avif',
     'Bedding & Bath': '/images/Beddings.avif',

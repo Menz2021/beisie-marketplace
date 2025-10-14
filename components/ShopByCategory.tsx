@@ -88,7 +88,7 @@ export function ShopByCategory() {
     const categoryImageMap: { [key: string]: string } = {
       // Production categories (matching actual database)
       'Audio & Headphones': '/images/Headphones.avif',
-      'Automotive': '/images/Automotives.avif',
+      'Automotive': '/images/Automotives.jpg',
       'Baby Care': '/images/Baby care.avif',
       'Bags & Luggage': '/images/luggage.jpg',
       'Bedding & Bath': '/images/Beddings.avif',

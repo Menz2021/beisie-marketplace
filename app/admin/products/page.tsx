@@ -90,7 +90,7 @@ export default function AdminProductsPage() {
     isFeatured: false,
     deliveryTimeDays: 0,
     deliveryTimeText: '',
-    specifications: ''
+    specifications: [] as { key: string; value: string }[]
   })
   const router = useRouter()
 
@@ -357,7 +357,7 @@ export default function AdminProductsPage() {
       formDataToSend.append('isFeatured', formData.isFeatured.toString())
       formDataToSend.append('deliveryTimeDays', formData.deliveryTimeDays.toString())
       formDataToSend.append('deliveryTimeText', formData.deliveryTimeText || '')
-      formDataToSend.append('specifications', formData.specifications || '')
+      formDataToSend.append('specifications', JSON.stringify(formData.specifications))
       
       // Add images
       selectedImages.forEach((image, index) => {
@@ -418,7 +418,7 @@ export default function AdminProductsPage() {
       isFeatured: product.isFeatured,
       deliveryTimeDays: product.deliveryTimeDays || 0,
       deliveryTimeText: product.deliveryTimeText || '',
-      specifications: product.specifications || ''
+      specifications: product.specifications ? JSON.parse(product.specifications) : [] as { key: string; value: string }[]
     })
     setShowAddModal(true)
   }
@@ -454,7 +454,7 @@ export default function AdminProductsPage() {
       formDataToSend.append('isFeatured', formData.isFeatured.toString())
       formDataToSend.append('deliveryTimeDays', formData.deliveryTimeDays.toString())
       formDataToSend.append('deliveryTimeText', formData.deliveryTimeText || '')
-      formDataToSend.append('specifications', formData.specifications || '')
+      formDataToSend.append('specifications', JSON.stringify(formData.specifications))
       
       // Add images (only if new ones are selected)
       selectedImages.forEach((image, index) => {
@@ -561,7 +561,7 @@ export default function AdminProductsPage() {
       isFeatured: false,
       deliveryTimeDays: 0,
       deliveryTimeText: '',
-      specifications: ''
+      specifications: [] as { key: string; value: string }[]
     })
     setSelectedImages([])
     setImagePreviews([])
@@ -1357,15 +1357,58 @@ export default function AdminProductsPage() {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Specifications
+                    Product Specifications
                   </label>
-                  <textarea
-                    rows={4}
-                    value={formData.specifications}
-                    onChange={(e) => setFormData({...formData, specifications: e.target.value})}
-                    className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation"
-                    placeholder="Enter product specifications (e.g., dimensions, materials, features, etc.)..."
-                  />
+                  <div className="space-y-3">
+                    {formData.specifications.map((spec, index) => (
+                      <div key={index} className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Specification name (e.g., Display, Processor)"
+                          value={spec.key}
+                          onChange={(e) => {
+                            const newSpecs = [...formData.specifications]
+                            newSpecs[index] = { ...spec, key: e.target.value }
+                            setFormData({ ...formData, specifications: newSpecs })
+                          }}
+                          className="flex-1 px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Value (e.g., 6.8 inch AMOLED, Snapdragon 8 Gen 2)"
+                          value={spec.value}
+                          onChange={(e) => {
+                            const newSpecs = [...formData.specifications]
+                            newSpecs[index] = { ...spec, value: e.target.value }
+                            setFormData({ ...formData, specifications: newSpecs })
+                          }}
+                          className="flex-1 px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm touch-manipulation min-h-[44px]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newSpecs = formData.specifications.filter((_, i) => i !== index)
+                            setFormData({ ...formData, specifications: newSpecs })
+                          }}
+                          className="px-3 py-3 sm:py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
+                        >
+                          <XMarkIcon className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData({
+                          ...formData,
+                          specifications: [...formData.specifications, { key: '', value: '' }]
+                        })
+                      }}
+                      className="w-full px-4 py-3 sm:py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors touch-manipulation min-h-[44px]"
+                    >
+                      Add Specification
+                    </button>
+                  </div>
                   <p className="text-xs text-gray-500 mt-1">
                     Optional: Add detailed specifications like dimensions, materials, features, technical details, etc.
                   </p>
@@ -1524,7 +1567,25 @@ export default function AdminProductsPage() {
                         {previewProduct.specifications && (
                           <div className="bg-gray-50 p-2 rounded-lg">
                             <span className="text-xs font-medium text-gray-500">Specifications:</span>
-                            <p className="text-sm text-gray-900 break-words whitespace-pre-wrap">{previewProduct.specifications}</p>
+                            <div className="mt-1 space-y-1">
+                              {(() => {
+                                try {
+                                  const specs = JSON.parse(previewProduct.specifications)
+                                  return Object.entries(specs).map(([key, value]) => (
+                                    <div key={key} className="text-sm">
+                                      <span className="font-medium text-gray-700">{key}:</span>
+                                      <span className="ml-2 text-gray-900">{value as string}</span>
+                                    </div>
+                                  ))
+                                } catch {
+                                  return (
+                                    <p className="text-sm text-gray-900 break-words whitespace-pre-wrap">
+                                      {previewProduct.specifications}
+                                    </p>
+                                  )
+                                }
+                              })()}
+                            </div>
                           </div>
                         )}
                       </div>

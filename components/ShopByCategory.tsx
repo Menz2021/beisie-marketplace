@@ -98,7 +98,7 @@ export function ShopByCategory() {
       'Fragrance': '/images/fragances.avif',
       'Furniture': '/images/Funiture.jpg',
       'Gaming': '/images/games.avif',
-      'Garden & Outdoor': '/images/Automotives.avif',
+      'Garden & Outdoor': '/images/garden.jpg',
       'Groceries': '/images/grocery.jpg',
       'Haircare': '/images/fragances.avif',
       'Health & Wellness': '/images/fragances.avif',

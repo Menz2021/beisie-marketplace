@@ -48,6 +48,7 @@ const getCategoryImage = (categoryName: string): string => {
     'Makeup': '/images/Makeup.jpg',
     'Men\'s Fashion': '/images/mens fashion.avif',
     'Mobiles and Accessories': '/images/Mobile phones.jpg',
+    'Mobile phones': '/images/Mobile phones.jpg',
     'Outdoor & Camping': '/images/Automotives.avif',
     'Personal Care': '/images/Personal-care.jpg',
     'Pet Supplies': '/images/Pet-supplies.jpg',

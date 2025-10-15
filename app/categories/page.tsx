@@ -36,7 +36,7 @@ const getCategoryImage = (categoryName: string): string => {
     'Furniture': '/images/Funiture.jpg',
     'Gaming': '/images/games.jpg',
     'Garden & Outdoor': '/images/garden.jpg',
-    'Groceries': '/images/Electronics.jpg',
+    'Groceries': '/images/grocery.jpg',
     'Haircare': '/images/Hair-care.jpg',
     'Health & Wellness': '/images/Health.jpg',
     'Home Decor': '/images/Funiture.jpg',

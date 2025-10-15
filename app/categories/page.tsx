@@ -102,11 +102,8 @@ const getCategoryImage = (categoryName: string): string => {
 // Function to normalize/display category names
 const getCategoryDisplayName = (categoryName: string): string => {
   const nameMap: { [key: string]: string } = {
+    'Mobile Phones': 'Mobiles and Accessories',
     'Mobile phones': 'Mobiles and Accessories'
-  }
-  // Debug: log the category name to see what we're getting
-  if (categoryName.includes('Mobile') || categoryName.includes('phone')) {
-    console.log('Category name:', categoryName, 'Mapped to:', nameMap[categoryName] || categoryName)
   }
   return nameMap[categoryName] || categoryName
 }

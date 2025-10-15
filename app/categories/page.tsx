@@ -99,6 +99,14 @@ const getCategoryImage = (categoryName: string): string => {
   return imageMap[categoryName] || '/images/Electronics.jpg'
 }
 
+// Function to normalize/display category names
+const getCategoryDisplayName = (categoryName: string): string => {
+  const nameMap: { [key: string]: string } = {
+    'Mobile phones': 'Mobiles and Accessories'
+  }
+  return nameMap[categoryName] || categoryName
+}
+
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -306,7 +314,7 @@ export default function CategoriesPage() {
                       ? 'text-sm lg:text-lg' 
                       : 'text-lg flex-1 text-left'
                   }`}>
-                    {category.name}
+                    {getCategoryDisplayName(category.name)}
                   </h3>
                 </div>
               </Link>

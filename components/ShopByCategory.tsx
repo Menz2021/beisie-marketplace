@@ -111,7 +111,7 @@ export function ShopByCategory() {
       'Makeup': '/images/Makeup.jpg',
       'Men\'s Fashion': '/images/mens fashion.avif',
       'Mobiles and Accessories': '/images/Mobile phones.jpg',
-      'Outdoor & Camping': '/images/Automotives.avif',
+      'Outdoor & Camping': '/images/Outdoor.jpg',
       'Personal Care': '/images/Personal-care.jpg',
       'Pet Supplies': '/images/Pet-supplies.jpg',
       'Power Banks & Chargers': '/images/power bank.jpg',

@@ -76,7 +76,6 @@ const getCategoryImage = (categoryName: string): string => {
     'Camera': '/images/camera.avif',
     'Photography': '/images/camera.avif',
     'Eyeware': '/images/Eyeware1.jpg',
-    'Mobile phones': '/images/Mobile phones.jpg',
     'Laptops and computers': '/images/Lapptops and computers.jpg',
     'Machines': '/images/machines.jpg',
     'Mobiles': '/images/Mobile phones.jpg',

@@ -40,7 +40,7 @@ const getCategoryImage = (categoryName: string): string => {
     'Haircare': '/images/Hair-care.jpg',
     'Health & Wellness': '/images/Health.jpg',
     'Home Decor': '/images/Funiture.jpg',
-    'Jewelry': '/images/fragances.avif',
+    'Jewelry': '/images/jewelry.jpg',
     'Kids Fashion': '/images/Kids-fashion.jpg',
     'Kitchen Appliances': '/images/machines.jpg',
     'Laptops & Computers': '/images/Lapptops and computers.jpg',

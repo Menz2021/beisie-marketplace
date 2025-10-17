@@ -421,6 +421,7 @@ export async function PUT(request: NextRequest) {
     console.log('✅ Product data validated')
     
     // For admin-created products, use "Beisie" as the vendor
+    // BUT preserve original vendor for seller products
     let vendor = await prisma.user.findFirst({
       where: { 
         role: 'ADMIN',
@@ -450,8 +451,22 @@ export async function PUT(request: NextRequest) {
       }
     }
     
-    // Override the vendorId with the Beisie vendor
-    validatedData.vendorId = vendor.id
+    // Only override vendorId for NEW admin-created products, not when editing existing seller products
+    // Check if this is a new product creation (no existing product) or if we're preserving seller ownership
+    const existingProduct = await prisma.product.findUnique({
+      where: { id: productId },
+      select: { vendorId: true }
+    })
+    
+    // If editing an existing product, preserve the original vendor
+    if (existingProduct) {
+      // Keep the original vendorId - don't override it
+      console.log('📝 Preserving original vendor for existing product:', existingProduct.vendorId)
+    } else {
+      // Only for new products, use the admin vendor
+      validatedData.vendorId = vendor.id
+      console.log('📝 Using admin vendor for new product:', vendor.id)
+    }
     
     // Handle image uploads
     const imageFiles = formData.getAll('images') as File[]

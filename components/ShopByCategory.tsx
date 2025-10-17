@@ -110,7 +110,7 @@ export function ShopByCategory() {
       'Lighting': '/images/lighting.jpg',
       'Makeup': '/images/Makeup.jpg',
       'Men\'s Fashion': '/images/mens fashion.avif',
-      'Mobiles and Accessories': '/images/Mobile phones.jpg',
+      'Mobiles and Accessories': '/images/Mobile phones.jpg?v=2',
       'Outdoor & Camping': '/images/Outdoor.jpg',
       'Personal Care': '/images/Personal-care.jpg',
       'Pet Supplies': '/images/Pet-supplies.jpg',
